@@ -48,10 +48,21 @@ esp32_improv:
 # To have a "next url" for improv serial
 web_server:
 
+spi:
+  clk_pin: GPIO8    # SCK
+  mosi_pin: GPIO10  # MOSI
+  miso_pin: GPIO9   # MISO
+
+spi_device:
+  id: pot
+  cs_pin: GPIO5     # D3
+
+
 binary_sensor:
   - platform: template
     name: "Bed Left Occupied"
     id: bed_left_occupied
+    device_class: occupancy
     lambda: |-
       if (id(bed_left_sensor).state < id(trigger_level).state) {
         return true;
@@ -61,16 +72,16 @@ binary_sensor:
   - platform: template
     name: "Bed Right Occupied"
     id: bed_right_occupied
+    device_class: occupancy
     lambda: |-
       if (id(bed_right_sensor).state < id(trigger_level).state) {
         return true;
       } else {
         return false;
       }
-
 sensor:
   - platform: adc
-    pin: GPIO4
+    pin: GPIO3 # A1
     attenuation: 11db
     name: "Bed Left Sensor"
     id: "bed_left_sensor"
@@ -83,8 +94,47 @@ sensor:
       - or:
           - throttle: 180s
           - delta: 0.02
+    on_raw_value:
+      - lambda: |-
+          if (id(calibrate_left_u).state) {
+            // Verify voltage is within x, otherwise increment/decriment
+            // Calculate FSR resistance
+            uint16_t FSR_R = 10e3/(3.3*x);
+          
+            // Set a number with this value
+            auto call = id(sensor_r_left_occupied).make_call();
+            call.set_value(FSR_R);
+            call.perform();
+
+            id(read_w0).press();
+            id(calibrate_left_u).turn_off();
+          } else if (id(calibrate_left_o).state) {
+            // Verify voltage is within x, otherwise increment/decriment
+            // Calculate FSR resistance
+            uint16_t FSR_R = 937.5/(3.3*x);
+          
+            // Set a number with this value
+            auto call = id(sensor_r_left_unoccupied).make_call();
+            call.set_value(FSR_R);
+            call.perform();
+
+            id(read_w0).press();
+            id(calibrate_left_o).turn_off();
+          }
+
+
+
+
+
+
+
+
+
+
+
+
   - platform: adc
-    pin: GPIO3
+    pin: GPIO4 # A2
     attenuation: 11db
     name: "Bed Right Sensor"
     id: "bed_right_sensor"
@@ -98,6 +148,7 @@ sensor:
           - throttle: 180s
           - delta: 0.02
 
+
 number:
   - platform: template
     name: Bed Trigger Level
@@ -105,7 +156,142 @@ number:
     optimistic: true
     restore_value: true
     min_value: 0
-    max_value: 3.5
+    max_value: 2.8
+    initial_value: 1.4
     step: 0.05
     icon: mdi:arrow-collapse-down
     unit_of_measurement: V
+  - platform: template
+    name: Sensor Resistance Left (Unoccupied)
+    id: sensor_r_left_occupied
+    optimistic: true
+    restore_value: true
+    min_value: 0
+    max_value: 10e6
+    initial_value: 0
+    step: 10
+    unit_of_measurement: ohms
+  - platform: template
+    name: Sensor Resistance Left (Occupied)
+    id: sensor_r_left_unoccupied
+    optimistic: true
+    restore_value: true
+    min_value: 0
+    max_value: 10e6
+    initial_value: 0
+    step: 10
+    unit_of_measurement: ohms
+
+button:
+  - platform: template
+    name: "Increment W0"
+    on_press: 
+      then:
+        - lambda: !lambda |-
+            id(pot).enable();
+            id(pot).write_byte(0x04);
+            id(pot).disable();
+            id(read_w0).press();
+  - platform: template
+    name: "Decrement W0"
+    on_press: 
+      then:
+        - lambda: !lambda |-
+            id(pot).enable();
+            id(pot).write_byte(0x08);
+            id(pot).disable();
+            id(read_w0).press();
+  - platform: template
+    name: "Read W0"
+    id: read_w0
+    on_press: 
+      then:
+        - lambda: !lambda |-
+            id(pot).enable();
+            uint8_t cmd = 0xC;
+            id(pot).transfer_byte(cmd);
+            uint8_t val = id(pot).transfer_byte(0x00);
+            id(pot).disable();
+
+            uint16_t resistance = val*10e3/128;
+
+            ESP_LOGD("custom", "val = %u\tres = %u", val, resistance);
+  #- platform: template
+  #  name: "Calibrate Left (Unoccupied)"
+  #  id: calibrate_left_unoccupied
+  #  on_press: 
+  #    then:
+  #      - lambda: !lambda |-
+  #          id(pot).enable();
+  #
+  #          uint16_t test = analogRead(1);
+  #          ESP_LOGD("custom", "**********ANALOG READ VAL = %u");
+  #
+  #          // Set resistance to max
+  #          uint16_t cmd = 
+  #            0b0000  << 12 | // address (volatile wiper 0)
+  #            0b00    << 10 | // command (write)
+  #            128;            // data
+  #          id(pot).write_byte16(cmd);
+  #          
+  #          // Disable
+  #          id(pot).disable();
+  #
+  #          // Calculate FSR resistance
+  #          uint16_t FSR_R = 10e3/(3.3*id(bed_left_sensor).state);
+  #          test = analogRead(1);
+  #          ESP_LOGD("custom", "ANALOG READ VAL = %u");
+  #
+  #          // Set a number with this value
+  #          auto call = id(fsr_left_r_occupied).make_call();
+  #          call.set_value(FSR_R);
+  #          call.perform();
+  #
+  #          id(read_w0).press();
+
+## IDEA
+# Create switch that says calibrate x
+# set resistance, then 
+# for the sensor, on_update (if calibrate_x, call calibrate script)
+# Once you get x resistance values close together, disable calibration (set text sensor that says done?)
+switch:
+  - platform: template
+    name: "Calibrate Left (Unoccupied)"
+    id: calibrate_left_u
+    optimistic: true
+    turn_on_action: 
+      then:
+        - lambda: |-
+            //replace with script (set_wiper_v0(10k))
+            // Enable
+            id(pot).enable();
+            // Set resistance to 10k
+            //             addr (v wiper 0)    cmd (write)   data (10k ohm)
+            uint16_t cmd = 0b0000  << 12     | 0b00 << 10  | 128;
+            id(pot).write_byte16(cmd);
+            // Disable
+            id(pot).disable();  
+  - platform: template
+    name: "Calibrate Left (Occupied)"
+    id: calibrate_left_o
+    optimistic: true
+    turn_on_action: 
+      then:
+        - lambda: |-
+            //replace with script (set_wiper_v0(937.5))
+            // Enable
+            id(pot).enable();
+            // Set resistance to 
+            //             addr (v wiper 0)    cmd (write)   data (937.5 ohm)
+            uint16_t cmd = 0b0000  << 12     | 0b00 << 10  | 12;
+            id(pot).write_byte16(cmd);
+            // Disable
+            id(pot).disable();  
+  - platform: template
+    name: "Calibrate Right (Unoccupied)"
+    id: calibrate_right_u
+    optimistic: true
+  - platform: template
+    name: "Calibrate Right (Occupied)"
+    id: calibrate_right_o
+    optimistic: true
