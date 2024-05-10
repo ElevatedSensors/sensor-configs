@@ -36,7 +36,7 @@ wifi:
 captive_portal:
 
 dashboard_import:
-  package_import_url: github://ElevatedSensors/sensor-configs/bed-presence-v1.yaml
+  package_import_url: github://ElevatedSensors/sensor-configs/bed-presence-mk1.yaml
   import_full_config: false
 
 
