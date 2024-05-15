@@ -163,21 +163,28 @@ sensor:
     id: val_min_status_left
     icon: mdi:gauge-empty
     unit_of_measurement: "%"
+    entity_category: diagnostic
   - platform: template
     name: Left Pressure (Max)
     id: val_max_status_left
     icon: mdi:gauge-full
     unit_of_measurement: "%"
+    entity_category: diagnostic
   - platform: template
     name: Right Pressure (Min)
     id: val_min_status_right
     icon: mdi:gauge-empty
     unit_of_measurement: "%"
+    entity_category: diagnostic
   - platform: template
     name: Right Pressure (Max)
     id: val_max_status_right
     icon: mdi:gauge-full
     unit_of_measurement: "%"
+    entity_category: diagnostic
+  - platform: wifi_signal
+    name: WiFi Strength
+    update_interval: 60s
 
 number:
   - platform: template
@@ -221,6 +228,7 @@ number:
     step: 0.01
     icon: mdi:gauge
     unit_of_measurement: "%"
+    entity_category: config
   - platform: template
     id: val_min_right
     optimistic: True
@@ -262,11 +270,13 @@ number:
     step: 0.01
     icon: mdi:gauge
     unit_of_measurement: "%"
+    entity_category: config
   
 button:
   - platform: template
     name: Calibration Left (Reset)
     icon: mdi:sync
+    entity_category: config
     on_press: 
       then:
         - number.set:
@@ -281,6 +291,7 @@ button:
   - platform: template
     name: Calibration Right (Reset)
     icon: mdi:sync
+    entity_category: config
     on_press: 
       then:
         - number.set:
@@ -300,12 +311,16 @@ switch:
     optimistic: True
     icon: mdi:auto-fix
     restore_mode: ${calibration_auto_restore}
+    entity_category: config
   - platform: template
     name: Calibration Right (Auto)
     id: calibrate_auto_right
     optimistic: True
     icon: mdi:auto-fix
     restore_mode: ${calibration_auto_restore}
+    entity_category: config
+  - platform: restart
+    name: Restart
   
 script:
   - id: update_trigger_left
