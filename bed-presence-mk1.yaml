@@ -75,7 +75,7 @@ binary_sensor:
     id: bed_occupied_left
     device_class: occupancy
     icon: mdi:bed
-    lambda: |-
+    lambda: |-  # Check current state against trigger value
       if (id(bed_sensor_left).state > id(val_trigger_left).state) {
         return true;
       } else {
@@ -86,7 +86,7 @@ binary_sensor:
     id: bed_occupied_right
     device_class: occupancy
     icon: mdi:bed
-    lambda: |-
+    lambda: |-  # Check current state against trigger value
       if (id(bed_sensor_right).state > id(val_trigger_right).state) {
         return true;
       } else {
@@ -103,20 +103,19 @@ sensor:
     icon: mdi:gauge
     filters: 
       - sliding_window_moving_average: 
-          window_size: 10   # average over 10 samples/5 seconds
-          send_every: 1     # send every 0.5s
-      - lambda: return x*100/7000/60;  # scale 0->7000Hz to 0->100%
+          window_size: 10             # average over 10 samples/5 seconds (0.5s update_interval)
+          send_every: 1               # send every 0.5s
+      - lambda: return x*100/7000/60; # scale 0->7000Hz to 0->100%
       - clamp:
           min_value: 0
           max_value: 100
       - or: 
-          - delta: 0.1         # only send if sensor change +/- by 0.1
-          - throttle: 60s      # but still update every minute
+          - delta: 0.1                # only send if sensor changes by +/- 0.1
+          - throttle: 60s             # but still update every minute
       #- lambda: return x/60; # frequency
     on_value: 
       then:
-        # Update min/max states
-        - lambda: |-
+        - lambda: |-  # Update min/max measured pressures
             if (x > id(val_max_left).state) {
                 auto call = id(val_max_left).make_call();
                 call.set_value(x);
@@ -136,20 +135,19 @@ sensor:
     icon: mdi:gauge
     filters: 
       - sliding_window_moving_average: 
-          window_size: 10   # average over 10 samples/5 seconds
-          send_every: 1     # send every 0.5s
-      - lambda: return x*100/7000/60;  # scale 0->7000Hz to 0->100%
+          window_size: 10             # average over 10 samples/5 seconds (0.5s update_interval)
+          send_every: 1               # send every 0.5s
+      - lambda: return x*100/7000/60; # scale 0->7000Hz to 0->100%
       - clamp:
           min_value: 0
           max_value: 100
       - or: 
-          - delta: 0.1         # only send if sensor change +/- by 0.1
-          - throttle: 60s      # but still update every minute
+          - delta: 0.1                # only send if sensor changes by +/- 0.1
+          - throttle: 60s             # but still update every minute
       #- lambda: return x/60; # frequency
     on_value: 
       then:
-        # Update min/max states
-        - lambda: |-
+        - lambda: |-  # Update min/max states
             if (x > id(val_max_right).state) {
                 auto call = id(val_max_right).make_call();
                 call.set_value(x);
@@ -192,8 +190,7 @@ number:
     step: 0.01
     on_value: 
       then:
-        # Update status and trigger (if auto calibrating)
-        - lambda: |-
+        - lambda: |-  # Update status and trigger (if auto calibrating)
             id(val_min_status_left).publish_state(x);
             if (id(calibrate_auto_left).state) {
               id(update_trigger_left)->execute();
@@ -208,8 +205,7 @@ number:
     step: 0.01
     on_value: 
       then:
-        # Update status and trigger (if auto calibrating)
-        - lambda: |-
+        - lambda: |-  # Update status and trigger (if auto calibrating)
             id(val_max_status_left).publish_state(x);
             if (id(calibrate_auto_left).state) {
               id(update_trigger_left)->execute();
@@ -235,8 +231,7 @@ number:
     step: 0.01
     on_value: 
       then:
-        # Update status and trigger (if auto calibrating)
-        - lambda: |-
+        - lambda: |-  # Update status and trigger (if auto calibrating)
             id(val_min_status_right).publish_state(x);
             if (id(calibrate_auto_right).state) {
               id(update_trigger_right)->execute();
@@ -251,8 +246,7 @@ number:
     step: 0.01
     on_value: 
       then:
-        # Update status and trigger (if auto calibrating)
-        - lambda: |-
+        - lambda: |-  # Update status and trigger (if auto calibrating)
             id(val_max_status_right).publish_state(x);
             if (id(calibrate_auto_right).state) {
               id(update_trigger_right)->execute();
@@ -317,22 +311,37 @@ script:
   - id: update_trigger_left
     mode: queued
     then:
-      - lambda: |-  # Set val_trigger to x% of difference between min/max
+      - lambda: |-  # Set trigger to x% of difference between min/max
           float min_pressure = id(val_min_left).state;
           float max_pressure = id(val_max_left).state;
           if (min_pressure <= max_pressure) {
+              // calculate new trigger value       
+              float trigger_pressure = min_pressure + ((max_pressure - min_pressure) * float(${trigger_percentile}));
+              
+              // round to 2 decimal places
+              trigger_pressure = round(trigger_pressure * 100)/100.0;
+
+              // set value
               auto call = id(val_trigger_left).make_call();
-              call.set_value(min_pressure + ((max_pressure - min_pressure) * float(${trigger_percentile})));
+              call.set_value(trigger_pressure);
               call.perform();
           }
+              
   - id: update_trigger_right
     mode: queued
     then:
-      - lambda: |-  # Set val_trigger to x% of difference between min/max
+      - lambda: |-  # Set trigger to x% of difference between min/max
           float min_pressure = id(val_min_right).state;
           float max_pressure = id(val_max_right).state;
           if (min_pressure <= max_pressure) {
+              // calculate new trigger value       
+              float trigger_pressure = min_pressure + ((max_pressure - min_pressure) * float(${trigger_percentile}));
+              
+              // round to 2 decimal places
+              trigger_pressure = round(trigger_pressure * 100)/100.0;
+
+              // set value
               auto call = id(val_trigger_right).make_call();
-              call.set_value(min_pressure + ((max_pressure - min_pressure) * float(${trigger_percentile})));
+              call.set_value(trigger_pressure);
               call.perform();
           }
