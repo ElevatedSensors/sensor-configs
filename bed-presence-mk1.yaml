@@ -1,6 +1,24 @@
 substitutions:
-  name: bed-presence-template
-  friendly_name: Bed Presence Template
+  name: "bed-presence"
+  friendly_name: Bed Presence
+  
+  # Auto Calibrate
+  # What happens to the auto calibration switch when the device power cycles?
+  #     - RESTORE_DEFAULT_ON - Attempt to restore previous state, but enable auto calibration if not possible to restore (Default)
+  #     - RESTORE_DEFAULT_OFF - Attempt to restore previous state, but disable auto calibration if not possible to restore
+  #     - ALWAYS_ON - Always enable auto calibration
+  #     - ALWAYS_OFF - Always disable auto calibration
+  calibration_auto_restore: RESTORE_DEFAULT_ON
+
+  # Auto Calibrate Trigger Percentile
+  # This controls how the trigger threshold is set when auto calibration is enabled. This is the percentage of the
+  # observed pressure that is required to register the bed as occupied. During auto calibration, the system stores the
+  # minimum and maximum pressures that it sees and used those values in combination with the trigger_percentile to 
+  # calculate the trigger threshold.
+  #     - 0.75   Require 75% of the maximum measured pressure to trigger (Default)
+  #     - 0.50   Set trigger exactly in the middle of minimum and maximum measured pressures
+  #     - 0.20   More sensitive, might trigger with light items placed on bed
+  trigger_percentile: "0.75"
 
 esphome:
   name: ${name}
@@ -14,6 +32,11 @@ esp32:
   board: esp32-c3-devkitm-1
   framework:
     type: arduino
+
+# Allow updates from ElevatedSensors Github
+dashboard_import:
+  package_import_url: github://ElevatedSensors/sensor-configs/bed-presence-mk1.yaml
+  import_full_config: true
 
 # Enable logging
 logger:
@@ -35,11 +58,6 @@ wifi:
 # to provision wifi credentials to the device via WiFi AP.
 captive_portal:
 
-dashboard_import:
-  package_import_url: github://ElevatedSensors/sensor-configs/bed-presence-mk1.yaml
-  import_full_config: false
-
-
 # Sets up Bluetooth LE (Only on ESP32) to allow the user
 # to provision wifi credentials to the device.
 esp32_improv:
@@ -48,250 +66,145 @@ esp32_improv:
 # To have a "next url" for improv serial
 web_server:
 
-spi:
-  clk_pin: GPIO8    # SCK
-  mosi_pin: GPIO10  # MOSI
-  miso_pin: GPIO9   # MISO
-
-spi_device:
-  id: pot
-  cs_pin: GPIO5     # D3
-
+################################################################################
+# Sensor Configs
 
 binary_sensor:
   - platform: template
-    name: "Bed Left Occupied"
-    id: bed_left_occupied
+    name: "Bed Occupied"
+    id: bed_occupied
     device_class: occupancy
+    icon: mdi:bed # make switch between bed and bed-empty
     lambda: |-
-      if (id(bed_left_sensor).state < id(trigger_level).state) {
+      if (id(bed_sensor).state > id(val_trigger).state) {
         return true;
       } else {
         return false;
       }
-  - platform: template
-    name: "Bed Right Occupied"
-    id: bed_right_occupied
-    device_class: occupancy
-    lambda: |-
-      if (id(bed_right_sensor).state < id(trigger_level).state) {
-        return true;
-      } else {
-        return false;
-      }
+
 sensor:
-  - platform: adc
-    pin: GPIO3 # A1
-    attenuation: 11db
-    name: "Bed Left Sensor"
-    id: "bed_left_sensor"
-    icon: mdi:bed
+  - platform: pulse_counter
+    pin: GPIO3
+    name: Pressure (Current)
+    id: bed_sensor
     update_interval: 0.5s
-    filters:
-      - sliding_window_moving_average:
-          window_size: 10
-          send_every: 1
-      - or:
-          - throttle: 180s
-          - delta: 0.02
-    on_raw_value:
-      - lambda: |-
-          if (id(calibrate_left_u).state) {
-            // Verify voltage is within x, otherwise increment/decriment
-            // Calculate FSR resistance
-            uint16_t FSR_R = 10e3/(3.3*x);
-          
-            // Set a number with this value
-            auto call = id(sensor_r_left_occupied).make_call();
-            call.set_value(FSR_R);
-            call.perform();
-
-            id(read_w0).press();
-            id(calibrate_left_u).turn_off();
-          } else if (id(calibrate_left_o).state) {
-            // Verify voltage is within x, otherwise increment/decriment
-            // Calculate FSR resistance
-            uint16_t FSR_R = 937.5/(3.3*x);
-          
-            // Set a number with this value
-            auto call = id(sensor_r_left_unoccupied).make_call();
-            call.set_value(FSR_R);
-            call.perform();
-
-            id(read_w0).press();
-            id(calibrate_left_o).turn_off();
-          }
-
-
-
-
-
-
-
-
-
-
-
-
-  - platform: adc
-    pin: GPIO4 # A2
-    attenuation: 11db
-    name: "Bed Right Sensor"
-    id: "bed_right_sensor"
-    icon: mdi:bed
-    update_interval: 0.5s
-    filters:
-      - sliding_window_moving_average:
-          window_size: 10
-          send_every: 1
-      - or:
-          - throttle: 180s
-          - delta: 0.02
-
+    unit_of_measurement: "%"
+    icon: mdi:gauge
+    filters: 
+      - sliding_window_moving_average: 
+          window_size: 10   # average over 10 samples/5 seconds
+          send_every: 1     # send every 0.5s
+      - lambda: return x*100/7000/60;  # scale 0->7000Hz to 0->100%
+      - clamp:
+          min_value: 0
+          max_value: 100
+      - or: 
+          - delta: 0.1         # only send if sensor change +/- by 0.1
+          - throttle: 60s      # but still update every minute
+      #- lambda: return x/60; # frequency
+    on_value: 
+      then:
+        # Update min/max states
+        - lambda: |-
+            if (x > id(val_max).state) {
+                auto call = id(val_max).make_call();
+                call.set_value(x);
+                call.perform();
+            }
+            if (x < id(val_min).state) {
+                auto call = id(val_min).make_call();
+                call.set_value(x);
+                call.perform();
+            }
+  - platform: template
+    name: Pressure (Min)
+    id: val_min_status
+    icon: mdi:gauge-empty
+    unit_of_measurement: "%"
+  - platform: template
+    name: Pressure (Max)
+    id: val_max_status
+    icon: mdi:gauge-full
+    unit_of_measurement: "%"
 
 number:
   - platform: template
-    name: Bed Trigger Level
-    id: trigger_level
-    optimistic: true
-    restore_value: true
+    id: val_min
+    optimistic: True
+    restore_value: True
+    initial_value: 100
     min_value: 0
-    max_value: 2.8
-    initial_value: 1.4
-    step: 0.05
-    icon: mdi:arrow-collapse-down
-    unit_of_measurement: V
+    max_value: 100
+    step: 0.01
+    on_value: 
+      then:
+        # Update status and trigger (if auto calibrating)
+        - lambda: |-
+            id(val_min_status).publish_state(x);
+            if (id(calibrate_auto).state) {
+              id(update_trigger)->execute();
+            }
   - platform: template
-    name: Sensor Resistance Left (Unoccupied)
-    id: sensor_r_left_occupied
-    optimistic: true
-    restore_value: true
-    min_value: 0
-    max_value: 10e6
+    id: val_max
+    optimistic: True
+    restore_value: True
     initial_value: 0
-    step: 10
-    unit_of_measurement: ohms
+    min_value: 0
+    max_value: 100
+    step: 0.01
+    on_value: 
+      then:
+        # Update status and trigger (if auto calibrating)
+        - lambda: |-
+            id(val_max_status).publish_state(x);
+            if (id(calibrate_auto).state) {
+              id(update_trigger)->execute();
+            }
   - platform: template
-    name: Sensor Resistance Left (Occupied)
-    id: sensor_r_left_unoccupied
-    optimistic: true
-    restore_value: true
+    name: Pressure (Trigger)
+    id: val_trigger
+    optimistic: True
+    restore_value: True
+    initial_value: 50
     min_value: 0
-    max_value: 10e6
-    initial_value: 0
-    step: 10
-    unit_of_measurement: ohms
-
+    max_value: 100
+    step: 0.01
+    icon: mdi:gauge
+    unit_of_measurement: "%"
+  
 button:
   - platform: template
-    name: "Increment W0"
+    name: Calibration (Reset)
+    icon: mdi:sync
     on_press: 
       then:
-        - lambda: !lambda |-
-            id(pot).enable();
-            id(pot).write_byte(0x04);
-            id(pot).disable();
-            id(read_w0).press();
-  - platform: template
-    name: "Decrement W0"
-    on_press: 
-      then:
-        - lambda: !lambda |-
-            id(pot).enable();
-            id(pot).write_byte(0x08);
-            id(pot).disable();
-            id(read_w0).press();
-  - platform: template
-    name: "Read W0"
-    id: read_w0
-    on_press: 
-      then:
-        - lambda: !lambda |-
-            id(pot).enable();
-            uint8_t cmd = 0xC;
-            id(pot).transfer_byte(cmd);
-            uint8_t val = id(pot).transfer_byte(0x00);
-            id(pot).disable();
-
-            uint16_t resistance = val*10e3/128;
-
-            ESP_LOGD("custom", "val = %u\tres = %u", val, resistance);
-  #- platform: template
-  #  name: "Calibrate Left (Unoccupied)"
-  #  id: calibrate_left_unoccupied
-  #  on_press: 
-  #    then:
-  #      - lambda: !lambda |-
-  #          id(pot).enable();
-  #
-  #          uint16_t test = analogRead(1);
-  #          ESP_LOGD("custom", "**********ANALOG READ VAL = %u");
-  #
-  #          // Set resistance to max
-  #          uint16_t cmd = 
-  #            0b0000  << 12 | // address (volatile wiper 0)
-  #            0b00    << 10 | // command (write)
-  #            128;            // data
-  #          id(pot).write_byte16(cmd);
-  #          
-  #          // Disable
-  #          id(pot).disable();
-  #
-  #          // Calculate FSR resistance
-  #          uint16_t FSR_R = 10e3/(3.3*id(bed_left_sensor).state);
-  #          test = analogRead(1);
-  #          ESP_LOGD("custom", "ANALOG READ VAL = %u");
-  #
-  #          // Set a number with this value
-  #          auto call = id(fsr_left_r_occupied).make_call();
-  #          call.set_value(FSR_R);
-  #          call.perform();
-  #
-  #          id(read_w0).press();
-
-## IDEA
-# Create switch that says calibrate x
-# set resistance, then 
-# for the sensor, on_update (if calibrate_x, call calibrate script)
-# Once you get x resistance values close together, disable calibration (set text sensor that says done?)
+        - number.set:
+            id: val_min
+            value: 100
+        - number.set:
+            id: val_max
+            value: 0
+        - number.set: 
+            id: val_trigger
+            value: 50
+  
 switch:
   - platform: template
-    name: "Calibrate Left (Unoccupied)"
-    id: calibrate_left_u
-    optimistic: true
-    turn_on_action: 
-      then:
-        - lambda: |-
-            //replace with script (set_wiper_v0(10k))
-            // Enable
-            id(pot).enable();
-            // Set resistance to 10k
-            //             addr (v wiper 0)    cmd (write)   data (10k ohm)
-            uint16_t cmd = 0b0000  << 12     | 0b00 << 10  | 128;
-            id(pot).write_byte16(cmd);
-            // Disable
-            id(pot).disable();  
-  - platform: template
-    name: "Calibrate Left (Occupied)"
-    id: calibrate_left_o
-    optimistic: true
-    turn_on_action: 
-      then:
-        - lambda: |-
-            //replace with script (set_wiper_v0(937.5))
-            // Enable
-            id(pot).enable();
-            // Set resistance to 
-            //             addr (v wiper 0)    cmd (write)   data (937.5 ohm)
-            uint16_t cmd = 0b0000  << 12     | 0b00 << 10  | 12;
-            id(pot).write_byte16(cmd);
-            // Disable
-            id(pot).disable();  
-  - platform: template
-    name: "Calibrate Right (Unoccupied)"
-    id: calibrate_right_u
-    optimistic: true
-  - platform: template
-    name: "Calibrate Right (Occupied)"
-    id: calibrate_right_o
-    optimistic: true
+    name: Calibration (Auto)
+    id: calibrate_auto
+    optimistic: True
+    icon: mdi:auto-fix
+    restore_mode: ${calibration_auto_restore}
+  
+script:
+  - id: update_trigger
+    mode: queued
+    then:
+      - lambda: |-  # Set val_trigger to x% of difference between min/max
+          float min_pressure = id(val_min).state;
+          float max_pressure = id(val_max).state;
+          if (min_pressure <= max_pressure) {
+              auto call = id(val_trigger).make_call();
+              call.set_value(min_pressure + ((max_pressure - min_pressure) * float(${trigger_percentile})));
+              call.perform();
+          }
