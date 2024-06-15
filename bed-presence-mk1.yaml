@@ -4,21 +4,21 @@ substitutions:
   
   # Auto Calibrate
   # What happens to the auto calibration switch when the device power cycles?
-  #     - RESTORE_DEFAULT_ON - Attempt to restore previous state, but enable auto calibration if not possible to restore (Default)
+  #     - RESTORE_DEFAULT_ON - Attempt to restore previous state, but enable auto calibration if not possible to restore
   #     - RESTORE_DEFAULT_OFF - Attempt to restore previous state, but disable auto calibration if not possible to restore
   #     - ALWAYS_ON - Always enable auto calibration
-  #     - ALWAYS_OFF - Always disable auto calibration
-  calibration_auto_restore: RESTORE_DEFAULT_ON
+  #     - ALWAYS_OFF - Always disable auto calibration (Default)
+  calibration_auto_restore: ALWAYS_OFF
 
   # Auto Calibrate Trigger Percentile
   # This controls how the trigger threshold is set when auto calibration is enabled. This is the percentage of the
   # observed pressure that is required to register the bed as occupied. During auto calibration, the system stores the
   # minimum and maximum pressures that it sees and used those values in combination with the trigger_percentile to 
   # calculate the trigger threshold.
-  #     - 0.75   Less sensitive, requires 75% of the maximum measured pressure to trigger
-  #     - 0.50   Set trigger exactly in the middle of minimum and maximum measured pressures (Default)
-  #     - 0.20   More sensitive, might trigger with light items placed on bed
-  trigger_percentile: "0.50"
+  #     - 0.9    Less sensitive, requires 90% of the maximum measured pressure to trigger (Default)
+  #     - 0.50   Set trigger exactly in the middle of minimum and maximum measured pressures
+  #     - 0.20   More sensitive, likely to be triggered by partner
+  trigger_percentile: "0.90"
 
 esphome:
   name: ${name}
@@ -95,7 +95,7 @@ binary_sensor:
 
 sensor:
   - platform: pulse_counter
-    pin: GPIO3
+    pin: GPIO20
     name: Left Pressure (Current)
     id: bed_sensor_left
     update_interval: 0.5s
@@ -127,7 +127,7 @@ sensor:
                 call.perform();
             }
   - platform: pulse_counter
-    pin: GPIO4
+    pin: GPIO10
     name: Right Pressure (Current)
     id: bed_sensor_right
     update_interval: 0.5s
