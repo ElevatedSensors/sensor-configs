@@ -95,7 +95,7 @@ binary_sensor:
 
 sensor:
   - platform: pulse_counter
-    pin: GPIO20
+    pin: GPIO10
     name: Left Pressure (Current)
     id: bed_sensor_left
     update_interval: 0.5s
@@ -127,7 +127,7 @@ sensor:
                 call.perform();
             }
   - platform: pulse_counter
-    pin: GPIO10
+    pin: GPIO20
     name: Right Pressure (Current)
     id: bed_sensor_right
     update_interval: 0.5s
