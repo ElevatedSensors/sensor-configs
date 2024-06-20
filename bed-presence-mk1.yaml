@@ -275,6 +275,7 @@ number:
 button:
   - platform: template
     name: Calibration Left (Reset)
+    id: calibration_left_reset
     icon: mdi:sync
     entity_category: config
     on_press: 
@@ -290,6 +291,7 @@ button:
             value: 50
   - platform: template
     name: Calibration Right (Reset)
+    id: calibration_right_reset
     icon: mdi:sync
     entity_category: config
     on_press: 
@@ -311,6 +313,8 @@ switch:
     optimistic: True
     icon: mdi:auto-fix
     restore_mode: ${calibration_auto_restore}
+    turn_on_action:
+      - button.press: calibration_left_reset
     entity_category: config
   - platform: template
     name: Calibration Right (Auto)
@@ -318,6 +322,8 @@ switch:
     optimistic: True
     icon: mdi:auto-fix
     restore_mode: ${calibration_auto_restore}
+    turn_on_action:
+      - button.press: calibration_right_reset
     entity_category: config
   - platform: restart
     name: Restart
