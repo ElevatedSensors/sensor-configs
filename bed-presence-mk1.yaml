@@ -1,14 +1,6 @@
 substitutions:
   name: "bed-presence"
   friendly_name: Bed Presence
-  
-  # Auto Calibrate
-  # What happens to the auto calibration switch when the device power cycles?
-  #     - RESTORE_DEFAULT_ON - Attempt to restore previous state, but enable auto calibration if not possible to restore
-  #     - RESTORE_DEFAULT_OFF - Attempt to restore previous state, but disable auto calibration if not possible to restore
-  #     - ALWAYS_ON - Always enable auto calibration
-  #     - ALWAYS_OFF - Always disable auto calibration (Default)
-  calibration_auto_restore: ALWAYS_OFF
 
   # Auto Calibrate Trigger Percentile
   # This controls how the trigger threshold is set when auto calibration is enabled. This is the percentage of the
@@ -313,7 +305,7 @@ switch:
     id: calibrate_auto_left
     optimistic: True
     icon: mdi:auto-fix
-    restore_mode: ${calibration_auto_restore}
+    restore_mode: ALWAYS_OFF
     turn_on_action:
       - button.press: calibration_left_reset
     entity_category: config
@@ -322,7 +314,7 @@ switch:
     id: calibrate_auto_right
     optimistic: True
     icon: mdi:auto-fix
-    restore_mode: ${calibration_auto_restore}
+    restore_mode: ALWAYS_OFF
     turn_on_action:
       - button.press: calibration_right_reset
     entity_category: config
