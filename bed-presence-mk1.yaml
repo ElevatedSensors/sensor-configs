@@ -1,6 +1,6 @@
 substitutions:
-  name: "bed-presence"
-  friendly_name: Bed Presence
+  name: bed-presence-02d538
+  friendly_name: Bed Presence 02d538
 
   # Auto Calibrate Trigger Percentile
   # This controls how the trigger threshold is set when auto calibration is enabled. This is the percentage of the
@@ -10,15 +10,15 @@ substitutions:
   #     - 0.9    Less sensitive, requires 90% of the maximum measured pressure to trigger (Default)
   #     - 0.50   Set trigger exactly in the middle of minimum and maximum measured pressures
   #     - 0.20   More sensitive, likely to be triggered by partner
-  trigger_percentile: "0.90"
+  trigger_percentile: '0.90'
 
 esphome:
   name: ${name}
   friendly_name: ${friendly_name}
-  name_add_mac_suffix: true
+  name_add_mac_suffix: false
   project:
     name: ElevatedSensors.BedPresence
-    version: 'mk1'
+    version: mk1
 
 esp32:
   board: esp32-c3-devkitm-1
@@ -38,7 +38,7 @@ api:
 
 # Allow Over-The-Air updates
 ota:
-  - platform: esphome
+- platform: esphome
 
 # Allow provisioning Wi-Fi via serial
 improv_serial:
@@ -63,299 +63,311 @@ web_server:
 # Sensor Configs
 
 binary_sensor:
-  - platform: template
-    name: "Bed Occupied Left"
-    id: bed_occupied_left
-    device_class: occupancy
-    icon: mdi:bed
-    lambda: |-  # Check current state against trigger value
-      if (id(bed_sensor_left).state > id(val_trigger_left).state) {
-        return true;
-      } else {
-        return false;
-      }
-  - platform: template
-    name: "Bed Occupied Right"
-    id: bed_occupied_right
-    device_class: occupancy
-    icon: mdi:bed
-    lambda: |-  # Check current state against trigger value
-      if (id(bed_sensor_right).state > id(val_trigger_right).state) {
-        return true;
-      } else {
-        return false;
-      }
+- platform: template
+  name: Bed Occupied Left
+  id: bed_occupied_left
+  device_class: occupancy
+  icon: mdi:bed
+  filters: 
+    - delayed_off: 2s   # prevent shifting in bed from registering "off"
+  lambda: |-  # Check current state against trigger value
+    if (id(bed_sensor_left).state > id(val_trigger_left).state) {
+      return true;
+    } else {
+      return false;
+    }
+- platform: template
+  name: Bed Occupied Right
+  id: bed_occupied_right
+  device_class: occupancy
+  icon: mdi:bed
+  lambda: |-  # Check current state against trigger value
+    if (id(bed_sensor_right).state > id(val_trigger_right).state) {
+      return true;
+    } else {
+      return false;
+    }
 
 sensor:
-  - platform: pulse_counter
-    pin: GPIO10
-    name: Left Pressure (Current)
-    id: bed_sensor_left
-    update_interval: 0.5s
-    unit_of_measurement: "%"
-    icon: mdi:gauge
-    filters: 
-      - sliding_window_moving_average: 
-          window_size: 10             # average over 10 samples/5 seconds (0.5s update_interval)
-          send_every: 1               # send every 0.5s
-      - lambda: return x*100/7000/60; # scale 0->7000Hz to 0->100%
-      - clamp:
-          min_value: 0
-          max_value: 100
-      - or: 
-          - delta: 0.1                # only send if sensor changes by +/- 0.1
-          - throttle: 60s             # but still update every minute
+- platform: pulse_counter
+  pin: GPIO10
+  name: Left Pressure (Current)
+  id: bed_sensor_left
+  update_interval: 0.5s
+  unit_of_measurement: '%'
+  icon: mdi:gauge
+  filters:
+  - sliding_window_moving_average:
+      window_size: 10                  # average over 4 samples/2 seconds (0.5s update_interval)
+      send_every: 1                   # send every 0.5s
+  - calibrate_linear:                 # scale pulses/minute to 0->100%
+      method: exact
+      datapoints:           # Weight    FSR Resistance
+        - 169412 -> 0.00    #  0.2g     30.0k
+        - 367660 -> 5.00    #  0.5kg     2.5k
+        - 386871 -> 10.00   #  1.0kg     1.3k
+        - 396895 -> 20.00   #  2.0kg      769
+        - 402910 -> 40.00   #  4.0kg      444
+        - 405006 -> 60.00   #  6.0kg      333
+        - 405901 -> 80.00   #  8.0kg      286
+        - 406703 -> 100.00  # 10.0kg      244
+  - clamp:
+      min_value: 0
+      max_value: 110
+  - or:
+    - delta: 1.0                      # only send if sensor changes by +/- 1.0 (eliminate sensor noise)
+    - throttle: 60s                   # but still update every minute
       #- lambda: return x/60; # frequency
-    on_value: 
-      then:
-        - lambda: |-  # Update min/max measured pressures
-            if (x > id(val_max_left).state) {
-                auto call = id(val_max_left).make_call();
-                call.set_value(x);
-                call.perform();
-            }
-            if (x < id(val_min_left).state) {
-                auto call = id(val_min_left).make_call();
-                call.set_value(x);
-                call.perform();
-            }
-  - platform: pulse_counter
-    pin: GPIO20
-    name: Right Pressure (Current)
-    id: bed_sensor_right
-    update_interval: 0.5s
-    unit_of_measurement: "%"
-    icon: mdi:gauge
-    filters: 
-      - sliding_window_moving_average: 
-          window_size: 10             # average over 10 samples/5 seconds (0.5s update_interval)
-          send_every: 1               # send every 0.5s
-      - lambda: return x*100/7000/60; # scale 0->7000Hz to 0->100%
-      - clamp:
-          min_value: 0
-          max_value: 100
-      - or: 
-          - delta: 0.1                # only send if sensor changes by +/- 0.1
-          - throttle: 60s             # but still update every minute
+  on_value:
+    then:
+    - lambda: |-  # Update min/max measured pressures
+        if (x > id(val_max_left).state) {
+            auto call = id(val_max_left).make_call();
+            call.set_value(x);
+            call.perform();
+        }
+        if (x < id(val_min_left).state) {
+            auto call = id(val_min_left).make_call();
+            call.set_value(x);
+            call.perform();
+        }
+- platform: pulse_counter
+  pin: GPIO20
+  name: Right Pressure (Current)
+  id: bed_sensor_right
+  update_interval: 0.5s
+  unit_of_measurement: '%'
+  icon: mdi:gauge
+  filters:
+  - sliding_window_moving_average:
+      window_size: 10                 # average over 10 samples/5 seconds (0.5s update_interval)
+      send_every: 1                   # send every 0.5s
+  - lambda: return x*100/7000/60;     # scale 0->7000Hz to 0->100%
+  - clamp:
+      min_value: 0
+      max_value: 100
+  - or:
+    - delta: 0.1                      # only send if sensor changes by +/- 0.1
+    - throttle: 60s                   # but still update every minute
       #- lambda: return x/60; # frequency
-    on_value: 
-      then:
-        - lambda: |-  # Update min/max states
-            if (x > id(val_max_right).state) {
-                auto call = id(val_max_right).make_call();
-                call.set_value(x);
-                call.perform();
-            }
-            if (x < id(val_min_right).state) {
-                auto call = id(val_min_right).make_call();
-                call.set_value(x);
-                call.perform();
-            }
-  - platform: template
-    name: Left Pressure (Min)
-    id: val_min_status_left
-    icon: mdi:gauge-empty
-    unit_of_measurement: "%"
-    entity_category: diagnostic
-  - platform: template
-    name: Left Pressure (Max)
-    id: val_max_status_left
-    icon: mdi:gauge-full
-    unit_of_measurement: "%"
-    entity_category: diagnostic
-  - platform: template
-    name: Right Pressure (Min)
-    id: val_min_status_right
-    icon: mdi:gauge-empty
-    unit_of_measurement: "%"
-    entity_category: diagnostic
-  - platform: template
-    name: Right Pressure (Max)
-    id: val_max_status_right
-    icon: mdi:gauge-full
-    unit_of_measurement: "%"
-    entity_category: diagnostic
-  - platform: wifi_signal
-    name: WiFi Strength
-    update_interval: 60s
+  on_value:
+    then:
+    - lambda: |-  # Update min/max states
+        if (x > id(val_max_right).state) {
+            auto call = id(val_max_right).make_call();
+            call.set_value(x);
+            call.perform();
+        }
+        if (x < id(val_min_right).state) {
+            auto call = id(val_min_right).make_call();
+            call.set_value(x);
+            call.perform();
+        }
+- platform: template
+  name: Left Pressure (Min)
+  id: val_min_status_left
+  icon: mdi:gauge-empty
+  unit_of_measurement: '%'
+  entity_category: diagnostic
+- platform: template
+  name: Left Pressure (Max)
+  id: val_max_status_left
+  icon: mdi:gauge-full
+  unit_of_measurement: '%'
+  entity_category: diagnostic
+- platform: template
+  name: Right Pressure (Min)
+  id: val_min_status_right
+  icon: mdi:gauge-empty
+  unit_of_measurement: '%'
+  entity_category: diagnostic
+- platform: template
+  name: Right Pressure (Max)
+  id: val_max_status_right
+  icon: mdi:gauge-full
+  unit_of_measurement: '%'
+  entity_category: diagnostic
+- platform: wifi_signal
+  name: WiFi Strength
+  update_interval: 60s
 
 number:
-  - platform: template
-    id: val_min_left
-    optimistic: True
-    restore_value: True
-    initial_value: 100
-    min_value: 0
-    max_value: 100
-    step: 0.01
-    on_value: 
-      then:
-        - lambda: |-  # Update status and trigger (if auto calibrating)
-            id(val_min_status_left).publish_state(x);
-            if (id(calibrate_auto_left).state) {
-              id(update_trigger_left)->execute();
-            }
-  - platform: template
-    id: val_max_left
-    optimistic: True
-    restore_value: True
-    initial_value: 0
-    min_value: 0
-    max_value: 100
-    step: 0.01
-    on_value: 
-      then:
-        - lambda: |-  # Update status and trigger (if auto calibrating)
-            id(val_max_status_left).publish_state(x);
-            if (id(calibrate_auto_left).state) {
-              id(update_trigger_left)->execute();
-            }
-  - platform: template
-    name: Left Trigger Pressure
-    id: val_trigger_left
-    optimistic: True
-    restore_value: True
-    initial_value: 50
-    min_value: 0
-    max_value: 100
-    step: 0.01
-    icon: mdi:gauge
-    unit_of_measurement: "%"
-    entity_category: config
-  - platform: template
-    id: val_min_right
-    optimistic: True
-    restore_value: True
-    initial_value: 100
-    min_value: 0
-    max_value: 100
-    step: 0.01
-    on_value: 
-      then:
-        - lambda: |-  # Update status and trigger (if auto calibrating)
-            id(val_min_status_right).publish_state(x);
-            if (id(calibrate_auto_right).state) {
-              id(update_trigger_right)->execute();
-            }
-  - platform: template
-    id: val_max_right
-    optimistic: True
-    restore_value: True
-    initial_value: 0
-    min_value: 0
-    max_value: 100
-    step: 0.01
-    on_value: 
-      then:
-        - lambda: |-  # Update status and trigger (if auto calibrating)
-            id(val_max_status_right).publish_state(x);
-            if (id(calibrate_auto_right).state) {
-              id(update_trigger_right)->execute();
-            }
-  - platform: template
-    name:  Right Trigger Pressure
-    id: val_trigger_right
-    optimistic: True
-    restore_value: True
-    initial_value: 50
-    min_value: 0
-    max_value: 100
-    step: 0.01
-    icon: mdi:gauge
-    unit_of_measurement: "%"
-    entity_category: config
-  
+- platform: template
+  id: val_min_left
+  optimistic: true
+  restore_value: true
+  initial_value: 100
+  min_value: 0
+  max_value: 100
+  step: 0.01
+  on_value:
+    then:
+    - lambda: |-  # Update status and trigger (if auto calibrating)
+        id(val_min_status_left).publish_state(x);
+        if (id(calibrate_auto_left).state) {
+          id(update_trigger_left)->execute();
+        }
+- platform: template
+  id: val_max_left
+  optimistic: true
+  restore_value: true
+  initial_value: 0
+  min_value: 0
+  max_value: 100
+  step: 0.01
+  on_value:
+    then:
+    - lambda: |-  # Update status and trigger (if auto calibrating)
+        id(val_max_status_left).publish_state(x);
+        if (id(calibrate_auto_left).state) {
+          id(update_trigger_left)->execute();
+        }
+- platform: template
+  name: Left Trigger Pressure
+  id: val_trigger_left
+  optimistic: true
+  restore_value: true
+  initial_value: 50
+  min_value: 0
+  max_value: 100
+  step: 0.01
+  icon: mdi:gauge
+  unit_of_measurement: '%'
+  entity_category: config
+- platform: template
+  id: val_min_right
+  optimistic: true
+  restore_value: true
+  initial_value: 100
+  min_value: 0
+  max_value: 100
+  step: 0.01
+  on_value:
+    then:
+    - lambda: |-  # Update status and trigger (if auto calibrating)
+        id(val_min_status_right).publish_state(x);
+        if (id(calibrate_auto_right).state) {
+          id(update_trigger_right)->execute();
+        }
+- platform: template
+  id: val_max_right
+  optimistic: true
+  restore_value: true
+  initial_value: 0
+  min_value: 0
+  max_value: 100
+  step: 0.01
+  on_value:
+    then:
+    - lambda: |-  # Update status and trigger (if auto calibrating)
+        id(val_max_status_right).publish_state(x);
+        if (id(calibrate_auto_right).state) {
+          id(update_trigger_right)->execute();
+        }
+- platform: template
+  name: Right Trigger Pressure
+  id: val_trigger_right
+  optimistic: true
+  restore_value: true
+  initial_value: 50
+  min_value: 0
+  max_value: 100
+  step: 0.01
+  icon: mdi:gauge
+  unit_of_measurement: '%'
+  entity_category: config
+
 button:
-  - platform: template
-    name: Calibration Left (Reset)
-    id: calibration_left_reset
-    icon: mdi:sync
-    entity_category: config
-    on_press: 
-      then:
-        - number.set:
-            id: val_min_left
-            value: 100
-        - number.set:
-            id: val_max_left
-            value: 0
-        - number.set: 
-            id: val_trigger_left
-            value: 50
-  - platform: template
-    name: Calibration Right (Reset)
-    id: calibration_right_reset
-    icon: mdi:sync
-    entity_category: config
-    on_press: 
-      then:
-        - number.set:
-            id: val_min_right
-            value: 100
-        - number.set:
-            id: val_max_right
-            value: 0
-        - number.set: 
-            id: val_trigger_right
-            value: 50
-  
+- platform: template
+  name: Calibration Left (Reset)
+  id: calibration_left_reset
+  icon: mdi:sync
+  entity_category: config
+  on_press:
+    then:
+    - number.set:
+        id: val_min_left
+        value: 100
+    - number.set:
+        id: val_max_left
+        value: 0
+    - number.set:
+        id: val_trigger_left
+        value: 50
+- platform: template
+  name: Calibration Right (Reset)
+  id: calibration_right_reset
+  icon: mdi:sync
+  entity_category: config
+  on_press:
+    then:
+    - number.set:
+        id: val_min_right
+        value: 100
+    - number.set:
+        id: val_max_right
+        value: 0
+    - number.set:
+        id: val_trigger_right
+        value: 50
+
 switch:
-  - platform: template
-    name: Calibration Left (Auto)
-    id: calibrate_auto_left
-    optimistic: True
-    icon: mdi:auto-fix
-    restore_mode: ALWAYS_OFF
-    turn_on_action:
-      - button.press: calibration_left_reset
-    entity_category: config
-  - platform: template
-    name: Calibration Right (Auto)
-    id: calibrate_auto_right
-    optimistic: True
-    icon: mdi:auto-fix
-    restore_mode: ALWAYS_OFF
-    turn_on_action:
-      - button.press: calibration_right_reset
-    entity_category: config
-  - platform: restart
-    name: Restart
-  
+- platform: template
+  name: Calibration Left (Auto)
+  id: calibrate_auto_left
+  optimistic: true
+  icon: mdi:auto-fix
+  restore_mode: ALWAYS_OFF
+  turn_on_action:
+  - button.press: calibration_left_reset
+  entity_category: config
+- platform: template
+  name: Calibration Right (Auto)
+  id: calibrate_auto_right
+  optimistic: true
+  icon: mdi:auto-fix
+  restore_mode: ALWAYS_OFF
+  turn_on_action:
+  - button.press: calibration_right_reset
+  entity_category: config
+- platform: restart
+  name: Restart
+
 script:
-  - id: update_trigger_left
-    mode: queued
-    then:
-      - lambda: |-  # Set trigger to x% of difference between min/max
-          float min_pressure = id(val_min_left).state;
-          float max_pressure = id(val_max_left).state;
-          if (min_pressure <= max_pressure) {
-              // calculate new trigger value       
-              float trigger_pressure = min_pressure + ((max_pressure - min_pressure) * float(${trigger_percentile}));
-              
-              // round to 2 decimal places
-              trigger_pressure = round(trigger_pressure * 100)/100.0;
+- id: update_trigger_left
+  mode: queued
+  then:
+  - lambda: |-  # Set trigger to x% of difference between min/max
+      float min_pressure = id(val_min_left).state;
+      float max_pressure = id(val_max_left).state;
+      if (min_pressure <= max_pressure) {
+          // calculate new trigger value       
+          float trigger_pressure = min_pressure + ((max_pressure - min_pressure) * float(${trigger_percentile}));
+          
+          // round to 2 decimal places
+          trigger_pressure = round(trigger_pressure * 100)/100.0;
 
-              // set value
-              auto call = id(val_trigger_left).make_call();
-              call.set_value(trigger_pressure);
-              call.perform();
-          }
-              
-  - id: update_trigger_right
-    mode: queued
-    then:
-      - lambda: |-  # Set trigger to x% of difference between min/max
-          float min_pressure = id(val_min_right).state;
-          float max_pressure = id(val_max_right).state;
-          if (min_pressure <= max_pressure) {
-              // calculate new trigger value       
-              float trigger_pressure = min_pressure + ((max_pressure - min_pressure) * float(${trigger_percentile}));
-              
-              // round to 2 decimal places
-              trigger_pressure = round(trigger_pressure * 100)/100.0;
+          // set value
+          auto call = id(val_trigger_left).make_call();
+          call.set_value(trigger_pressure);
+          call.perform();
+      }
+          
+- id: update_trigger_right
+  mode: queued
+  then:
+  - lambda: |-  # Set trigger to x% of difference between min/max
+      float min_pressure = id(val_min_right).state;
+      float max_pressure = id(val_max_right).state;
+      if (min_pressure <= max_pressure) {
+          // calculate new trigger value       
+          float trigger_pressure = min_pressure + ((max_pressure - min_pressure) * float(${trigger_percentile}));
+          
+          // round to 2 decimal places
+          trigger_pressure = round(trigger_pressure * 100)/100.0;
 
-              // set value
-              auto call = id(val_trigger_right).make_call();
-              call.set_value(trigger_pressure);
-              call.perform();
-          }
+          // set value
+          auto call = id(val_trigger_right).make_call();
+          call.set_value(trigger_pressure);
+          call.perform();
+      }
