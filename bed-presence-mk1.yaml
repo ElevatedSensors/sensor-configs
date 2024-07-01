@@ -1,6 +1,6 @@
 substitutions:
-  name: bed-presence-02d538
-  friendly_name: Bed Presence 02d538
+  name: bed-presence
+  friendly_name: Bed Presence
 
   # Auto Calibrate Trigger Percentile
   # This controls how the trigger threshold is set when auto calibration is enabled. This is the percentage of the
@@ -15,7 +15,7 @@ substitutions:
 esphome:
   name: ${name}
   friendly_name: ${friendly_name}
-  name_add_mac_suffix: false
+  name_add_mac_suffix: true
   project:
     name: ElevatedSensors.BedPresence
     version: mk1
