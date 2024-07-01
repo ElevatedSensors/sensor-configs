@@ -81,6 +81,8 @@ binary_sensor:
   id: bed_occupied_right
   device_class: occupancy
   icon: mdi:bed
+  filters: 
+    - delayed_off: 2s   # prevent shifting in bed from registering "off"
   lambda: |-  # Check current state against trigger value
     if (id(bed_sensor_right).state > id(val_trigger_right).state) {
       return true;
@@ -113,9 +115,9 @@ sensor:
         - 406703 -> 100.00  # 10.0kg      244
   - clamp:
       min_value: 0
-      max_value: 110
+      max_value: 100
   - or:
-    - delta: 1.0                      # only send if sensor changes by +/- 1.0 (eliminate sensor noise)
+    - delta: 0.1                      # only send if sensor changes by +/- 1.0 (eliminate sensor noise)
     - throttle: 60s                   # but still update every minute
       #- lambda: return x/60; # frequency
   on_value:
@@ -142,7 +144,17 @@ sensor:
   - sliding_window_moving_average:
       window_size: 10                 # average over 10 samples/5 seconds (0.5s update_interval)
       send_every: 1                   # send every 0.5s
-  - lambda: return x*100/7000/60;     # scale 0->7000Hz to 0->100%
+  - calibrate_linear:                 # scale pulses/minute to 0->100%
+      method: exact
+      datapoints:           # Weight    FSR Resistance
+        - 169412 -> 0.00    #  0.2g     30.0k
+        - 367660 -> 5.00    #  0.5kg     2.5k
+        - 386871 -> 10.00   #  1.0kg     1.3k
+        - 396895 -> 20.00   #  2.0kg      769
+        - 402910 -> 40.00   #  4.0kg      444
+        - 405006 -> 60.00   #  6.0kg      333
+        - 405901 -> 80.00   #  8.0kg      286
+        - 406703 -> 100.00  # 10.0kg      244
   - clamp:
       min_value: 0
       max_value: 100
