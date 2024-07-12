@@ -10,9 +10,7 @@ jobs:
     strategy:
       matrix:
         file:
-          - project-template-esp32-release.yaml
-          - project-template-esp32-c3-release.yaml
-          - project-template-esp32-s3-release.yaml
+            bed-presence-mk1.yaml
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4.1.7
