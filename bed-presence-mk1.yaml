@@ -28,7 +28,7 @@ esp32:
 # Allow Import
 dashboard_import:
   package_import_url: github://ElevatedSensors/sensor-configs/bed-presence-mk1.yaml@main
-  import_full_config: false
+  import_full_config: true
 
 # Enable logging
 logger:
@@ -55,18 +55,22 @@ esp32_improv:
 # To have a "next url" for improv serial
 web_server:
 
-# Managed Updates from Elevated Sensors
+# Enable esphome OTA updates
 ota:
-- platform: http_request
+  platform: esphome
 
-http_request:
-  verify_ssl: false
-
-update:
-  - platform: http_request
-    name: Firmware Update
-    source: https://elevatedsensors.github.io/sensor-configs-new/manifest.json
-    update_interval: 1min # Default to 6 hours later
+## Managed Updates from Elevated Sensors
+#ota:
+#- platform: http_request
+#
+#http_request:
+#  verify_ssl: false
+#
+#update:
+#  - platform: http_request
+#    name: Firmware Update
+#    source: https://dev.elevatedsensors.com/sensor-configs-/manifest.json
+#    update_interval: 6h
 
 ################################################################################
 # Sensor Configs
@@ -135,7 +139,6 @@ sensor:
   - clamp:
       max_value: 100.0
       min_value: 0.0
-  #- lambda: return x*100/6800/60; # scale 0->6800Hz to 0->100%
   - or:
     - delta: 0.1                  # only send if sensor changes by +/-0.1% (eliminate sensor noise)
     - throttle: 60s               # but still update every minute
@@ -171,7 +174,6 @@ sensor:
   - clamp:
       max_value: 100.0
       min_value: 0.0
-  #- lambda: return x*100/6800/60; # scale 0->6800Hz to 0->100%
   - or:
     - delta: 0.1                  # only send if sensor changes by +/-0.1% (eliminate sensor noise)
     - throttle: 60s               # but still update every minute
