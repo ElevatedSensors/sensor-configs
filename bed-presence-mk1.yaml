@@ -5,7 +5,7 @@ substitutions:
   # Auto Calibrate Trigger Percentile
   # This controls how the trigger threshold is set when auto calibration is enabled. This is the percentage of the
   # observed pressure that is required to register the bed as occupied. During auto calibration, the system stores the
-  # minimum and maximum pressures that it sees and used those values in combination with the trigger_percentile to 
+  # minimum and maximum pressures that it sees and used those values in combination with the trigger_percentile to
   # calculate the trigger threshold.
   #     - 0.9    Less sensitive, requires 90% of the maximum measured pressure to trigger (Default)
   #     - 0.50   Set trigger exactly in the middle of minimum and maximum measured pressures
@@ -65,7 +65,7 @@ http_request:
 update:
   - platform: http_request
     name: Firmware Update
-    source: https://raw.githubusercontent.com/ElevatedSensors/sensor-configs/main/firmware/bed-presence-mk1/manifest.json
+    source: https://elevatedsensors.github.io/sensor-configs-new/manifest.json
     update_interval: 1min # Default to 6 hours later
 
 ################################################################################
@@ -132,7 +132,7 @@ sensor:
       datapoints:
         - 408000 -> 100.0         # 6800Hz (sensor shorted/0ohms)
         - 276000 -> 0.0           # 4600Hz (breakforce/10k)
-  - clamp: 
+  - clamp:
       max_value: 100.0
       min_value: 0.0
   #- lambda: return x*100/6800/60; # scale 0->6800Hz to 0->100%
@@ -168,7 +168,7 @@ sensor:
       datapoints:
         - 408000 -> 100.0         # 6800Hz (sensor shorted/0ohms)
         - 276000 -> 0.0           # 4600Hz (breakforce/10k)
-  - clamp: 
+  - clamp:
       max_value: 100.0
       min_value: 0.0
   #- lambda: return x*100/6800/60; # scale 0->6800Hz to 0->100%
@@ -375,9 +375,9 @@ script:
       float min_pressure = id(val_min_left).state;
       float max_pressure = id(val_max_left).state;
       if (min_pressure <= max_pressure) {
-          // calculate new trigger value       
+          // calculate new trigger value
           float trigger_pressure = min_pressure + ((max_pressure - min_pressure) * float(${trigger_percentile}));
-          
+
           // round to 2 decimal places
           trigger_pressure = round(trigger_pressure * 100)/100.0;
 
@@ -386,7 +386,7 @@ script:
           call.set_value(trigger_pressure);
           call.perform();
       }
-          
+
 - id: update_trigger_right
   mode: queued
   then:
@@ -394,9 +394,9 @@ script:
       float min_pressure = id(val_min_right).state;
       float max_pressure = id(val_max_right).state;
       if (min_pressure <= max_pressure) {
-          // calculate new trigger value       
+          // calculate new trigger value
           float trigger_pressure = min_pressure + ((max_pressure - min_pressure) * float(${trigger_percentile}));
-          
+
           // round to 2 decimal places
           trigger_pressure = round(trigger_pressure * 100)/100.0;
 
