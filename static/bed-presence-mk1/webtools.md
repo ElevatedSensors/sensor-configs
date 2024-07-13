@@ -1,10 +1,6 @@
-# About
-
-Elevated Sensors helps you bring your DIY to a new level. Elevate your smart home experience with our high-quality, reliable, local sensors designed to seamlessly integrate with leading home automation platforms like Home Assistant and ESPHome. Discover the power of connected living and take control of your environment.
-
 # Installation
 
-You can use the button below to install the pre-built firmware directly to your device via USB from the browser.
+You can use the button below to install the pre-built firmware directly to your device via USB from the browser. Note this has already been done from the factory.
 
 <esp-web-install-button manifest="../manifest.json"></esp-web-install-button>
 
