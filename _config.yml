@@ -1,4 +1,5 @@
 # CHANGEME: Set these variable to your liking
 title: Elevated Sensors
 description: Powered by ESPHome and ESP Web Tools
-theme: jekyll-theme-slate
+#theme: jekyll-theme-slate
+theme: jekyll-theme-minimal
