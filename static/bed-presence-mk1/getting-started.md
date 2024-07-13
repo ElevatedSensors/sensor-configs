@@ -36,7 +36,7 @@ Welcome to Bed Presence for ESPHome! This page contains everything you need to g
 2. Select a slat in the torso region, where most of your weight will be applied to the bed
 3. Orient the sensor with the circuit board/text facing up.
 4. Firmly attach the device using the provide screw. Pre-drill if necessary.
-5. Insert the sensors, then peal back the adhesive and affix the sensors to the bed slat.
+5. Insert the sensors, then peal the adhesive backing and affix the sensors to the bed slat.
 
 ## Automatic Sensor Calibration
 
