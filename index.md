@@ -2,11 +2,12 @@
 
 Elevated Sensors helps you bring your DIY to a new level. Elevate your smart home experience with our high-quality, reliable, local sensors designed to seamlessly integrate with leading home automation platforms like Home Assistant and ESPHome. Discover the power of connected living and take control of your environment.
 
-# Projects
-
-## Bed Presence for ESPHome
+# Bed Presence for ESPHome
 
 [Getting Started]({% link bed-presence-mk1/getting-started.md %})
+
+[Purchase Sensor](https://www.elevatedsensors.com/store/p/bed-presence-for-esphome)
+
 [ESP Webtools]({% link bed-presence-mk1/webtools.md %})
 
 <img src="/assets/images/bed-presence.png" width="300">
