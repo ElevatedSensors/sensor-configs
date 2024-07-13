@@ -7,6 +7,7 @@ Elevated Sensors helps you bring your DIY to a new level. Elevate your smart hom
 ## Bed Presence for ESPHome
 
 [Getting Started]({% link bed-presence-mk1/getting-started.md %})
+[ESP Webtools]({% link bed-presence-mk1/webtools.md %})
 
 <img src="/assets/images/bed-presence.png" width="300">
 <img src="/assets/images/sensors.png" width="300">
