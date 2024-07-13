@@ -6,10 +6,10 @@ Elevated Sensors helps you bring your DIY to a new level. Elevate your smart hom
 
 ## Bed Presence for ESPHome
 
-[Getting Started]("{{ bed-presence/getting-started.md | relative_url }}")
+[Getting Started]({% link bed-presence-mk1/getting-started.md %})
 
-![Bed Presence for ESPHome](/assets/images/bed-presence.jpg)
-![Sensor Preview](/assets/images/sensors.jpg)
+<img src="/assets/images/bed-presence.png" width="300">
+<img src="/assets/images/sensors.png" width="300">
 
 ### Dual Sensor
 
