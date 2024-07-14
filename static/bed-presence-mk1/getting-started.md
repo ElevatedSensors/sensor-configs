@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Getting Started - Bed Presence for ESPHome"
+title: "Bed Presence for ESPHome"
 ---
 
 Welcome to Bed Presence for ESPHome! This page contains everything you need to get started.

@@ -3,8 +3,6 @@ layout: home
 title: "Documentation"
 ---
 
-# Documentation
-
 The documentation covers topics around the installation, setup, configuration, and usage of products from Elevated Sensors
 
 # Bed Presence for ESPHome
