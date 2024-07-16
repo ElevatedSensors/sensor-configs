@@ -36,24 +36,29 @@ Welcome to Bed Presence for ESPHome! This page contains everything you need to g
 ## Installing Sensor on Bed
 
 1. Remove mattress from bed frame.
-  ![](/assets/images/bp-install-1.jpg)
+
+    ![](/assets/images/bp-install-1.jpg)
 
 2. Select a bed slat in the torso region, where most of your weight will be applied to the bed (think about where you sit or lay in bed). If possible, select a bed slat that does not rock side to side.
 
 3. Orient the sensor with the circuit board/text facing up.
-  ![](/assets/images/bp-install-2.jpg)
+
+    ![](/assets/images/bp-install-2.jpg)
 
 4. Firmly attach the device using the provided screw. Pre-drill if necessary.
-  ![](/assets/images/bp-install-3.jpg)
-  ![](/assets/images/bp-install-4.jpg)
+
+    ![](/assets/images/bp-install-3.jpg)
+    ![](/assets/images/bp-install-4.jpg)
 
 5. Insert the sensor strips, then peal the adhesive backing and affix the sensors to the bed slat.
-  ![](/assets/images/bp-install-5.jpg)
-  ![](/assets/images/bp-install-6.jpg)
-  ![](/assets/images/bp-install-7.jpg)
+
+    ![](/assets/images/bp-install-5.jpg)
+    ![](/assets/images/bp-install-6.jpg)
+    ![](/assets/images/bp-install-7.jpg)
 
 6. Connect USB-C power.
-  ![](/assets/images/bp-install-8.jpg)
+
+    ![](/assets/images/bp-install-8.jpg)
 
 ## Automatic Sensor Calibration
 
