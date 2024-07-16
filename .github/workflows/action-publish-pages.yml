@@ -35,10 +35,11 @@ jobs:
     # needs: [build]
     steps:
       - uses: actions/checkout@v4.1.7
-      - uses: actions/download-artifact@v3.0.2
+      - uses: actions/download-artifact@v4.1.8
         with:
           path: output
           name: ${{ inputs.name }}
+        continue-on-error: true
 
       - name: Create single manifest.json
         run: |
