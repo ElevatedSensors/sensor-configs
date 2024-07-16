@@ -13,11 +13,11 @@ jobs:
     with:
       files: bed-presence-mk1.yaml
       name: Bed Presence Mk1
-      version: 2024.6.6
+      esphome_version: 2024.6.6
 
   publish:
     uses: ./.github/workflows/action-publish-pages.yml
     with:
       name: Bed Presence Mk1
-      version: 2024.6.6
+      esphome_version: 2024.6.6
 
