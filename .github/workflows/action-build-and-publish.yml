@@ -54,7 +54,7 @@ jobs:
       matrix:
         file: ${{ fromJson(needs.prepare.outputs.files) }}
     outputs:
-      esphome-version: ${{ steps.esphome-build.outputs.esphome-version }}
+      esphome-version: ${{ steps.esphome-build.outputs.version }}
     steps:
       - uses: actions/checkout@v4.1.7
       - uses: esphome/build-action@v3.1.0
@@ -64,28 +64,10 @@ jobs:
           version: ${{ inputs.esphome_version }}
       - run: |
           mv "${{ steps.esphome-build.outputs.name }}" output/
-      - run: |
-          jq -s '{"name": "${{ inputs.name }}", "version": "${{ steps.esphome-build.outputs.esphome-version }}", "home_assistant_domain": "esphome", "new_install_skip_erase": false, "builds":.}' output/*/manifest.json > output/${{ inputs.manifest_filename }}
       - uses: actions/upload-artifact@v4.3.4
         with:
           name: ${{ inputs.name }}
           path: output
-
-            #package:
-            #  name: Package up manifest.json
-            #  if: ${{ inputs.build_fw }}
-            #  runs-on: ubuntu-latest
-            #  needs: [build]
-            #  steps:
-            #    - uses: actions/download-artifact@v4.1.8
-            #      with:
-            #        path: output
-            #        name: ${{ inputs.name }}
-
-            #    - name: Create single manifest.json
-            #      run: |
-            #        jq -s '{"name": "${{ inputs.name }}", "version": "${{ needs.build.outputs.esphome-version }}", "home_assistant_domain": "esphome", "new_install_skip_erase": false, "builds":.}' output/*/manifest.json > output/${{ inputs.manifest_filename }}
-
 
   publish:
     name: Publish new firmware and website to GitHub Pages
@@ -93,11 +75,21 @@ jobs:
     needs: [build]
     steps:
       - uses: actions/checkout@v4.1.7
+
+      # Download fw build artifacts
       - uses: actions/download-artifact@v4.1.8
         with:
           path: output
           name: ${{ inputs.name }}
-        continue-on-error: true
+        if: ${{ inputs.build_fw }}  # no artifacts if no fw build
+        # continue-on-error: true
+
+      # Join manifest.json files
+      - name: Create single manifest.json
+        run: |
+          jq -s '{"name": "${{ inputs.name }}", "version": "${{ needs.build.outputs.esphome-version }}", "home_assistant_domain": "esphome", "new_install_skip_erase": false, "builds":.}' output/*/manifest.json > output/${{ inputs.manifest_filename }}
+        if: ${{ inputs.build_fw }}  # no manifest if no fw build
+        # continue-on-error: true
 
       - run: cp -R static/* output
 
