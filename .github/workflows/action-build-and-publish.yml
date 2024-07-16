@@ -89,8 +89,8 @@ jobs:
           path: output
           name: ${{ inputs.name }}
         if: ${{ inputs.build_fw }}  # only download if there's a new build
-        # continue-on-error: true
 
+      - run: mkdir -p output  # create output if it doesn't already exist
       - run: cp -R static/* output
 
       - name: Deploy 🚀
