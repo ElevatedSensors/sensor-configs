@@ -50,7 +50,12 @@ jobs:
           # jq -s '{"name": "${{ inputs.name }}", "version": "${{ needs.build.outputs.esphome-version }}", "home_assistant_domain": "esphome", "new_install_skip_erase": false, "builds":.}' output/*/manifest.json > output/${{ inputs.manifest_filename }}
         continue-on-error: true
 
-      - run: cp -R static/* output
+        # output dir won't exist if there is not a fresh fw build
+      - name: Create output if it doesn't exists
+        run: mkdir -p output
+
+      - name: Copy over static files
+        run: cp -R static/* output
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4.6.1
