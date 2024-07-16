@@ -64,6 +64,12 @@ jobs:
           version: ${{ inputs.esphome_version }}
       - run: |
           mv "${{ steps.esphome-build.outputs.name }}" output/
+      - run: find output/
+      - name: Create single manifest.json
+        run: |
+          jq -s '{"name": "${{ inputs.name }}", "version": "${{ steps.esphome-build.outputs.version }}", "home_assistant_domain": "esphome", "new_install_skip_erase": false, "builds":.}' output/*/manifest.json > output/${{ inputs.manifest_filename }}
+        if: ${{ inputs.build_fw }}  # no manifest if no fw build
+        # continue-on-error: true
       - uses: actions/upload-artifact@v4.3.4
         with:
           name: ${{ inputs.name }}
@@ -81,14 +87,7 @@ jobs:
         with:
           path: output
           name: ${{ inputs.name }}
-        if: ${{ inputs.build_fw }}  # no artifacts if no fw build
-        # continue-on-error: true
-
-      # Join manifest.json files
-      - name: Create single manifest.json
-        run: |
-          jq -s '{"name": "${{ inputs.name }}", "version": "${{ needs.build.outputs.esphome-version }}", "home_assistant_domain": "esphome", "new_install_skip_erase": false, "builds":.}' output/*/manifest.json > output/${{ inputs.manifest_filename }}
-        if: ${{ inputs.build_fw }}  # no manifest if no fw build
+        if: ${{ inputs.build_fw }}  # only download if there's a new build
         # continue-on-error: true
 
       - run: cp -R static/* output
