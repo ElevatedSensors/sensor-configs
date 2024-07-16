@@ -35,16 +35,20 @@ jobs:
     # needs: [build]
     steps:
       - uses: actions/checkout@v4.1.7
+
+      # Download fw build artifacts
       - uses: actions/download-artifact@v4.1.8
         with:
           path: output
           name: ${{ inputs.name }}
         continue-on-error: true
 
+      # Join manifest.json files
       - name: Create single manifest.json
         run: |
           jq -s '{"name": "${{ inputs.name }}", "version": "${{ inputs.esphome_version }}", "home_assistant_domain": "esphome", "new_install_skip_erase": false, "builds":.}' output/*/manifest.json > output/${{ inputs.manifest_filename }}
           # jq -s '{"name": "${{ inputs.name }}", "version": "${{ needs.build.outputs.esphome-version }}", "home_assistant_domain": "esphome", "new_install_skip_erase": false, "builds":.}' output/*/manifest.json > output/${{ inputs.manifest_filename }}
+        continue-on-error: true
 
       - run: cp -R static/* output
 
