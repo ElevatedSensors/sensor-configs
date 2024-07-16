@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Getting Started - Bed Presence for ESPHome"
+title: "Bed Presence for ESPHome"
 ---
 
 Welcome to Bed Presence for ESPHome! This page contains everything you need to get started.
@@ -37,27 +37,28 @@ Welcome to Bed Presence for ESPHome! This page contains everything you need to g
 
 1. Remove mattress from bed frame.
 
-  <img src="/assets/images/bed-presence.png" width="300">
+  ![](/assets/images/bp-install-1.jpg)
 
 2. Select a bed slat in the torso region, where most of your weight will be applied to the bed (think about where you sit or lay in bed). If possible, select a bed slat that does not rock side to side.
 
-  <img src="/assets/images/bed-presence.png" width="300">
-
 3. Orient the sensor with the circuit board/text facing up.
 
-  <img src="/assets/images/bed-presence.png" width="300">
+  ![](/assets/images/bp-install-2.jpg)
 
 4. Firmly attach the device using the provided screw. Pre-drill if necessary.
 
-  <img src="/assets/images/bed-presence.png" width="300">
+  ![](/assets/images/bp-install-3.jpg)
+  ![](/assets/images/bp-install-4.jpg)
 
 5. Insert the sensor strips, then peal the adhesive backing and affix the sensors to the bed slat.
 
-  <img src="/assets/images/bed-presence.png" width="300">
+  ![](/assets/images/bp-install-5.jpg)
+  ![](/assets/images/bp-install-6.jpg)
+  ![](/assets/images/bp-install-7.jpg)
 
 6. Connect USB-C power.
 
-  <img src="/assets/images/bed-presence.png" width="300">
+  ![](/assets/images/bp-install-8.jpg)
 
 ## Automatic Sensor Calibration
 
@@ -67,4 +68,7 @@ Welcome to Bed Presence for ESPHome! This page contains everything you need to g
 4. Turn on "Calibration \[Right or Left\] (Auto)".
 5. Have the person get out of bed.
 6. Turn off "Calibration \[Right or Left\] (Auto)".
-7. Alternatively, you can manually set the "Trigger Pressure". The Max/Min Pressure values in the "Diagnostic" section can help guide your desired pressure.
+
+## Manual Sensor Calibration
+1. Alternatively, you can manually set the "Trigger Pressure". The Max/Min Pressure values in the "Diagnostic" section can help guide your desired pressure.
+2. If using only once sensor, you can set the value slightly higher than the "non occupied" pressure. If using both sensors, make sure to set it high enough that someone on the opposite side of the bed doesn't trigger it.
