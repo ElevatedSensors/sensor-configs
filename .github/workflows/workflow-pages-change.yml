@@ -9,7 +9,7 @@ on:
 
 jobs:
   publish:
-    uses: ./actions/publish-pages.yml@main
+    uses: ./.github/workflows/action-publish-pages.yml
     with:
       name: Bed Presence Mk1
       version: 2024.6.6
