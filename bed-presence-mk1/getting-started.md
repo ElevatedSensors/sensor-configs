@@ -41,24 +41,24 @@ Welcome to Bed Presence for ESPHome! This page contains everything you need to g
 
 2. Select a bed slat in the torso region, where most of your weight will be applied to the bed (think about where you sit or lay in bed). If possible, select a bed slat that does not rock side to side.
 
-3. Orient the sensor with the circuit board/text facing up.
+3. Orient the sensor with the circuit board/text facing up, and the thicker part of the device hanging over the edge of the bed slat.
 
-    ![](/assets/images/bp-install-2.jpg)
+    <img src="/assets/images/bp-install-2.jpg" class="rounded" alt="test" width="400"/>
 
 4. Firmly attach the device using the provided screw. Pre-drill if necessary.
 
-    ![](/assets/images/bp-install-3.jpg)
-    ![](/assets/images/bp-install-4.jpg)
+    <img src="/assets/images/bp-install-3.jpg" class="rounded" alt="test" width="400"/>
+    <img src="/assets/images/bp-install-4.jpg" class="rounded" alt="test" width="400"/>
 
 5. Insert the sensor strips, then peal the adhesive backing and affix the sensors to the bed slat.
 
-    ![](/assets/images/bp-install-5.jpg)
-    ![](/assets/images/bp-install-6.jpg)
-    ![](/assets/images/bp-install-7.jpg)
+    <img src="/assets/images/bp-install-5.jpg" class="rounded" alt="test" width="400"/>
+    <img src="/assets/images/bp-install-6.jpg" class="rounded" alt="test" width="400"/>
+    <img src="/assets/images/bp-install-7.jpg" class="rounded" alt="test" width="400"/>
 
 6. Connect USB-C power.
 
-    ![](/assets/images/bp-install-8.jpg)
+    <img src="/assets/images/bp-install-8.jpg" class="rounded" alt="test" width="400"/>
 
 ## Automatic Sensor Calibration
 
