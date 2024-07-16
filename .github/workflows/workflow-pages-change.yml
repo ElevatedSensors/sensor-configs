@@ -1,4 +1,4 @@
-name: Publish ESPHome website (don't rebuild fw)
+name: Publish ESPHome website
 
 on:
   push:
@@ -9,8 +9,9 @@ on:
 
 jobs:
   publish:
-    uses: ./.github/workflows/action-publish-pages.yml
+    uses: ./.github/workflows/action-build-and-publish.yml
     with:
+      files: bed-presence-mk1.yaml
       name: Bed Presence Mk1
-      esphome_version: 2024.6.6
+      build_fw: false
 
