@@ -11,7 +11,7 @@ The documentation covers topics around the installation, setup, configuration, a
 
 [Getting Started]({% link bed-presence-mk1/getting-started.md %})
 
-Sensor Explanation (not yet ready).
+Sensor Explanation (not yet ready)
 
 [ESP Webtools]({% link bed-presence-mk1/webtools.md %})
 
