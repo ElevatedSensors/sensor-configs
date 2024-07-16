@@ -3,5 +3,19 @@
   "version": "2024.6.6",
   "home_assistant_domain": "esphome",
   "new_install_skip_erase": false,
-  "builds": []
+  "builds": [
+    {
+      "chipFamily": "ESP32-C3",
+      "ota": {
+        "path": "bed-presence-esp32c3/bed-presence-esp32c3.ota.bin",
+        "md5": "51e1ce08fd88ae36012c2852de692024"
+      },
+      "parts": [
+        {
+          "path": "bed-presence-esp32c3/bed-presence-esp32c3.factory.bin",
+          "offset": 0
+        }
+      ]
+    }
+  ]
 }
