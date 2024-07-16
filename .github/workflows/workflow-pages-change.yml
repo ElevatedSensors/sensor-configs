@@ -14,4 +14,3 @@ jobs:
       files: bed-presence-mk1.yaml
       name: Bed Presence Mk1
       build_fw: false
-
