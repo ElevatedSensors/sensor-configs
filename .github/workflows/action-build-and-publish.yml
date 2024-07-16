@@ -42,7 +42,7 @@ jobs:
       - id: files-array
         run: |
           files=$(echo "${{ inputs.files }}" | jq -Rcn 'inputs | . / ","')
-		  echo files=$files >> $GITHUB_OUTPUT
+          echo files=$files >> $GITHUB_OUTPUT
           mkdir output
 
   build:
