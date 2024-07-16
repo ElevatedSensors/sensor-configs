@@ -9,16 +9,9 @@ on:
 
 jobs:
   build:
-    uses: ./.github/workflows/action-build-fw.yml
+    uses: ./.github/workflows/action-build-and-publish.yml
     with:
       files: bed-presence-mk1.yaml
-      name: Bed Presence Mk1
-      esphome_version: 2024.6.6
-
-  publish:
-    needs: [build]
-    uses: ./.github/workflows/action-publish-pages.yml
-    with:
       name: Bed Presence Mk1
       esphome_version: 2024.6.6
 
