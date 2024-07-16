@@ -1,0 +1,16 @@
+name: Publish ESPHome website (don't rebuild fw)
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'static/**'
+
+jobs:
+  publish:
+    uses: ./actions/publish-pages.yml@main
+    with:
+      name: Bed Presence Mk1
+      version: 2024.6.6
+

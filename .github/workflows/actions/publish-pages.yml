@@ -1,0 +1,55 @@
+name: Publish GitHub Pages
+
+on:
+  workflow_call:
+    inputs:
+      # files:
+      #   description: Comma-separated list of files to build.
+      #   required: true
+      #   type: string
+      name:
+        description: Name of the firmware to publish.
+        required: false
+        type: string
+        default: ESPHome
+      clean:
+        description: Remove deleted files from the build
+        required: false
+        type: boolean
+        default: true
+      manifest_filename:
+        description: Filename of the manifest to write.
+        required: false
+        type: string
+        default: manifest.json
+      esphome_version:
+        description: Version of ESPHome to build for.
+        required: false
+        type: string
+        default: latest
+
+jobs:
+  publish:
+    name: Publish firmware and website to GitHub Pages
+    runs-on: ubuntu-latest
+    # needs: [build]
+    steps:
+      - uses: actions/checkout@v4.1.7
+      - uses: actions/download-artifact@v3.0.2
+        with:
+          path: output
+          name: ${{ inputs.name }}
+
+      - name: Create single manifest.json
+        run: |
+          jq -s '{"name": "${{ inputs.name }}", "version": "${{ inputs.esphome_version }}", "home_assistant_domain": "esphome", "new_install_skip_erase": false, "builds":.}' output/*/manifest.json > output/${{ inputs.manifest_filename }}
+          # jq -s '{"name": "${{ inputs.name }}", "version": "${{ needs.build.outputs.esphome-version }}", "home_assistant_domain": "esphome", "new_install_skip_erase": false, "builds":.}' output/*/manifest.json > output/${{ inputs.manifest_filename }}
+
+      - run: cp -R static/* output
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4.6.1
+        with:
+          branch: gh-pages
+          folder: output
+          clean: ${{ inputs.clean }}
