@@ -16,6 +16,7 @@ jobs:
       esphome_version: 2024.6.6
 
   publish:
+    needs: [build]
     uses: ./.github/workflows/action-publish-pages.yml
     with:
       name: Bed Presence Mk1
