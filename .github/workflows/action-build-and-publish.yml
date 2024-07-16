@@ -53,8 +53,8 @@ jobs:
     strategy:
       matrix:
         file: ${{ fromJson(needs.prepare.outputs.files) }}
-    outputs:
-      esphome-version: ${{ steps.esphome-build.outputs.version }}
+    # outputs:
+    #   esphome-version: ${{ steps.esphome-build.outputs.version }}
     steps:
       - uses: actions/checkout@v4.1.7
       - uses: esphome/build-action@v3.1.0
@@ -64,12 +64,11 @@ jobs:
           version: ${{ inputs.esphome_version }}
       - run: |
           mv "${{ steps.esphome-build.outputs.name }}" output/
-      - run: find output/
+      - name: Print output folder structure
+        run: find output/
       - name: Create single manifest.json
         run: |
-          jq -s '{"name": "${{ inputs.name }}", "version": "${{ steps.esphome-build.outputs.version }}", "home_assistant_domain": "esphome", "new_install_skip_erase": false, "builds":.}' output/*/manifest.json > output/${{ inputs.manifest_filename }}
-        if: ${{ inputs.build_fw }}  # no manifest if no fw build
-        # continue-on-error: true
+          jq -s '{"name": "${{ inputs.name }}", "version": "${{ steps.esphome-build.outputs.version }}", "home_assistant_domain": "esphome", "new_install_skip_erase": false, "builds":.}' output/manifest.json > output/${{ inputs.manifest_filename }}
       - uses: actions/upload-artifact@v4.3.4
         with:
           name: ${{ inputs.name }}
