@@ -37,7 +37,7 @@ Welcome to Bed Presence for ESPHome! This page contains everything you need to g
 
 1. Remove mattress from bed frame.
 
-    <img src="/assets/images/bp-install-1.jpg" alt="test" width="400"/>
+    <img src="/assets/images/bp-install-1.jpg" class="rounded" alt="test" width="400"/>
 
 2. Select a bed slat in the torso region, where most of your weight will be applied to the bed (think about where you sit or lay in bed). If possible, select a bed slat that does not rock side to side.
 
