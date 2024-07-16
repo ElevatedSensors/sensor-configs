@@ -43,6 +43,9 @@ jobs:
           name: ${{ inputs.name }}
         continue-on-error: true
 
+      - name: Print output folder structure
+        run: find output/
+
       # Join manifest.json files
       - name: Create single manifest.json
         run: |
