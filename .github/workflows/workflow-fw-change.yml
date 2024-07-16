@@ -13,4 +13,4 @@ jobs:
     with:
       files: bed-presence-mk1.yaml
       name: Bed Presence Mk1
-      esphome_version: 2024.6.6
+      esphome_version: latest
