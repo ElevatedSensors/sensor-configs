@@ -1,67 +1,67 @@
-title: Elevated Sensors
+#title: Elevated Sensors
 
-author:
-#   name: GitHub User
-  email: support@elevatedsensors.com
+#author:
+##   name: GitHub User
+#  email: support@elevatedsensors.com
 
-# The `>` after `description:` means to ignore line-breaks until next key.
-# If you want to omit the line-break after the end of text, use `>-` instead.
-description: >
-  Documentation for all Elevated Sensors include Bed Presence for ESPHome.
+## The `>` after `description:` means to ignore line-breaks until next key.
+## If you want to omit the line-break after the end of text, use `>-` instead.
+#description: >
+#  Documentation for all Elevated Sensors include Bed Presence for ESPHome.
 
-# Build settings
+## Build settings
 
-remote_theme: jekyll/minima
+#remote_theme: jekyll/minima
 
-plugins:
-  - jekyll-feed
-  - jekyll-seo-tag
+#plugins:
+#  - jekyll-feed
+#  - jekyll-seo-tag
 
-# Theme-specific settings
+## Theme-specific settings
 
-# If you want to link only specific pages in your header, use this and add the path to the pages
-# in order as they should show up.
-header_pages:
-  - bed-presence-mk1/getting-started.md
+## If you want to link only specific pages in your header, use this and add the path to the pages
+## in order as they should show up.
+#header_pages:
+#  - bed-presence-mk1/getting-started.md
 
-# Minima specific settings, which are only available from Minima 3.0 onward.
-minima:
-  # Minima skin selection.
-  # Available skins are:
-  # classic	           Default, light color scheme.
-  # dark	             Dark variant of the classic skin.
-  # auto	             Adaptive skin based on the default classic and dark skins.
-  # solarized-light	   Light variant of solarized color scheme.
-  # solarized-dark	   Dark variant of solarized color scheme.
-  # solarized	         Adaptive skin for solarized color scheme skins.
-  skin: dark
+## Minima specific settings, which are only available from Minima 3.0 onward.
+#minima:
+#  # Minima skin selection.
+#  # Available skins are:
+#  # classic	           Default, light color scheme.
+#  # dark	             Dark variant of the classic skin.
+#  # auto	             Adaptive skin based on the default classic and dark skins.
+#  # solarized-light	   Light variant of solarized color scheme.
+#  # solarized-dark	   Dark variant of solarized color scheme.
+#  # solarized	         Adaptive skin for solarized color scheme skins.
+#  skin: dark
 
-  # Minima date format.
-  # The default value is "%b %d, %Y" (e.g. Nov 14, 2023)
-  # Refer to https://shopify.github.io/liquid/filters/date/ if you want to customize this.
-  #date_format: "%b-%d-%Y"
+#  # Minima date format.
+#  # The default value is "%b %d, %Y" (e.g. Nov 14, 2023)
+#  # Refer to https://shopify.github.io/liquid/filters/date/ if you want to customize this.
+#  #date_format: "%b-%d-%Y"
 
-  # Generate social links in footer.
-  social_links:
-  #  - { platform: devto,          user_url: "https://dev.to/jekyll" }
-  #  - { platform: dribbble,       user_url: "https://dribbble.com/jekyll" }
-  #  - { platform: facebook,       user_url: "https://www.facebook.com/jekyll" }
-  #  - { platform: flickr,         user_url: "https://www.flickr.com/photos/jekyll" }
-    - { platform: github,         user_url: "https://github.com/elevatedsensors" }
-  #  - { platform: gitlab,         user_url: "https://gitlab.com/jekyll" }
-  #  - { platform: google_scholar, user_url: "https://scholar.google.com/citations?user=qc6CJjYAAAAJ" }
-    - { platform: instagram,      user_url: "https://www.instagram.com/elevated_sensors/" }
-  #  - { platform: keybase,        user_url: "https://keybase.io/jekyll" }
-  #  - { platform: linkedin,       user_url: "https://www.linkedin.com/in/jekyll" }
-  #  - { platform: microdotblog,   user_url: "https://micro.blog/jekyll" }
-  #  - { platform: pinterest,      user_url: "https://www.pinterest.com/jekyll" }
-  #  - { platform: stackoverflow,  user_url: "https://stackoverflow.com/users/1234567/jekyll" }
-  #  - { platform: telegram,       user_url: "https://t.me/jekyll" }
-  #  - { platform: twitter,        user_url: "https://twitter.com/jekyllrb" }
-  #  - { platform: x,              user_url: "https://x.com/jekyllrb" }
-  #  - { platform: youtube,        user_url: "https://www.youtube.com/jekyll" }
-  #
-  #  ############################################3
+#  # Generate social links in footer.
+#  social_links:
+#  #  - { platform: devto,          user_url: "https://dev.to/jekyll" }
+#  #  - { platform: dribbble,       user_url: "https://dribbble.com/jekyll" }
+#  #  - { platform: facebook,       user_url: "https://www.facebook.com/jekyll" }
+#  #  - { platform: flickr,         user_url: "https://www.flickr.com/photos/jekyll" }
+#    - { platform: github,         user_url: "https://github.com/elevatedsensors" }
+#  #  - { platform: gitlab,         user_url: "https://gitlab.com/jekyll" }
+#  #  - { platform: google_scholar, user_url: "https://scholar.google.com/citations?user=qc6CJjYAAAAJ" }
+#    - { platform: instagram,      user_url: "https://www.instagram.com/elevated_sensors/" }
+#  #  - { platform: keybase,        user_url: "https://keybase.io/jekyll" }
+#  #  - { platform: linkedin,       user_url: "https://www.linkedin.com/in/jekyll" }
+#  #  - { platform: microdotblog,   user_url: "https://micro.blog/jekyll" }
+#  #  - { platform: pinterest,      user_url: "https://www.pinterest.com/jekyll" }
+#  #  - { platform: stackoverflow,  user_url: "https://stackoverflow.com/users/1234567/jekyll" }
+#  #  - { platform: telegram,       user_url: "https://t.me/jekyll" }
+#  #  - { platform: twitter,        user_url: "https://twitter.com/jekyllrb" }
+#  #  - { platform: x,              user_url: "https://x.com/jekyllrb" }
+#  #  - { platform: youtube,        user_url: "https://www.youtube.com/jekyll" }
+#  #
+#  #  ############################################3
 
 
 
@@ -107,7 +107,7 @@ author:
       label: # Another label
 
 fa_version: 6 #default ["6"] Use 6 or 5
-fa_kit_code: f1193352e3 # Your FontAwesome kit code. If not provided a free hosted version (slower) will be loaded:  https://fontawesome.com/
+fa_kit_code: 5c92574f38 # Your FontAwesome kit code. If not provided a free hosted version (slower) will be loaded:  https://fontawesome.com/
 fa_v4_support: false #Bool Add FontAwesome 4 support
 # Web tracking - Google services https://analytics.google.com/analytics/web/
 # gtag_id is the preferred option, see https://developers.google.com/analytics/devguides/collection/gtagjs/migration?hl=en
