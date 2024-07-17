@@ -17,3 +17,5 @@ Sensor Explanation
 
 <img src="/assets/images/bed-presence.png" width="300">
 <img src="/assets/images/sensors.png" width="300">
+
+<span class="fa-solid fa-bed-pulse"></span>
