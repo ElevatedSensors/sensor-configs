@@ -156,7 +156,8 @@
 
 {%- else -%}
 <nav class="navbar {{ navexp }} sticky-top navbar-chulapa" aria-label="primary-navigation">
-	<div class="container-fluid mx-md-2 flex-nowrap">
+	<!-- <div class="container-fluid mx-md-2 flex-nowrap"> -->
+	<div class="container-fluid mx-md-2">
 			<a class="navbar-brand font-weight-bold" href="{{ site.navbar.brand.url | default: "/" | absolute_url }}">
 			{%- if site.navbar.brand.img -%}
 				<img src="{{ site.navbar.brand.img | absolute_url }}" width="300" height="30" class="d-inline-block align-top rounded-lg mr-1" alt="NavbarLogo">
