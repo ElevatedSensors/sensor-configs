@@ -1,8 +1,12 @@
 ---
 layout: default
-title: Bed Presence for ESPHome
+title: Getting Started
+subtitle: Bed Presence for ESPHome
 header_type: post
-subtitle: Getting Started
+show_breadcrumb: true
+breadcrumb_list:
+    - label: Bed Presence for ESPHome
+      url: /bed-presence-mk1
 ---
 
 Welcome to Bed Presence for ESPHome! This page contains everything you need to get started.
