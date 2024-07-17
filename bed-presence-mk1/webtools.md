@@ -1,8 +1,12 @@
 ---
 layout: default
-title: Bed Presence for ESPHome
+title: ESP Web Tools
+subtitle: Bed Presence for ESPHome
 header_type: post
-subtitle: ESP Web Tools
+show_breadcrumb: true
+breadcrumb_list:
+    - label: Bed Presence for ESPHome
+      url: /bed-presence-mk1
 ---
 
 # Installation
