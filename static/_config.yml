@@ -93,34 +93,21 @@ navbar:
   style     :  #default is the classical top navbar, set "fab" for a floating action button navbar or "dual"
   expand    :  # At which device size expand the navbar menu. default[md] https://getbootstrap.com/docs/4.5/layout/overview/
   brand:
-    title   :  Home # Title in navbar
+    title   :  # Title in navbar
     url     :  # default["url/baseurl"]
-    img     :  # An small image, try 30x30px
+    img     :  /assets/images/logo-inline.png # An small image, try 30x30px
   nav:
+  - title   : Bed Presence
+    url     : /bed-presence-mk1
+    child   :
+      - title : Getting Started
+        url   : /bed-presence-mk1/getting-started
+      - title : ESP Web Tools
+        url   : /bed-presence-mk1/webtools
+  - title   : Store
+    url     : https://elevatedsensors.com
   - title   : Blog # Label
     url     : /blog/ # url
-  - title   : Cheatsheets
-    url     : /cheatsheets
-  - title   : Extras
-    child   :
-      - title : Tags
-        url   : /tags
-      - title : Categories
-        url   : /categories
-      - title : Archive
-        url   : /archive
-      - title : Current skin
-        url   : /current-skin
-  - title   : Docs
-    url     : https://dieghernan.github.io/chulapa/docs/01-install
-  - title   : Use this template
-    url     : https://github.com/dieghernan/chulapa-101/generate
-#  - title   : # Label submenu
-#    child:
-#    - title: # Child label
-#      url  : # child url
-#    - title: # Child label
-#      url  : # child url
 #Social links to be placed on your site footer
 footer:
   links:
