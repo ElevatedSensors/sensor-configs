@@ -64,7 +64,7 @@ Welcome to Bed Presence for ESPHome! This page contains everything you need to g
 
 6. Connect USB-C power.
 
-    <img src="/assets/images/bp-install-8.jpg" class="rounded m-2" alt="test" width="400"/>
+    <img src="/assets/images/bp-install-8.jpg" class="rounded m-2" width="400"/>
 
 7. Carefully place the mattress back in place. This may require 2 people, as dragging the mattress across the sensors may dislodge them.
 
