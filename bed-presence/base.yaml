@@ -1,0 +1,14 @@
+packages:
+  left_bed_sensor: !include
+    file: bed-presence/sensor.yaml
+    vars:
+      sensor_name: Left
+      sensor_id: left
+      sensor_gpio: GPIO10
+  
+  right_bed_sensor: !include
+    file: bed-presence/sensor.yaml
+    vars:
+      sensor_name: Right
+      sensor_id: right
+      sensor_gpio: GPIO20
