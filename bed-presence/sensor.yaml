@@ -7,7 +7,7 @@ binary_sensor:
   filters:
   - delayed_off: 750ms    # prevent shifting in bed from registering "off"
   lambda: |-  # Check current state against trigger value
-    if (id(bed_occupied_${sensor_id}).state > id(val_trigger_${sensor_id}).state) {
+    if (id(bed_sensor_${sensor_id}).state > id(val_trigger_${sensor_id}).state) {
       return true;
     } else {
       return false;
