@@ -73,9 +73,9 @@ ota:
 #    update_interval: 6h
 
 ################################################################################
-
+packages:
   remote_package:
-    url: https://github.com/rohankapoorcom/sensor-configs
-    ref: use-packages
-    files: ['bed-presence/sensor.yaml']
+    url: https://github.com/ElevatedSensors/sensor-configs
+    ref: main
+    files: ['bed-presence/base.yaml']
     refresh: 1s
