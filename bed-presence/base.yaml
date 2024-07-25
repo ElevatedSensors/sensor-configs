@@ -1,14 +1,35 @@
 packages:
   left_bed_sensor: !include
-    file: bed-presence/sensor.yaml
+    file: sensor.yaml
     vars:
       sensor_name: Left
       sensor_id: left
       sensor_gpio: GPIO10
   
   right_bed_sensor: !include
-    file: bed-presence/sensor.yaml
+    file: sensor.yaml
     vars:
       sensor_name: Right
       sensor_id: right
       sensor_gpio: GPIO20
+
+sensor:
+- platform: wifi_signal # Reports the WiFi signal strength in dB
+  name: WiFi Signal dB
+  id: wifi_signal_db
+  update_interval: 60s
+
+- platform: copy # Reports the WiFi signal strength in %
+  source_id: wifi_signal_db
+  name: "WiFi Signal Percent"
+  id: wifi_signal_percent
+  filters:
+    - lambda: return min(max(2 * (x + 100.0), 0.0), 100.0);
+  unit_of_measurement: "%"
+  entity_category: "diagnostic"
+  device_class: ""
+
+button:
+- platform: restart
+  name: Restart
+  id: bed_presence_restart
