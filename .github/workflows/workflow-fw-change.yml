@@ -5,7 +5,9 @@ on:
     branches:
       - main
     paths:
-      - 'bed-presence-mk1.yaml'
+      - '**.yaml'
+    paths-ignore:
+      - '.github'
 
 jobs:
   build:
