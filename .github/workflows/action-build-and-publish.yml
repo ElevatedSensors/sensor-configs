@@ -102,6 +102,6 @@ jobs:
           folder: output
           clean: ${{ inputs.clean }}
           # When we only build website (no fw), leave the fw files alone
-          clean-exclude: |
-            manifest.json
-            *esp*/*
+          # clean-exclude: |
+          #   manifest.json
+          #   *esp*/*
