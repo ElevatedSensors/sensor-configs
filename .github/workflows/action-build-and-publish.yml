@@ -92,6 +92,8 @@ jobs:
 
       - run: mkdir -p output  # create output if it doesn't already exist
       - run: cp -R static/* output
+      - name: Print output folder structure
+        run: find output/
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4.6.3
