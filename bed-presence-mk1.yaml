@@ -11,7 +11,6 @@ substitutions:
   #     - 0.50   Set trigger exactly in the middle of minimum and maximum measured pressures
   #     - 0.20   More sensitive, likely to be triggered by partner
   trigger_percentile: '0.90'
-  build_test: '5'
 
 esphome:
   name: ${name}
@@ -19,7 +18,7 @@ esphome:
   name_add_mac_suffix: true
   project:
     name: ElevatedSensors.BedPresenceMk1
-    version: "2024.7.1"
+    version: "2024.7.2"
 
 esp32:
   board: esp32-c3-devkitm-1
