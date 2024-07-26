@@ -18,7 +18,7 @@ esphome:
   name_add_mac_suffix: true
   project:
     name: ElevatedSensors.BedPresenceMk1
-    version: "2024.7.2"
+    version: "2024.7.0"
 
 esp32:
   board: esp32-c3-devkitm-1
