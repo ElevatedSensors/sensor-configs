@@ -104,6 +104,7 @@ jobs:
           clean: ${{ inputs.clean }}
       - name: Deploy 🚀 (pages only)
         uses: JamesIves/github-pages-deploy-action@v4.6.3
+        if: ${{ !inputs.build_fw }}
         with:
           branch: gh-pages
           folder: output
