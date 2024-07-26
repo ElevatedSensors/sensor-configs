@@ -11,6 +11,7 @@ substitutions:
   #     - 0.50   Set trigger exactly in the middle of minimum and maximum measured pressures
   #     - 0.20   More sensitive, likely to be triggered by partner
   trigger_percentile: '0.90'
+  build_test: 1
 
 esphome:
   name: ${name}
