@@ -6,8 +6,6 @@ on:
       - main
     paths:
       - '**.yaml'
-    paths-ignore:
-      - '.github'
 
 jobs:
   build:
