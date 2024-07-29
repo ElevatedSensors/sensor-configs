@@ -45,19 +45,19 @@ sensor:
   - or:
     - delta: 0.1                  # only send if sensor changes by +/-0.1% (eliminate sensor noise)
     - throttle: 60s               # but still update every minute
-  on_value:
-    then:
-    - lambda: |-  # Update min/max measured pressures
-        if (x > id(val_max_${sensor_id}).state) {
-            auto call = id(val_max_${sensor_id}).make_call();
-            call.set_value(x);
-            call.perform();
-        }
-        if (x < id(val_min_${sensor_id}).state) {
-            auto call = id(val_min_${sensor_id}).make_call();
-            call.set_value(x);
-            call.perform();
-        }
+  # on_value:
+  #   then:
+  #   - lambda: |-  # Update min/max measured pressures
+  #       if (x > id(val_max_${sensor_id}).state) {
+  #           auto call = id(val_max_${sensor_id}).make_call();
+  #           call.set_value(x);
+  #           call.perform();
+  #       }
+  #       if (x < id(val_min_${sensor_id}).state) {
+  #           auto call = id(val_min_${sensor_id}).make_call();
+  #           call.set_value(x);
+  #           call.perform();
+  #       }
 
 - platform: template
   name: ${sensor_name} Pressure (Unoccupied)
