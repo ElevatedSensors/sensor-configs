@@ -59,18 +59,18 @@ sensor:
   #           call.perform();
   #       }
 
-- platform: template
-  name: ${sensor_name} Pressure (Unoccupied)
-  id: val_unoccupied_status_${sensor_id}
-  icon: mdi:gauge-empty
-  unit_of_measurement: '%'
-  entity_category: diagnostic
-- platform: template
-  name: ${sensor_name} Pressure (Occupied)
-  id: val_occupied_status_${sensor_id}
-  icon: mdi:gauge-full
-  unit_of_measurement: '%'
-  entity_category: diagnostic
+# - platform: template
+#   name: ${sensor_name} Pressure (Unoccupied)
+#   id: val_unoccupied_status_${sensor_id}
+#   icon: mdi:gauge-empty
+#   unit_of_measurement: '%'
+#   entity_category: diagnostic
+# - platform: template
+#   name: ${sensor_name} Pressure (Occupied)
+#   id: val_occupied_status_${sensor_id}
+#   icon: mdi:gauge-full
+#   unit_of_measurement: '%'
+#   entity_category: diagnostic
 # - platform: template
 #   name: ${sensor_name} Pressure (Min)
 #   id: val_min_status_${sensor_id}
@@ -86,7 +86,11 @@ sensor:
 
 number:
 - platform: template
+  name: ${sensor_name} Pressure (Unoccupied)
   id: val_unoccupied_${sensor_id}
+  icon: mdi:gauge-empty
+  unit_of_measurement: '%'
+  entity_category: diagnostic
   optimistic: true
   restore_value: true
   initial_value: 0
@@ -96,10 +100,14 @@ number:
   on_value:
     then:
     - lambda: |-  # Update status and trigger
-        id(val_unoccupied_status_${sensor_id}).publish_state(x);
+        # id(val_unoccupied_status_${sensor_id}).publish_state(x);
         id(update_trigger_${sensor_id})->execute();
 - platform: template
+  name: ${sensor_name} Pressure (Occupied)
   id: val_occupied_${sensor_id}
+  icon: mdi:gauge-full
+  unit_of_measurement: '%'
+  entity_category: diagnostic
   optimistic: true
   restore_value: true
   initial_value: 100
@@ -109,7 +117,7 @@ number:
   on_value:
     then:
     - lambda: |-  # Update status and trigger
-        id(val_occupied_status_${sensor_id}).publish_state(x);
+        # id(val_occupied_status_${sensor_id}).publish_state(x);
         id(update_trigger_${sensor_id})->execute();
 # - platform: template
 #   id: val_min_${sensor_id}
