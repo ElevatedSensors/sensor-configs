@@ -100,7 +100,7 @@ number:
   on_value:
     then:
     - lambda: |-  # Update status and trigger
-        # id(val_unoccupied_status_${sensor_id}).publish_state(x);
+        // id(val_unoccupied_status_${sensor_id}).publish_state(x);
         id(update_trigger_${sensor_id})->execute();
 - platform: template
   name: ${sensor_name} Pressure (Occupied)
@@ -117,7 +117,7 @@ number:
   on_value:
     then:
     - lambda: |-  # Update status and trigger
-        # id(val_occupied_status_${sensor_id}).publish_state(x);
+        // id(val_occupied_status_${sensor_id}).publish_state(x);
         id(update_trigger_${sensor_id})->execute();
 # - platform: template
 #   id: val_min_${sensor_id}
