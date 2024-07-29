@@ -9,7 +9,7 @@ substitutions:
   #     - 0.75   Less sensitive, requires 75% of the occupied pressure to trigger
   #     - 0.50   Set trigger exactly in the middle of unoccupied and occupied pressures (Default)
   #     - 0.25   More sensitive, likely to be triggered by partner
-  trigger_percentile: '0.90'
+  trigger_percentile: '0.50'
 
 esphome:
   name: ${name}
