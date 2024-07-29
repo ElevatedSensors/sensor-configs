@@ -17,8 +17,8 @@ esphome:
   friendly_name: ${friendly_name}
   name_add_mac_suffix: true
   project:
-    name: ElevatedSensors.BedPresenceMk1
-    version: "2024.7.0"
+    name: ElevatedSensors.BedPresence
+    version: Mk1
 
 esp32:
   board: esp32-c3-devkitm-1

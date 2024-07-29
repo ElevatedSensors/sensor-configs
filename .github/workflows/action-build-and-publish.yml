@@ -69,7 +69,7 @@ jobs:
         run: find output/
       - name: Create single manifest.json
         run: |
-          jq -s '{"name": "${{ inputs.name }}", "version": "${{ steps.esphome-build.outputs.project-version }}", "home_assistant_domain": "esphome", "new_install_improv_wait_time": 15, "builds":.}' output/*/manifest.json > output/${{ inputs.manifest_filename }}
+          jq -s '{"name": "${{ inputs.name }}", "version": "${{ steps.esphome-build.outputs.version }}", "home_assistant_domain": "esphome", "new_install_improv_wait_time": 15, "builds":.}' output/*/manifest.json > output/${{ inputs.manifest_filename }}
       - uses: actions/upload-artifact@v4.3.4
         with:
           name: ${{ inputs.name }}
