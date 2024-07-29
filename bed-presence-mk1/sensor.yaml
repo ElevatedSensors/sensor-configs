@@ -4,14 +4,10 @@ binary_sensor:
   id: bed_occupied_${sensor_id}_fast
   device_class: occupancy
   icon: mdi:bed
+  disabled_by_default: true
   filters:
-  - delayed_off: 750ms    # prevent shifting in bed from registering "off"
-  lambda: |-  # Check current state against trigger value
-    if (id(bed_sensor_${sensor_id}).state > id(val_trigger_${sensor_id}).state) {
-      return true;
-    } else {
-      return false;
-    }
+  - delayed_off: ${fast_delayed_off}  # prevent shifting in bed from registering "off"
+  lambda: return id(bed_sensor_${sensor_id}).state > id(val_trigger_${sensor_id}).state;
 
 - platform: template
   name: Bed Occupied ${sensor_name}
@@ -19,8 +15,8 @@ binary_sensor:
   device_class: occupancy
   icon: mdi:bed
   filters:
-  - delayed_on_off: 2s      # ensure stability
-  lambda: return id(bed_occupied_${sensor_id}_fast).state;
+  - delayed_on_off: 2s                # ensure stability
+  lambda: return id(bed_sensor_${sensor_id}).state > id(val_trigger_${sensor_id}).state;
 
 sensor:
 - platform: pulse_counter

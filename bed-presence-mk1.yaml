@@ -12,6 +12,14 @@ substitutions:
   #     - 0.20   More sensitive, likely to be triggered by partner
   trigger_percentile: '0.90'
 
+  # Fast Sensor Delay
+  # This controls how long the "Fast" sensor must register its value before updating. Without any delay, the sensor
+  # will register frequent fall negatives as you shift in bed.
+  #     - 2s    Same response as standard sensor
+  #     - 750ms Good starting point for getting speed without too many false negatives (Default)
+  #     - 0ms   No delay, expect many false negatives
+  fast_delayed_off: '750ms'
+
 esphome:
   name: ${name}
   friendly_name: ${friendly_name}
