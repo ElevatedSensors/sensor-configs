@@ -86,7 +86,7 @@ sensor:
 
 number:
 - platform: template
-  name: ${sensor_name} Pressure (Unoccupied)
+  name: ${sensor_name} Unoccupied Pressure
   id: val_unoccupied_${sensor_id}
   icon: mdi:gauge-empty
   unit_of_measurement: '%'
@@ -103,7 +103,7 @@ number:
         // id(val_unoccupied_status_${sensor_id}).publish_state(x);
         id(update_trigger_${sensor_id})->execute();
 - platform: template
-  name: ${sensor_name} Pressure (Occupied)
+  name: ${sensor_name} Occupied Pressure
   id: val_occupied_${sensor_id}
   icon: mdi:gauge-full
   unit_of_measurement: '%'
