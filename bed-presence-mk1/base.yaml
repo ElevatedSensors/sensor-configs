@@ -5,7 +5,7 @@ packages:
       sensor_name: Left
       sensor_id: left
       sensor_gpio: GPIO10
-  
+
   right_bed_sensor: !include
     file: sensor.yaml
     vars:
@@ -33,3 +33,4 @@ button:
 - platform: restart
   name: Restart
   id: bed_presence_restart
+  entity_category: diagnostic

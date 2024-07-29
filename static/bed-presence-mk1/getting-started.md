@@ -70,13 +70,12 @@ Welcome to Bed Presence for ESPHome! This page contains everything you need to g
 
 ## Automatic Sensor Calibration
 
-1. The calibration process requires you to get into and out of your bed. It uses the maximum and minimum observed pressures to automatically figure out the best trigger pressure.
-2. Have the person you are calibrating for lay on their side of the bed.
-3. Navigate to the device and find the "Configuration" section.
-4. Turn on "Calibration \[Right or Left\] (Auto)".
-5. Have the person get out of bed.
-6. Turn off "Calibration \[Right or Left\] (Auto)".
+1. The calibration process requires you to get into and our of your bed. It records the sensor readings while the bed is both occupied and unoccupied and automatically calculates the best trigger pressure. This process is best performed when the bed has settled in the unoccupied state. For some beds, this is instant. For others, the unoccupied pressure may increase slowly over several hours. NOTE: you can always go back and update the unoccupied pressure at a later time when it's more convenient (e.g. you're at work and the bed has been unoccupied for several hours).
+2. Navigate to the device under Home Assistant Devices. Find the "Configuration" section.
+3. Press "Calibrate Unoccupied" for the desired side of the bed.
+4. Have the person you are calibrating for gently lay on their side of the bed.
+5. Let the sensor settle for a few seconds and press "Calibrate Occupied" for the desired side of the bed.
 
 ## Manual Sensor Calibration
-1. Alternatively, you can manually set the "Trigger Pressure". The Max/Min Pressure values in the "Diagnostic" section can help guide your desired pressure.
+1. Alternatively, you can manually set the "Trigger Pressure". Viewing the graph of the sensor pressure can help guide your desired pressure.
 2. If using only once sensor, you can set the value slightly higher than the "non occupied" pressure. If using both sensors, make sure to set it high enough that someone on the opposite side of the bed doesn't trigger it.

@@ -2,14 +2,13 @@ substitutions:
   name: bed-presence
   friendly_name: Bed Presence
 
-  # Auto Calibrate Trigger Percentile
-  # This controls how the trigger threshold is set when auto calibration is enabled. This is the percentage of the
-  # observed pressure that is required to register the bed as occupied. During auto calibration, the system stores the
-  # minimum and maximum pressures that it sees and used those values in combination with the trigger_percentile to
-  # calculate the trigger threshold.
-  #     - 0.9    Less sensitive, requires 90% of the maximum measured pressure to trigger (Default)
-  #     - 0.50   Set trigger exactly in the middle of minimum and maximum measured pressures
-  #     - 0.20   More sensitive, likely to be triggered by partner
+  # Calibrate Trigger Percentile
+  # This controls how the trigger threshold is set during calibration. During calibration, the unoccupied and occupied
+  # pressure values are determined. This is the percentage of the difference between those values required to trigger
+  # the "occupied" state.
+  #     - 0.75   Less sensitive, requires 75% of the occupied pressure to trigger
+  #     - 0.50   Set trigger exactly in the middle of unoccupied and occupied pressures (Default)
+  #     - 0.25   More sensitive, likely to be triggered by partner
   trigger_percentile: '0.90'
 
 esphome:
@@ -18,7 +17,9 @@ esphome:
   name_add_mac_suffix: true
   project:
     name: ElevatedSensors.BedPresenceMk1
-    version: "2024.7.0"
+    version: "2024.7.1"
+    release_summary: ""
+    release_url: ""
 
 esp32:
   board: esp32-c3-devkitm-1
