@@ -164,7 +164,7 @@ button:
     then:
     - number.set:
         id: val_unoccupied_${sensor_id}
-        value: !lambda return id(bed_sensor_${sensor_id}.state)
+        value: !lambda return id(bed_sensor_${sensor_id}).state
 - platform: template
   name: Calibrate ${sensor_name} Occupied
   id: calibration_${sensor_id}_set_occupied
@@ -174,7 +174,7 @@ button:
     then:
     - number.set:
         id: val_occupied_${sensor_id}
-        value: !lambda return id(bed_sensor_${sensor_id}.state)
+        value: !lambda return id(bed_sensor_${sensor_id}).state
 # - platform: template
 #   name: Calibration ${sensor_name} (Reset)
 #   id: calibration_${sensor_id}_reset
