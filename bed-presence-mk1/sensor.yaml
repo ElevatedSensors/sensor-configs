@@ -41,51 +41,52 @@ sensor:
   - or:
     - delta: 0.1                  # only send if sensor changes by +/-0.1% (eliminate sensor noise)
     - throttle: 60s               # but still update every minute
-  on_value:
-    then:
-    - lambda: |-  # Update min/max measured pressures
-        if (x > id(val_max_${sensor_id}).state) {
-            auto call = id(val_max_${sensor_id}).make_call();
-            call.set_value(x);
-            call.perform();
-        }
-        if (x < id(val_min_${sensor_id}).state) {
-            auto call = id(val_min_${sensor_id}).make_call();
-            call.set_value(x);
-            call.perform();
-        }
+  # on_value:
+  #   then:
+  #   - lambda: |-  # Update min/max measured pressures
+  #       if (x > id(val_max_${sensor_id}).state) {
+  #           auto call = id(val_max_${sensor_id}).make_call();
+  #           call.set_value(x);
+  #           call.perform();
+  #       }
+  #       if (x < id(val_min_${sensor_id}).state) {
+  #           auto call = id(val_min_${sensor_id}).make_call();
+  #           call.set_value(x);
+  #           call.perform();
+  #       }
 
-- platform: template
-  name: ${sensor_name} Pressure (Min)
-  id: val_min_status_${sensor_id}
-  icon: mdi:gauge-empty
-  unit_of_measurement: '%'
-  entity_category: diagnostic
-- platform: template
-  name: ${sensor_name} Pressure (Max)
-  id: val_max_status_${sensor_id}
-  icon: mdi:gauge-full
-  unit_of_measurement: '%'
-  entity_category: diagnostic
+# - platform: template
+#   name: ${sensor_name} Pressure (Unoccupied)
+#   id: val_unoccupied_status_${sensor_id}
+#   icon: mdi:gauge-empty
+#   unit_of_measurement: '%'
+#   entity_category: diagnostic
+# - platform: template
+#   name: ${sensor_name} Pressure (Occupied)
+#   id: val_occupied_status_${sensor_id}
+#   icon: mdi:gauge-full
+#   unit_of_measurement: '%'
+#   entity_category: diagnostic
+# - platform: template
+#   name: ${sensor_name} Pressure (Min)
+#   id: val_min_status_${sensor_id}
+#   icon: mdi:gauge-empty
+#   unit_of_measurement: '%'
+#   entity_category: diagnostic
+# - platform: template
+#   name: ${sensor_name} Pressure (Max)
+#   id: val_max_status_${sensor_id}
+#   icon: mdi:gauge-full
+#   unit_of_measurement: '%'
+#   entity_category: diagnostic
 
 number:
 - platform: template
-  id: val_min_${sensor_id}
-  optimistic: true
-  restore_value: true
-  initial_value: 100
-  min_value: 0
-  max_value: 100
-  step: 0.1
-  on_value:
-    then:
-    - lambda: |-  # Update status and trigger (if auto calibrating)
-        id(val_min_status_${sensor_id}).publish_state(x);
-        if (id(calibrate_auto_${sensor_id}).state) {
-          id(update_trigger_${sensor_id})->execute();
-        }
-- platform: template
-  id: val_max_${sensor_id}
+  name: ${sensor_name} Unoccupied Pressure
+  id: val_unoccupied_${sensor_id}
+  icon: mdi:gauge-empty
+  unit_of_measurement: '%'
+  entity_category: diagnostic
   optimistic: true
   restore_value: true
   initial_value: 0
@@ -94,11 +95,56 @@ number:
   step: 0.1
   on_value:
     then:
-    - lambda: |-  # Update status and trigger (if auto calibrating)
-        id(val_max_status_${sensor_id}).publish_state(x);
-        if (id(calibrate_auto_${sensor_id}).state) {
-          id(update_trigger_${sensor_id})->execute();
-        }
+    - lambda: |-  # Update status and trigger
+        // id(val_unoccupied_status_${sensor_id}).publish_state(x);
+        id(update_trigger_${sensor_id})->execute();
+- platform: template
+  name: ${sensor_name} Occupied Pressure
+  id: val_occupied_${sensor_id}
+  icon: mdi:gauge-full
+  unit_of_measurement: '%'
+  entity_category: diagnostic
+  optimistic: true
+  restore_value: true
+  initial_value: 100
+  min_value: 0
+  max_value: 100
+  step: 0.1
+  on_value:
+    then:
+    - lambda: |-  # Update status and trigger
+        // id(val_occupied_status_${sensor_id}).publish_state(x);
+        id(update_trigger_${sensor_id})->execute();
+# - platform: template
+#   id: val_min_${sensor_id}
+#   optimistic: true
+#   restore_value: true
+#   initial_value: 100
+#   min_value: 0
+#   max_value: 100
+#   step: 0.1
+#   on_value:
+#     then:
+#     - lambda: |-  # Update status and trigger (if auto calibrating)
+#         id(val_min_status_${sensor_id}).publish_state(x);
+#         if (id(calibrate_auto_${sensor_id}).state) {
+#           id(update_trigger_${sensor_id})->execute();
+#         }
+# - platform: template
+#   id: val_max_${sensor_id}
+#   optimistic: true
+#   restore_value: true
+#   initial_value: 0
+#   min_value: 0
+#   max_value: 100
+#   step: 0.1
+#   on_value:
+#     then:
+#     - lambda: |-  # Update status and trigger (if auto calibrating)
+#         id(val_max_status_${sensor_id}).publish_state(x);
+#         if (id(calibrate_auto_${sensor_id}).state) {
+#           id(update_trigger_${sensor_id})->execute();
+#         }
 - platform: template
   name: ${sensor_name} Trigger Pressure
   id: val_trigger_${sensor_id}
@@ -114,49 +160,68 @@ number:
 
 button:
 - platform: template
-  name: Calibration ${sensor_name} (Reset)
-  id: calibration_${sensor_id}_reset
-  icon: mdi:sync
+  name: Calibrate ${sensor_name} Unoccupied
+  id: calibration_${sensor_id}_set_unoccupied
+  icon: mdi:bed-empty
   entity_category: config
   on_press:
     then:
     - number.set:
-        id: val_min_${sensor_id}
-        value: 100
-    - number.set:
-        id: val_max_${sensor_id}
-        value: 0
-    - number.set:
-        id: val_trigger_${sensor_id}
-        value: 50
-
-switch:
+        id: val_unoccupied_${sensor_id}
+        value: !lambda return id(bed_sensor_${sensor_id}).state;
 - platform: template
-  name: Calibration ${sensor_name} (Auto)
-  id: calibrate_auto_${sensor_id}
-  optimistic: true
-  icon: mdi:auto-fix
-  restore_mode: ALWAYS_OFF
-  turn_on_action:
-  - button.press: calibration_${sensor_id}_reset
+  name: Calibrate ${sensor_name} Occupied
+  id: calibration_${sensor_id}_set_occupied
+  icon: mdi:bed
   entity_category: config
+  on_press:
+    then:
+    - number.set:
+        id: val_occupied_${sensor_id}
+        value: !lambda return id(bed_sensor_${sensor_id}).state;
+# - platform: template
+#   name: Calibration ${sensor_name} (Reset)
+#   id: calibration_${sensor_id}_reset
+#   icon: mdi:sync
+#   entity_category: config
+#   on_press:
+#     then:
+#     - number.set:
+#         id: val_min_${sensor_id}
+#         value: 100
+#     - number.set:
+#         id: val_max_${sensor_id}
+#         value: 0
+#     - number.set:
+#         id: val_trigger_${sensor_id}
+#         value: 50
+
+# switch:
+# - platform: template
+#   name: Calibration ${sensor_name} (Auto)
+#   id: calibrate_auto_${sensor_id}
+#   optimistic: true
+#   icon: mdi:auto-fix
+#   restore_mode: ALWAYS_OFF
+#   turn_on_action:
+#   - button.press: calibration_${sensor_id}_reset
+#   entity_category: config
 
 script:
 - id: update_trigger_${sensor_id}
   mode: queued
   then:
   - lambda: |-  # Set trigger to x% of difference between min/max
-      float min_pressure = id(val_min_${sensor_id}).state;
-      float max_pressure = id(val_max_${sensor_id}).state;
-      if (min_pressure <= max_pressure) {
-          // calculate new trigger value
-          float trigger_pressure = min_pressure + ((max_pressure - min_pressure) * float(${trigger_percentile}));
+      float unoccupied_pressure = id(val_unoccupied_${sensor_id}).state;
+      float occupied_pressure = id(val_occupied_${sensor_id}).state;
 
-          // round to 2 decimal places
-          trigger_pressure = round(trigger_pressure * 100)/100.0;
+      // calculate new trigger value
+      float trigger_pressure = unoccupied_pressure + ((occupied_pressure - unoccupied_pressure) * float(${trigger_percentile}));
 
-          // set value
-          auto call = id(val_trigger_${sensor_id}).make_call();
-          call.set_value(trigger_pressure);
-          call.perform();
-      }
+      // round to 2 decimal places
+      trigger_pressure = round(trigger_pressure * 100)/100.0;
+
+      // set value
+      auto call = id(val_trigger_${sensor_id}).make_call();
+      call.set_value(trigger_pressure);
+      call.perform();
