@@ -6,10 +6,10 @@ substitutions:
   # This controls how the trigger threshold is set during calibration. During calibration, the unoccupied and occupied
   # pressure values are determined. This is the percentage of the difference between those values required to trigger
   # the "occupied" state.
-  #     - 0.75   Less sensitive, requires 75% of the occupied pressure to trigger
-  #     - 0.50   Set trigger exactly in the middle of unoccupied and occupied pressures (Default)
+  #     - 0.75   Requires 75% of the occupied pressure to trigger (Default)
+  #     - 0.50   Set trigger exactly in the middle of unoccupied and occupied pressures
   #     - 0.25   More sensitive, likely to be triggered by partner
-  trigger_percentile: '0.50'
+  trigger_percentile: '0.75'
 
   # Fast Sensor Delay
   # This controls how long the "Fast" sensor must register its value before updating. Without any delay, the sensor
