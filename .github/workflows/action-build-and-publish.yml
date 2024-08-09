@@ -96,10 +96,10 @@ jobs:
         with:
           branch: gh-pages
           folder: output
-          clean: true
-          clean-exclude: |
-            *manifest.json
-            *esp*/*
+          clean: false
+          # clean-exclude: |
+          #   *manifest.json
+          #   *esp*/*
       # - name: Deploy 🚀 (pages only)
       #   uses: JamesIves/github-pages-deploy-action@v4.6.3
       #   if: ${{ !inputs.build_fw }}
