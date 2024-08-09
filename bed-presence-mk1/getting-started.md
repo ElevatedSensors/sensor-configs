@@ -14,30 +14,20 @@ Welcome to Bed Presence for ESPHome! This page contains everything you need to g
 ## WiFi Provisioning
 
 1. Connect USB-C power supply.
-2. Use phone to connect to "bed-presence-xxxxxx" WiFi.
-3. If asked to stay connected, press "Yes".
+2. Use phone to connect to `bed-presence-xxxxxx` WiFi.
+3. If asked to stay connected, press `Yes`.
 4. Open a web browser and navigate to http://192.168.4.1
 5. Select WiFi network you would like to add the device to, and provide the password.
 
-## Adding to ESPHome
-
-1. Navigate to your ESPHome Dashboard.
-2. The device should appear as "Discovered".
-3. Press "Adopt".
-4. Provide a name for the device and click "Adopt" (By default, it will be named "Bed Presence" followed by the last 6 digits of its MAC address).
-5. Click "Install".
-6. Wait for firmware to compile and upload.
-7. You are done! You can now hit "Stop".
-
 ## Adding to Home Assistant
 
-1. Now that the device has been adopted in ESPHome, you should get a notification that a new device was discovered.
-2. Open the notification and press "Check it out".
-3. If you don't get a notification, go to Settings -> Devices & services.
-4. The discovered device should appear at the top.
-5. Press "Configure" then "Submit".
-6. Select an area for the device if desired and press "Finish".
-7. Congrats! Your sensor is ready to use.
+1. If you'd like full control over the firmware on the device (advanced), adopt the device into the ESPHome Dashboard.
+2. In Home Assistant navigate to `Settings` -> `Devices & services`.
+3. You should see a discovered item called `Bed Presence xxxxxx`.
+
+    <img src="/assets/images/bp-discovered.jpg" class="rounded m-2" width="400"/>
+
+4. Click `Configure` then `Submit`. If desired, specify an area and click `Finish`.
 
 ## Installing Sensor on Bed
 
@@ -71,11 +61,12 @@ Welcome to Bed Presence for ESPHome! This page contains everything you need to g
 ## Automatic Sensor Calibration
 
 1. The calibration process requires you to get into and our of your bed. It records the sensor readings while the bed is both occupied and unoccupied and automatically calculates the best trigger pressure. This process is best performed when the bed has settled in the unoccupied state. For some beds, this is instant. For others, the unoccupied pressure may increase slowly over several hours. NOTE: you can always go back and update the unoccupied pressure at a later time when it's more convenient (e.g. you're at work and the bed has been unoccupied for several hours).
-2. Navigate to the device under Home Assistant Devices. Find the "Configuration" section.
-3. Press "Calibrate Unoccupied" for the desired side of the bed.
+2. Navigate to the device under Home Assistant Devices. Find the `Configuration` section.
+3. Press `Calibrate Unoccupied` for the desired side of the bed.
 4. Have the person you are calibrating for gently lay on their side of the bed.
-5. Let the sensor settle for a few seconds and press "Calibrate Occupied" for the desired side of the bed.
+5. Let the sensor settle for a few seconds and press `Calibrate Occupied` for the desired side of the bed.
+6. The goal of the automatic calibration is to get the value close to optimal. If you find that you are getting false triggers, want to increase/decrease sensitivity, etc, continue to `Manual Sensor Calibration`.
 
 ## Manual Sensor Calibration
-1. Alternatively, you can manually set the "Trigger Pressure". Viewing the graph of the sensor pressure can help guide your desired pressure.
+1. Alternatively, you can manually set the `Trigger Pressure`. Viewing the graph of the sensor pressure can help guide your desired pressure.
 2. If using only once sensor, you can set the value slightly higher than the "non occupied" pressure. If using both sensors, make sure to set it high enough that someone on the opposite side of the bed doesn't trigger it.
