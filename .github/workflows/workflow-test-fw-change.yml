@@ -1,4 +1,4 @@
-name: Bed Presence Mk1 Firmware Changed
+name: Test Firmware Changed
 
 on:
   push:
