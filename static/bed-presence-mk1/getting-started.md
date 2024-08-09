@@ -25,7 +25,7 @@ Welcome to Bed Presence for ESPHome! This page contains everything you need to g
 2. In Home Assistant navigate to `Settings` -> `Devices & services`.
 3. You should see a discovered item called `Bed Presence xxxxxx`.
 
-    <img src="/assets/images/bp-discovered.jpg" class="rounded m-2" width="400"/>
+    <img src="/assets/images/bp-discovered.png" class="rounded m-2" width="400"/>
 
 4. Click `Configure` then `Submit`. If desired, specify an area and click `Finish`.
 
