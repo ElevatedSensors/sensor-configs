@@ -27,16 +27,5 @@ subtitle: A dual bed occupancy sensor
             </div>
         </div>
     </div>
-
-    <!-- <!-1- ESP Web Tools -1-> -->
-    <!-- <div class="col-lg-4"> -->
-    <!--     <div class="card text-left border-primary h-100"> -->
-    <!--         <div class="card-body"> -->
-    <!--             <h5 class="card-title">ESP Web Tools</h5> -->
-    <!--             <p class="card-text">Reflash your device with the factory image.</p> -->
-    <!--             <a href="{% link bed-presence-mk1/webtools.md%}" class="btn btn-outline-warning stretched-link">Go!</a> -->
-    <!--         </div> -->
-    <!--     </div> -->
-    <!-- </div> -->
 </div>
 
