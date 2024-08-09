@@ -1,16 +1,17 @@
-name: Build and Publish ESPHome firmware and website
+name: Bed Presence Mk1 Firmware Changed
 
 on:
   push:
     branches:
       - main
     paths:
-      - '**.yaml'
+      - 'test.yaml'
 
 jobs:
   build:
     uses: ./.github/workflows/action-build-and-publish.yml
     with:
-      files: bed-presence-mk1.yaml
-      name: Bed Presence Mk1
+      files: test.yaml
+      name: Test
       esphome_version: latest
+      manifest_filename: test-manifest.json

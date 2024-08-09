@@ -1,16 +1,18 @@
-name: Website Changed
+name: Bed Presence Mk1 Firmware Changed
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'static/**'
+      - 'bed-presence-mk1.yaml'
+      - 'bed-presence-mk1/*.yaml'
 
 jobs:
-  publish:
+  build:
     uses: ./.github/workflows/action-build-and-publish.yml
     with:
       files: bed-presence-mk1.yaml
       name: Bed Presence Mk1
-      build_fw: false
+      esphome_version: latest
+      manifest_filename: bpmk1-manifest.json

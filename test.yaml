@@ -1,0 +1,67 @@
+substitutions:
+  name: bed-presence
+  friendly_name: Bed Presence
+
+  # Calibrate Trigger Percentile
+  # This controls how the trigger threshold is set during calibration. During calibration, the unoccupied and occupied
+  # pressure values are determined. This is the percentage of the difference between those values required to trigger
+  # the "occupied" state.
+  #     - 0.75   Requires 75% of the occupied pressure to trigger (Default)
+  #     - 0.50   Set trigger exactly in the middle of unoccupied and occupied pressures
+  #     - 0.25   More sensitive, likely to be triggered by partner
+  trigger_percentile: '0.75'
+
+  # Fast Sensor Delay
+  # This controls how long the "Fast" sensor must register its value before updating. Without any delay, the sensor
+  # will register frequent fall negatives as you shift in bed.
+  #     - 2s    Same response as standard sensor
+  #     - 500ms Good starting point for getting speed without too many false negatives (Default)
+  #     - 0ms   No delay, expect frequent false negatives
+  fast_delayed_off: '500ms'
+
+esphome:
+  name: ${name}
+  friendly_name: ${friendly_name}
+  name_add_mac_suffix: true
+  project:
+    name: ElevatedSensors.BedPresence
+    version: Mk1
+
+esp32:
+  board: esp32-c3-devkitm-1
+  framework:
+    type: arduino
+
+# Allow Import
+dashboard_import:
+  package_import_url: github://ElevatedSensors/sensor-configs/bed-presence-mk1.yaml@main
+  import_full_config: true
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+# Allow provisioning Wi-Fi via serial
+improv_serial:
+
+wifi:
+  # Set up a wifi access point
+  ap: {}
+
+# In combination with the `ap` this allows the user
+# to provision wifi credentials to the device via WiFi AP.
+captive_portal:
+
+# Sets up Bluetooth LE (Only on ESP32) to allow the user
+# to provision wifi credentials to the device.
+esp32_improv:
+  authorizer: none
+
+# To have a "next url" for improv serial
+web_server:
+
+# Enable esphome OTA updates
+ota:
+  platform: esphome
