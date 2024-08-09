@@ -4,3 +4,7 @@
 /.esphome/
 /secrets.yaml
 .vscode
+
+# Jekyll
+static/_site
+static/Gemfile.lock
