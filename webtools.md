@@ -11,8 +11,14 @@ You can use the button below to install the pre-built firmware directly to your 
 
 You can also use it to get device info, check which version is installed, view logs, etc.
 
-    <label><input type="radio" name="type" value="bpmk1" />Bed Presence Mk1</label>
-    <label><input type="radio" name="type" value="test" />2nd Test Device</label>
+<ul class="list-group">
+    <li class="list-group-item">
+        <label><input type="radio" name="type" value="bpmk1" />Bed Presence Mk1</label>
+    </li>
+    <li class="list-group-item">
+        <label><input type="radio" name="type" value="test" />2nd Test Device</label>
+    </li>
+</ul>
 
 <p class="button-row" align="center">
     <esp-web-install-button class="invisible"></esp-web-install-button>
