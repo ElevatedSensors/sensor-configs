@@ -29,8 +29,23 @@ sensor:
   entity_category: "diagnostic"
   device_class: ""
 
+- platform: uptime
+  id: bed_presence_uptime
+  name: "Uptime"
+
 button:
 - platform: restart
   name: Restart
   id: bed_presence_restart
   entity_category: "diagnostic"
+
+text_sensor:
+- platform: debug
+  id: bed_presence_reset_reason
+  reset_reason:
+    name: "Reset Reason"
+
+binary_sensor:
+- name: "Status"
+  id: bed_presence_status
+  platform: status
