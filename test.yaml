@@ -18,7 +18,7 @@ substitutions:
   #     - 500ms Good starting point for getting speed without too many false negatives (Default)
   #     - 0ms   No delay, expect frequent false negatives
   fast_delayed_off: '500ms'
-  force_build: '1'
+  force_build: '2'
 
 esphome:
   name: ${name}
