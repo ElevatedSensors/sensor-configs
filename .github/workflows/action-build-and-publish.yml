@@ -12,11 +12,6 @@ on:
         required: false
         type: string
         default: ESPHome
-      clean:
-        description: Remove deleted files from the build
-        required: false
-        type: boolean
-        default: true
       manifest_filename:
         description: Filename of the manifest to write.
         required: false
@@ -101,15 +96,15 @@ jobs:
         with:
           branch: gh-pages
           folder: output
-          clean: ${{ inputs.clean }}
+          clean: true
       - name: Deploy 🚀 (pages only)
         uses: JamesIves/github-pages-deploy-action@v4.6.3
         if: ${{ !inputs.build_fw }}
         with:
           branch: gh-pages
           folder: output
-          clean: ${{ inputs.clean }}
+          clean: true
           # When we only build website (no fw), leave the fw files alone
           clean-exclude: |
-            manifest.json
+            *manifest.json
             *esp*/*
