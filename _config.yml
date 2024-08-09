@@ -102,8 +102,10 @@ navbar:
     child   :
       - title : Getting Started
         url   : /bed-presence-mk1/getting-started
-      - title : ESP Web Tools
-        url   : /bed-presence-mk1/webtools
+      - title : Sensor Details
+        url   : /bed-presence-mk1/sensors
+  - title   : ESP Web Tools
+    url     : /webtools
   - title   : Store
     url     : https://elevatedsensors.com
   # - title   : Blog # Label
