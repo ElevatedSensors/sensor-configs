@@ -1,6 +1,6 @@
 substitutions:
-  name: bed-presence
-  friendly_name: Bed Presence
+  name: test
+  friendly_name: Test
 
   # Calibrate Trigger Percentile
   # This controls how the trigger threshold is set during calibration. During calibration, the unoccupied and occupied
@@ -24,8 +24,8 @@ esphome:
   friendly_name: ${friendly_name}
   name_add_mac_suffix: true
   project:
-    name: ElevatedSensors.BedPresence
-    version: Mk1
+    name: ElevatedSensors.Test
+    version: test
 
 esp32:
   board: esp32-c3-devkitm-1
@@ -34,7 +34,7 @@ esp32:
 
 # Allow Import
 dashboard_import:
-  package_import_url: github://ElevatedSensors/sensor-configs/bed-presence-mk1.yaml@main
+  package_import_url: github://ElevatedSensors/sensor-configs/test.yaml@main
   import_full_config: true
 
 # Enable logging
