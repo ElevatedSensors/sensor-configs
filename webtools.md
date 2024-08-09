@@ -21,7 +21,7 @@ You can use the button below to install the pre-built firmware directly to your 
     <esp-web-install-button class="btn btn-outline-warning invisible"></esp-web-install-button>
 </p>
 
-<esp-web-install-button manifest="../../manifest.json"></esp-web-install-button>
+<!-- <esp-web-install-button manifest="../../manifest.json"></esp-web-install-button> -->
 
 <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
 <script>
