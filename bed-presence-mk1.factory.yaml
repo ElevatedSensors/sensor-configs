@@ -63,9 +63,9 @@ esp32_improv:
 # To have a "next url" for improv serial
 web_server:
 
-# Enable esphome OTA updates
-ota:
-  platform: esphome
+# # Enable esphome OTA updates
+# ota:
+#   platform: esphome
 
 # Managed updates from Elevated Sensors
 ota:
