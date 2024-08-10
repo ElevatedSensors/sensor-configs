@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'bed-presence-mk1-factory.yaml'
+      - 'bed-presence-mk1.factory.yaml'
       - 'bed-presence-mk1/*.yaml'
 
 jobs:
