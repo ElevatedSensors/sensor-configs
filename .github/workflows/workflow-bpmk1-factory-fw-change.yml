@@ -1,0 +1,18 @@
+name: Bed Presence Mk1 Factory Firmware Changed
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'bed-presence-mk1-factory.yaml'
+      - 'bed-presence-mk1/*.yaml'
+
+jobs:
+  build:
+    uses: ./.github/workflows/action-build-and-publish.yml
+    with:
+      files: bed-presence-mk1-factory.yaml
+      name: Bed Presence Mk1 Factory
+      esphome_version: latest
+      manifest_filename: bpmk1-manifest.factory.json
