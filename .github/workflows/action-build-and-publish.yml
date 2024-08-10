@@ -50,10 +50,10 @@ jobs:
         file: ${{ fromJson(needs.prepare.outputs.files) }}
     steps:
       - uses: actions/checkout@v4.1.7
-      - uses: esphome/build-action@v3.2.0
+      - uses: esphome/build-action@v4.0.1
         id: esphome-build
         with:
-          yaml_file: ${{ matrix.file }}
+          yaml-file: ${{ matrix.file }}
           version: ${{ inputs.esphome_version }}
       - run: |
           mkdir output
