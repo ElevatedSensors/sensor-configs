@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         file:
-            bed-presence-mk1.yaml
+          - bed-presence-mk1.yaml
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4.1.7
