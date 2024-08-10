@@ -12,7 +12,7 @@ jobs:
   build:
     uses: ./.github/workflows/action-build-and-publish.yml
     with:
-      files: bed-presence-mk1-factory.yaml
+      files: bed-presence-mk1.factory.yaml
       name: Bed Presence Mk1 Factory
       esphome_version: latest
       manifest_filename: bpmk1-manifest.factory.json
