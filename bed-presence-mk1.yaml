@@ -33,10 +33,10 @@ esp32:
     type: esp-idf
     #type: arduino
 
-# Allow Import
-dashboard_import:
-  package_import_url: github://ElevatedSensors/sensor-configs/bed-presence-mk1.yaml@main
-  import_full_config: true
+# # Allow Import
+# dashboard_import:
+#   package_import_url: github://ElevatedSensors/sensor-configs/bed-presence-mk1.yaml@main
+#   import_full_config: true
 
 # Enable logging
 logger:
