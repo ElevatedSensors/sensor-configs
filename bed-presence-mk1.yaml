@@ -25,7 +25,7 @@ esphome:
   name_add_mac_suffix: true
   project:
     name: ElevatedSensors.BedPresenceMk1
-    version: "2024.8.0"
+    version: "2024.8.2"
 
 esp32:
   board: esp32-c3-devkitm-1
@@ -67,7 +67,7 @@ web_server:
 ota:
   platform: esphome
 
-# # Managed updates from Elevated Sensors
+# # Managed updates from Elevated Sensors (future)
 # ota:
 #   - platform: http_request
 #     id: ota_http_request
