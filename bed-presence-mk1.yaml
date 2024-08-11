@@ -27,13 +27,12 @@ esphome:
     name: ElevatedSensors.BedPresenceMk1
     version: "2024.8.3"
   platformio_options:
-    board_build.flash_mode: dio
+    board_build.flash_mode: dio # dio flash_mode fixes issue where board bootloops using esp-idf
 
 esp32:
   board: esp32-c3-devkitm-1
   framework:
-    type: esp-idf
-    # type: arduino
+    type: esp-idf # using arduino causes board to reset multiple times/day
 
 # Allow Import
 dashboard_import:
@@ -79,6 +78,7 @@ update:
     id: update_http_request
     name: Firmware
     source: https://docs.elevatedsensors.com/bpmk1-manifest.json
+    update_interval: 10s   # TODO update to 6 hours after dev work
 
 http_request:
   verify_ssl: true
