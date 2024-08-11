@@ -67,6 +67,20 @@ web_server:
 ota:
   platform: esphome
 
+# # Managed updates from Elevated Sensors
+# ota:
+#   - platform: http_request
+#     id: ota_http_request
+
+# update:
+#   - platform: http_request
+#     id: update_http_request
+#     name: Firmware
+#     source: https://docs.elevatedsensors.com/bpmk1-manifest.json
+
+# http_request:
+#   verify_ssl: true
+
 ################################################################################
 packages:
   remote_package:
