@@ -26,12 +26,14 @@ esphome:
   project:
     name: ElevatedSensors.BedPresenceMk1
     version: "2024.8.3"
+  platformio_options:
+    board_build.flash_mode: dio
 
 esp32:
   board: esp32-c3-devkitm-1
   framework:
-    # type: esp-idf
-    type: arduino
+    type: esp-idf
+    # type: arduino
 
 # Allow Import
 dashboard_import:
