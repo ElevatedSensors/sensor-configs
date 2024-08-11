@@ -25,13 +25,13 @@ esphome:
   name_add_mac_suffix: true
   project:
     name: ElevatedSensors.BedPresenceMk1
-    version: "2024.8.2"
+    version: "2024.8.3"
 
 esp32:
   board: esp32-c3-devkitm-1
   framework:
-    type: esp-idf
-    # type: arduino
+    # type: esp-idf
+    type: arduino
 
 # Allow Import
 dashboard_import:
