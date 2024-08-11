@@ -62,11 +62,10 @@ jobs:
         run: find output/
       - name: Create single manifest.json and update paths
         run: |
-          jq -s '{"name": "${{ inputs.name }}", "version": "${{ steps.esphome-build.outputs.version }}", "home_assistant_domain": "esphome", "new_install_improv_wait_time": 15, "builds":.}' output/*/manifest.json > output/tmp.json
+          jq -s '{"name": "${{ inputs.name }}", "version": "${{ steps.esphome-build.outputs.project-version }}", "home_assistant_domain": "esphome", "new_install_improv_wait_time": 15, "builds":.}' output/*/manifest.json > output/tmp.json
           jq '.builds[].ota.path |= "${{ steps.esphome-build.outputs.name }}/" + .' output/tmp.json > output/tmp2.json
           jq '.builds[].parts[].path |= "${{ steps.esphome-build.outputs.name }}/" + .' output/tmp2.json > output/${{ inputs.manifest_filename }}
           rm output/tmp*json
-          ls output
       - uses: actions/upload-artifact@v4.3.5
         with:
           name: ${{ inputs.name }}
