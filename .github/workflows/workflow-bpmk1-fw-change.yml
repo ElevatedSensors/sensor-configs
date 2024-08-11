@@ -5,14 +5,15 @@ on:
     branches:
       - main
     paths:
-      - 'bed-presence-mk1.yaml'
+      - 'bed-presence-mk1.factory.yaml'
       - 'bed-presence-mk1/*.yaml'
+  workflow_dispatch:
 
 jobs:
   build:
     uses: ./.github/workflows/action-build-and-publish.yml
     with:
-      files: bed-presence-mk1.yaml
+      files: bed-presence-mk1.factory.yaml
       name: Bed Presence Mk1
       esphome_version: latest
       manifest_filename: bpmk1-manifest.json

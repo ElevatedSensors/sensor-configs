@@ -1,5 +1,5 @@
 substitutions:
-  name: bed-presence-factory
+  name: bed-presence
   friendly_name: Bed Presence
 
   # Calibrate Trigger Percentile
@@ -18,15 +18,14 @@ substitutions:
   #     - 500ms Good starting point for getting speed without too many false negatives (Default)
   #     - 0ms   No delay, expect frequent false negatives
   fast_delayed_off: '500ms'
-  force_build: '2'
 
 esphome:
   name: ${name}
   friendly_name: ${friendly_name}
   name_add_mac_suffix: true
   project:
-    name: ElevatedSensors.BedPresence
-    version: Mk1
+    name: ElevatedSensors.BedPresenceMk1
+    version: "2024.8.0"
 
 esp32:
   board: esp32-c3-devkitm-1
