@@ -25,7 +25,7 @@ esphome:
   name_add_mac_suffix: true
   project:
     name: ElevatedSensors.BedPresenceMk1
-    version: DIY
+    version: "2024.8.0"
 
 esp32:
   board: esp32-c3-devkitm-1
@@ -33,10 +33,10 @@ esp32:
     type: esp-idf
     #type: arduino
 
-# # Allow Import
-# dashboard_import:
-#   package_import_url: github://ElevatedSensors/sensor-configs/bed-presence-mk1.yaml@main
-#   import_full_config: true
+# Allow Import
+dashboard_import:
+  package_import_url: github://ElevatedSensors/sensor-configs/bed-presence-mk1.yaml@main
+  import_full_config: true
 
 # Enable logging
 logger:
