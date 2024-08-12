@@ -21,7 +21,7 @@ update:
     id: update_http_request
     name: Firmware
     source: https://docs.elevatedsensors.com/bpmk1-manifest.json
-    update_interval: 1m   # TODO update to 6 hours after dev work
+    update_interval: 60s   # TODO update to 6 hours after dev work
 
 http_request:
   verify_ssl: true
