@@ -1,17 +1,17 @@
 packages:
   bed-presence-mk1: !include bed-presence-mk1.yaml
-  
+
 esphome:
   project:
     name: ElevatedSensors.BedPresenceMk1
-    version: "2024.8.5"
+    version: "2024.8.6"
 
 # Allow Import
 dashboard_import:
   package_import_url: github://ElevatedSensors/sensor-configs/bed-presence-mk1.yaml@main
   import_full_config: true
 
-# Managed updates from Elevated Sensors (future)
+# Managed updates from Elevated Sensors
 ota:
   - platform: http_request
     id: ota_http_request
@@ -25,3 +25,11 @@ update:
 
 http_request:
   verify_ssl: true
+
+# Allow provisioning Wi-Fi via serial
+improv_serial:
+
+# Sets up Bluetooth LE to allow the user
+# to provision wifi credentials to the device.
+esp32_improv:
+  authorizer: none
