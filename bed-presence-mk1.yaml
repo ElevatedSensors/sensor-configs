@@ -34,19 +34,11 @@ esp32:
   framework:
     type: esp-idf # using arduino causes board to reset multiple times/day
 
-# # Allow Import
-# dashboard_import:
-#   package_import_url: github://ElevatedSensors/sensor-configs/bed-presence-mk1.yaml@main
-#   import_full_config: true
-
 # Enable logging
 logger:
 
 # Enable Home Assistant API
 api:
-
-# Allow provisioning Wi-Fi via serial
-improv_serial:
 
 wifi:
   # Set up a wifi access point
@@ -56,32 +48,12 @@ wifi:
 # to provision wifi credentials to the device via WiFi AP.
 captive_portal:
 
-# Sets up Bluetooth LE (Only on ESP32) to allow the user
-# to provision wifi credentials to the device.
-esp32_improv:
-  authorizer: none
-
 # To have a "next url" for improv serial
 web_server:
 
 # Enable esphome OTA updates
 ota:
   platform: esphome
-
-# # Managed updates from Elevated Sensors (future)
-# ota:
-#   - platform: http_request
-#     id: ota_http_request
-
-# update:
-#   - platform: http_request
-#     id: update_http_request
-#     name: Firmware
-#     source: https://docs.elevatedsensors.com/bpmk1-manifest.json
-#     update_interval: 10s   # TODO update to 6 hours after dev work
-
-# http_request:
-#   verify_ssl: true
 
 ################################################################################
 packages:
