@@ -25,7 +25,7 @@ esphome:
   name_add_mac_suffix: true
   project:
     name: ElevatedSensors.BedPresenceMk1
-    version: "dev"
+    version: "2024.8.5"
   platformio_options:
     board_build.flash_mode: dio # dio flash_mode fixes issue where board bootloops using esp-idf
 
@@ -34,10 +34,10 @@ esp32:
   framework:
     type: esp-idf # using arduino causes board to reset multiple times/day
 
-# # Allow Import
-# dashboard_import:
-#   package_import_url: github://ElevatedSensors/sensor-configs/bed-presence-mk1.yaml@main
-#   import_full_config: true
+# Allow Import
+dashboard_import:
+  package_import_url: github://ElevatedSensors/sensor-configs/bed-presence-mk1.yaml@main
+  import_full_config: true
 
 # Enable logging
 logger:
@@ -64,24 +64,24 @@ esp32_improv:
 # To have a "next url" for improv serial
 web_server:
 
-# Enable esphome OTA updates
-ota:
-  platform: esphome
-
-# # Managed updates from Elevated Sensors (future)
+# # Enable esphome OTA updates
 # ota:
-#   - platform: http_request
-#     id: ota_http_request
+#   platform: esphome
 
-# update:
-#   - platform: http_request
-#     id: update_http_request
-#     name: Firmware
-#     source: https://docs.elevatedsensors.com/bpmk1-manifest.json
-#     update_interval: 10s   # TODO update to 6 hours after dev work
+# Managed updates from Elevated Sensors (future)
+ota:
+  - platform: http_request
+    id: ota_http_request
 
-# http_request:
-#   verify_ssl: true
+update:
+  - platform: http_request
+    id: update_http_request
+    name: Firmware
+    source: https://docs.elevatedsensors.com/bpmk1-manifest.json
+    update_interval: 10s   # TODO update to 6 hours after dev work
+
+http_request:
+  verify_ssl: true
 
 ################################################################################
 packages:
