@@ -25,7 +25,7 @@ esphome:
   name_add_mac_suffix: true
   project:
     name: ElevatedSensors.BedPresenceMk1
-    version: "dev"
+    # version: "dev"
   platformio_options:
     board_build.flash_mode: dio # dio flash_mode fixes issue where board bootloops using esp-idf
 
