@@ -4,7 +4,7 @@ packages:
 esphome:
   project:
     name: ElevatedSensors.BedPresenceMk1
-    version: "2024.8.9"
+    version: "2024.8.10"
 
 # Allow Import
 dashboard_import:
@@ -19,7 +19,7 @@ ota:
 update:
   - platform: http_request
     id: update_http_request
-    name: Firmware
+    name: ES Firmware
     source: https://docs.elevatedsensors.com/bpmk1-manifest.json
     update_interval: 60s   # TODO update to 6 hours after dev work
 

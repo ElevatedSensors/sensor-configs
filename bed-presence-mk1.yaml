@@ -26,13 +26,14 @@ esphome:
   # project:
   #   name: ElevatedSensors.BedPresenceMk1
   #   version: "dev"
-  platformio_options:
-    board_build.flash_mode: dio # dio flash_mode fixes issue where board bootloops using esp-idf
+  # platformio_options:
+  #   board_build.flash_mode: dio # dio flash_mode fixes issue where board bootloops using esp-idf
 
 esp32:
   board: esp32-c3-devkitm-1
   framework:
-    type: esp-idf # using arduino causes board to reset multiple times/day
+    # type: esp-idf # using arduino causes board to reset multiple times/day
+    type: arduino
 
 # Enable logging
 logger:
