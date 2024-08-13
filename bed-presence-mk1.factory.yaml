@@ -4,7 +4,7 @@ packages:
 esphome:
   project:
     name: ElevatedSensors.BedPresenceMk1
-    version: "2024.8.8"
+    version: "2024.8.9"
 
 # Allow Import
 dashboard_import:
