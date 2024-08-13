@@ -1,7 +1,4 @@
 substitutions:
-  name: bed-presence
-  friendly_name: Bed Presence
-
   # Calibrate Trigger Percentile
   # This controls how the trigger threshold is set during calibration. During calibration, the unoccupied and occupied
   # pressure values are determined. This is the percentage of the difference between those values required to trigger
@@ -20,12 +17,13 @@ substitutions:
   fast_delayed_off: '500ms'
 
 esphome:
-  name: ${name}
-  friendly_name: ${friendly_name}
+  name: bed-presence
+  friendly_name: Bed Presence
+  min_version: 2024.6.0
   name_add_mac_suffix: true
-  # project:
-  #   name: ElevatedSensors.BedPresenceMk1
-  #   version: "dev"
+  project:
+    name: ElevatedSensors.BedPresenceMk1
+    version: "diy"
   platformio_options:
     board_build.flash_mode: dio # dio flash_mode fixes issue where board bootloops using esp-idf
 
@@ -40,6 +38,7 @@ logger:
 # Enable Home Assistant API
 api:
 
+# Enable wifi
 wifi:
   # Set up a wifi access point
   ap: {}
@@ -48,12 +47,13 @@ wifi:
 # to provision wifi credentials to the device via WiFi AP.
 captive_portal:
 
-# To have a "next url" for improv serial
+# Enable web server
 web_server:
 
 # Enable esphome OTA updates
 ota:
   - platform: esphome
+    id: ota_esphome
 
 ################################################################################
 packages:
