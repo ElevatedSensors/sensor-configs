@@ -16,7 +16,7 @@ Welcome to Bed Presence for ESPHome! This page contains everything you need to g
 1. Connect USB-C power supply.
 2. Use phone to connect to `bed-presence-xxxxxx` WiFi.
 3. If asked to stay connected, press `Yes`.
-4. Open a web browser and navigate to http://192.168.4.1
+4. Open a web browser and navigate to `http://192.168.4.1`
 5. Select WiFi network you would like to add the device to, and provide the password.
 
 ## Adding to Home Assistant
@@ -37,11 +37,11 @@ Welcome to Bed Presence for ESPHome! This page contains everything you need to g
 
 2. Select a bed slat in the torso region, where most of your weight will be applied to the bed (think about where you sit or lay in bed). If possible, select a bed slat that does not rock side to side.
 
-3. Orient the sensor with the circuit board/text facing up, and the thicker part of the device hanging over the edge of the bed slat.
+3. Orient the sensor with the circuit board/text facing up, and the thicker part of the device hanging over the edge of the bed slat. If the selected slat can move, you may need to screw it in place.
 
     <img src="/assets/images/bp-install-2.jpg" class="rounded m-2" width="400"/>
 
-4. Firmly attach the device using the provided screw. Pre-drill if necessary.
+4. Firmly attach the device using the provided screw. Pre-drill if necessary. For metal slats, use the included double-sided mounting square (it may be easier to insert the sensor strips before applying the adhesive square).
 
     <img src="/assets/images/bp-install-3.jpg" class="rounded m-2" width="400"/>
     <img src="/assets/images/bp-install-4.jpg" class="rounded m-2" width="400"/>
