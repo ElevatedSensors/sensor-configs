@@ -4,7 +4,7 @@ packages:
 esphome:
   project:
     name: ElevatedSensors.BedPresenceMk1
-    version: "2024.8.10"
+    version: "2024.8.11"
 
 # Allow Import
 dashboard_import:
@@ -24,8 +24,7 @@ update:
     update_interval: 60s   # TODO update to 6 hours after dev work
 
 http_request:
-  # verify_ssl: true
-  verify_ssl: false
+  verify_ssl: true
 
 # Allow provisioning Wi-Fi via serial
 improv_serial:
