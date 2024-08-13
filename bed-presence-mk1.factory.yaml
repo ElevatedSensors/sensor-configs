@@ -24,7 +24,8 @@ update:
     update_interval: 60s   # TODO update to 6 hours after dev work
 
 http_request:
-  verify_ssl: true
+  # verify_ssl: true
+  verify_ssl: false
 
 # Allow provisioning Wi-Fi via serial
 improv_serial:
