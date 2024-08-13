@@ -2,7 +2,7 @@
   "chipFamily": "ESP32-C3",
   "ota": {
     "path": "bed-presence-esp32c3.ota.bin",
-    "md5": "324752e31c09f9144d32bc26ddfa12d1"
+    "md5": "d8ee474127632378b6f409264813358e"
   },
   "parts": [
     {
