@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'bed-presence-mk1.factory.yaml'
+      - 'bed-presence-mk1.yaml'
       - 'bed-presence-mk1/*.yaml'
   workflow_dispatch:
 
