@@ -53,7 +53,7 @@ web_server:
 
 # Enable esphome OTA updates
 ota:
-  platform: esphome
+  - platform: esphome
 
 ################################################################################
 packages:
