@@ -66,7 +66,7 @@ jobs:
           jq '.builds[].ota.path |= "${{ steps.esphome-build.outputs.name }}/" + .' output/tmp.json > output/tmp2.json
           jq '.builds[].parts[].path |= "${{ steps.esphome-build.outputs.name }}/" + .' output/tmp2.json > output/${{ inputs.manifest_filename }}
           rm output/tmp*json
-      - uses: actions/upload-artifact@v4.3.5
+      - uses: actions/upload-artifact@v4.3.6
         with:
           name: ${{ inputs.name }}
           path: output
