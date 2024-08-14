@@ -27,11 +27,6 @@ on:
         required: false
         type: boolean
         default: true
-      release-info-path:
-        description: Path to a yaml file containing release-summary and release-url.
-        required: false
-        type: string
-        default: ""
 
 jobs:
   prepare:
@@ -59,20 +54,13 @@ jobs:
         with:
           yaml-file: ${{ matrix.file }}
           version: ${{ inputs.esphome-version }}
-          release-summary: ${{ steps.release-info.outputs.release-summary }}
-          release-url: ${{ steps.release-info.outputs.release-url }}
+          # release-summary: ${{ steps.release-info.outputs.release-summary }}
+          # release-url: ${{ steps.release-info.outputs.release-url }}
       - run: |
           mkdir output
           mv "${{ steps.esphome-build.outputs.name }}" output/
       - name: Print output folder structure
         run: find output/
-      - name: Get release info
-        id: release-info
-        uses: actions-tools/yaml-outputs@v2.1
-        with:
-          file-path: ${{ inputs.release-info-path }}
-          fail-on-file-not-found: false
-      - run: echo "${{ format('steps.release-info.outputs.{0}__release-summary', steps.esphome-build.outputs.project-version) }}"
       - name: Create single manifest.json and update paths
         run: |
           jq -s '{"name": "${{ inputs.name }}", "version": "${{ steps.esphome-build.outputs.project-version }}", "home_assistant_domain": "esphome", "new_install_improv_wait_time": 15, "builds":.}' output/*/manifest.json > output/tmp.json
