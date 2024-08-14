@@ -12,21 +12,31 @@ on:
         required: false
         type: string
         default: ESPHome
-      manifest_filename:
+      manifest-filename:
         description: Filename of the manifest to write.
         required: false
         type: string
         default: manifest.json
-      esphome_version:
+      esphome-version:
         description: Version of ESPHome to build for.
         required: false
         type: string
         default: latest
-      build_fw:
+      build-fw:
         description: Build the firmware
         required: false
         type: boolean
         default: true
+      release-summary:
+        description: A summary of the release that will be added to the manifest file.
+        required: false
+        type: string
+        default: ""
+      release-url:
+        description: A URL to the release page that will be added to the manifest file.
+        required: false
+        type: string
+        default: ""
 
 jobs:
   prepare:
@@ -55,6 +65,8 @@ jobs:
         with:
           yaml-file: ${{ matrix.file }}
           version: ${{ inputs.esphome_version }}
+          release-summary: ${{ inputs.release-summary }}
+          release-url: ${{ inputs.release-url }}
       - run: |
           mkdir output
           mv "${{ steps.esphome-build.outputs.name }}" output/

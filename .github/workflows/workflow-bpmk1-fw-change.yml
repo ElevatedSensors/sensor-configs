@@ -12,9 +12,20 @@ on:
 
 jobs:
   build:
-    uses: ./.github/workflows/action-build-and-publish.yml
-    with:
-      files: bed-presence-mk1.factory.yaml
-      name: Bed Presence Mk1
-      esphome_version: latest
-      manifest_filename: bpmk1-manifest.json
+    steps:
+      - name: Get release info
+        id: release-info
+        uses: jbutcher5/read-yaml@1.6
+        with:
+          file: bed-presence-mk1/release-info.yaml
+          key-path: '["release-summary", "release-url"]'
+      - run: echo "${{ steps.release-info.outputs.data }}"
+      - run: echo "${{ steps.release-info.outputs.data.release-summary }}"
+      - run: echo "${{ steps.release-info.outputs.data.release-url }}"
+      - name: Build and Publish
+        uses: ./.github/workflows/action-build-and-publish.yml
+        with:
+          files: bed-presence-mk1.factory.yaml
+          name: Bed Presence Mk1
+          esphome-version: latest
+          manifest-filename: bpmk1-manifest.json
