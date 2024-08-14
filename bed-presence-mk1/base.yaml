@@ -37,6 +37,8 @@ button:
 - platform: safe_mode
   id: btn_safe_mode
   name: Safe Mode Boot
+  entity_category: "diagnostic"
 - platform: factory_reset
   id: btn_factory_reset
   name: Factory Reset
+  entity_category: "diagnostic"
