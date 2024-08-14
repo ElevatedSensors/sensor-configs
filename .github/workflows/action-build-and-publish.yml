@@ -27,13 +27,8 @@ on:
         required: false
         type: boolean
         default: true
-      release-summary:
-        description: A summary of the release that will be added to the manifest file.
-        required: false
-        type: string
-        default: ""
-      release-url:
-        description: A URL to the release page that will be added to the manifest file.
+      release-info:
+        description: Path to a yaml file containing release-summary and release-url.
         required: false
         type: string
         default: ""
@@ -47,7 +42,6 @@ jobs:
       - id: files-array
         run: |
           files=$(echo "${{ inputs.files }}" | jq -Rcn 'inputs | . / ","')
-          # echo ::set-output name=files::$files
           echo "files=$files" >> $GITHUB_OUTPUT
 
   build:
@@ -72,6 +66,15 @@ jobs:
           mv "${{ steps.esphome-build.outputs.name }}" output/
       - name: Print output folder structure
         run: find output/
+      - name: Get release info
+        id: release-info
+        uses: jbutcher5/read-yaml@1.6
+        with:
+          file: ${{ inputs.release-info }}
+          key-path: '["release-summary", "release-url"]'
+      - run: echo "${{ steps.release-info.outputs.data }}"
+      - run: echo "${{ steps.release-info.outputs.data.release-summary }}"
+      - run: echo "${{ steps.release-info.outputs.data.release-url }}"
       - name: Create single manifest.json and update paths
         run: |
           jq -s '{"name": "${{ inputs.name }}", "version": "${{ steps.esphome-build.outputs.project-version }}", "home_assistant_domain": "esphome", "new_install_improv_wait_time": 15, "builds":.}' output/*/manifest.json > output/tmp.json
