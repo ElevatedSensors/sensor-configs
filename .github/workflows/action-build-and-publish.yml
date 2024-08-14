@@ -54,15 +54,6 @@ jobs:
         file: ${{ fromJson(needs.prepare.outputs.files) }}
     steps:
       - uses: actions/checkout@v4.1.7
-      - name: Get release info
-        id: release-info
-        uses: actions-tools/yaml-outputs@v2.1
-        with:
-          file-path: ${{ inputs.release-info-path }}
-          fail-on-file-not-found: false
-      - run: echo "${{ steps.release-info.outputs }}"
-      - run: echo "${{ steps.release-info.outputs.release-summary }}"
-      - run: echo "${{ steps.release-info.outputs.release-url }}"
       - uses: esphome/build-action@v4.0.1
         id: esphome-build
         with:
@@ -75,6 +66,14 @@ jobs:
           mv "${{ steps.esphome-build.outputs.name }}" output/
       - name: Print output folder structure
         run: find output/
+      - name: Get release info
+        id: release-info
+        uses: actions-tools/yaml-outputs@v2.1
+        with:
+          file-path: ${{ inputs.release-info-path }}
+          fail-on-file-not-found: false
+            "${{ format("steps.release-info.outputs.{0}_release-summary", inputs.project-version") }}"
+      - run: echo "${{ format('steps.release-info.outputs.{0}__release-summary', steps.esphome-build.outputs.project-version) }}"
       - name: Create single manifest.json and update paths
         run: |
           jq -s '{"name": "${{ inputs.name }}", "version": "${{ steps.esphome-build.outputs.project-version }}", "home_assistant_domain": "esphome", "new_install_improv_wait_time": 15, "builds":.}' output/*/manifest.json > output/tmp.json
