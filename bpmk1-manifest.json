@@ -1,6 +1,6 @@
 {
   "name": "Bed Presence Mk1",
-  "version": "2024.8.12",
+  "version": "2024.8.13",
   "home_assistant_domain": "esphome",
   "new_install_improv_wait_time": 15,
   "builds": [
@@ -8,7 +8,7 @@
       "chipFamily": "ESP32-C3",
       "ota": {
         "path": "bed-presence-esp32c3/bed-presence-esp32c3.ota.bin",
-        "md5": "850785e9d42fc119721d890ff17536ac"
+        "md5": "7037bd67a5ebf1685c41c031c172f1a9"
       },
       "parts": [
         {
