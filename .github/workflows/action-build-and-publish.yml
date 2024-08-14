@@ -68,7 +68,7 @@ jobs:
         run: find output/
       - name: Get release info
         id: release-info
-        uses: action-tools/yaml-outputs@v2.1
+        uses: actions-tools/yaml-outputs@v2.1
         with:
           file-path: ${{ inputs.release-info }}
           fail-on-file-not-found: false
