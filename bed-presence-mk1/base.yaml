@@ -32,5 +32,11 @@ sensor:
 button:
 - platform: restart
   name: Restart
-  id: bed_presence_restart
+  id: btn_restart
   entity_category: "diagnostic"
+- platform: safe_mode
+  id: btn_safe_mode
+  name: Safe Mode Boot
+- platform: factory_reset
+  id: btn_factory_reset
+  name: Factory Reset
