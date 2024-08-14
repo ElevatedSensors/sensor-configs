@@ -2,8 +2,7 @@
   "chipFamily": "ESP32-C3",
   "ota": {
     "path": "bed-presence-esp32c3.ota.bin",
-    "md5": "42cbda94711ea6679f1fd8602724463f",
-    "release_url": "https://docs.elevatedsensors.com/webtools"
+    "md5": "36db7b4cc4f405a91d3ef4b9b98c44f2"
   },
   "parts": [
     {
