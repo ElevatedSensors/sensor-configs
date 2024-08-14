@@ -54,8 +54,6 @@ jobs:
         with:
           yaml-file: ${{ matrix.file }}
           version: ${{ inputs.esphome-version }}
-          # release-summary: ${{ steps.release-info.outputs.release-summary }}
-          # release-url: ${{ steps.release-info.outputs.release-url }}
       - run: |
           mkdir output
           mv "${{ steps.esphome-build.outputs.name }}" output/
