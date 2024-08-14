@@ -68,13 +68,13 @@ jobs:
         run: find output/
       - name: Get release info
         id: release-info
-        uses: jbutcher5/read-yaml@1.6
+        uses: action-tools/yaml-outputs@v2.1
         with:
-          file: ${{ inputs.release-info }}
-          key-path: '["release-summary", "release-url"]'
-      - run: echo "${{ steps.release-info.outputs.data }}"
-      - run: echo "${{ steps.release-info.outputs.data.release-summary }}"
-      - run: echo "${{ steps.release-info.outputs.data.release-url }}"
+          file-path: ${{ inputs.release-info }}
+          fail-on-file-not-found: false
+      - run: echo "${{ steps.release-info.outputs }}"
+      - run: echo "${{ steps.release-info.outputs.release-summary }}"
+      - run: echo "${{ steps.release-info.outputs.release-url }}"
       - name: Create single manifest.json and update paths
         run: |
           jq -s '{"name": "${{ inputs.name }}", "version": "${{ steps.esphome-build.outputs.project-version }}", "home_assistant_domain": "esphome", "new_install_improv_wait_time": 15, "builds":.}' output/*/manifest.json > output/tmp.json
