@@ -46,7 +46,7 @@ jobs:
 
   build:
     name: Build ESPHome binary for ${{ matrix.file }}
-    if: ${{ inputs.build_fw }}  # Don't build if there haven't been any fw changes
+    if: ${{ inputs.build-fw }}  # Don't build if there haven't been any fw changes
     needs: [prepare]
     runs-on: ubuntu-latest
     strategy:
@@ -58,7 +58,7 @@ jobs:
         id: esphome-build
         with:
           yaml-file: ${{ matrix.file }}
-          version: ${{ inputs.esphome_version }}
+          version: ${{ inputs.esphome-version }}
           release-summary: ${{ inputs.release-summary }}
           release-url: ${{ inputs.release-url }}
       - run: |
@@ -79,7 +79,7 @@ jobs:
         run: |
           jq -s '{"name": "${{ inputs.name }}", "version": "${{ steps.esphome-build.outputs.project-version }}", "home_assistant_domain": "esphome", "new_install_improv_wait_time": 15, "builds":.}' output/*/manifest.json > output/tmp.json
           jq '.builds[].ota.path |= "${{ steps.esphome-build.outputs.name }}/" + .' output/tmp.json > output/tmp2.json
-          jq '.builds[].parts[].path |= "${{ steps.esphome-build.outputs.name }}/" + .' output/tmp2.json > output/${{ inputs.manifest_filename }}
+          jq '.builds[].parts[].path |= "${{ steps.esphome-build.outputs.name }}/" + .' output/tmp2.json > output/${{ inputs.manifest-filename }}
           rm output/tmp*json
       - uses: actions/upload-artifact@v4.3.6
         with:
@@ -99,7 +99,7 @@ jobs:
         with:
           path: output
           name: ${{ inputs.name }}
-        if: ${{ inputs.build_fw }}  # only download if there's a new build
+        if: ${{ inputs.build-fw }}  # only download if there's a new build
 
       - run: mkdir -p output  # create output if it doesn't already exist
       - run: cp -R static/* output
