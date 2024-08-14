@@ -29,14 +29,6 @@ sensor:
   entity_category: "diagnostic"
   device_class: ""
 
-- platform: template
-  name: Average Pressure (Current)
-  id: bed_sensor_average
-  update_interval: 0.5s
-  unit_of_measurement: '%'
-  icon: mdi:gauge
-  lambda: return (id(bed_sensor_left).state + id(bed_sensor_right).state) / 2.0;
-
 binary_sensor:
 - platform: template
   name: Bed Occupied (Both, Fast)
