@@ -72,7 +72,6 @@ jobs:
         with:
           file-path: ${{ inputs.release-info-path }}
           fail-on-file-not-found: false
-            "${{ format("steps.release-info.outputs.{0}_release-summary", inputs.project-version") }}"
       - run: echo "${{ format('steps.release-info.outputs.{0}__release-summary', steps.esphome-build.outputs.project-version) }}"
       - name: Create single manifest.json and update paths
         run: |
