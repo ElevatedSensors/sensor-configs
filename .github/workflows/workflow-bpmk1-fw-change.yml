@@ -18,3 +18,4 @@ jobs:
       name: Bed Presence Mk1
       esphome-version: latest
       manifest-filename: bpmk1-manifest.json
+      release-url: https://docs.elevatedsensors.com/bed-presence-mk1/release

@@ -27,6 +27,12 @@ on:
         required: false
         type: boolean
         default: true
+      release-url:
+        description: URL with release notes that will be added to the manifest
+        required: false
+        type: string
+        default: ""
+
 
 jobs:
   prepare:
@@ -54,6 +60,7 @@ jobs:
         with:
           yaml-file: ${{ matrix.file }}
           version: ${{ inputs.esphome-version }}
+          release-url: ${{ inputs.release-url }}
       - run: |
           mkdir output
           mv "${{ steps.esphome-build.outputs.name }}" output/

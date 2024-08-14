@@ -27,5 +27,17 @@ subtitle: A dual bed occupancy sensor
             </div>
         </div>
     </div>
+
+    <!-- Firmware Release Notes -->
+    <div class="col-lg-4">
+        <div class="card text-left border-primary h-100">
+            <div class="card-body">
+                <h5 class="card-title">Firmware Release Notes</h5>
+                <p class="card-text">Details about each version of firmware.</p>
+                <a href="{% link bed-presence-mk1/release.md%}" class="btn btn-outline-warning stretched-link">Go!</a>
+            </div>
+        </div>
+    </div>
+
 </div>
 
