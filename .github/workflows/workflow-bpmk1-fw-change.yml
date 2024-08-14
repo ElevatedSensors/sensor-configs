@@ -18,4 +18,4 @@ jobs:
       name: Bed Presence Mk1
       esphome-version: latest
       manifest-filename: bpmk1-manifest.json
-      release-info: bed-presence-mk1/release-info.yaml
+      release-info-path: bed-presence-mk1/release-info.yaml

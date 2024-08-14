@@ -27,7 +27,7 @@ on:
         required: false
         type: boolean
         default: true
-      release-info:
+      release-info-path:
         description: Path to a yaml file containing release-summary and release-url.
         required: false
         type: string
@@ -54,27 +54,26 @@ jobs:
         file: ${{ fromJson(needs.prepare.outputs.files) }}
     steps:
       - uses: actions/checkout@v4.1.7
+      - name: Get release info
+        id: release-info
+        uses: actions-tools/yaml-outputs@v2.1
+        with:
+          file-path: ${{ inputs.release-info-path }}
+          fail-on-file-not-found: false
+      - run: echo "${{ steps.release-info.outputs.release-summary }}"
+      - run: echo "${{ steps.release-info.outputs.release-url }}"
       - uses: esphome/build-action@v4.0.1
         id: esphome-build
         with:
           yaml-file: ${{ matrix.file }}
           version: ${{ inputs.esphome-version }}
-          release-summary: ${{ inputs.release-summary }}
-          release-url: ${{ inputs.release-url }}
+          release-summary: ${{ steps.release-info.outputs.release-summary }}
+          release-url: ${{ steps.release-info.outputs.release-url }}
       - run: |
           mkdir output
           mv "${{ steps.esphome-build.outputs.name }}" output/
       - name: Print output folder structure
         run: find output/
-      - name: Get release info
-        id: release-info
-        uses: actions-tools/yaml-outputs@v2.1
-        with:
-          file-path: ${{ inputs.release-info }}
-          fail-on-file-not-found: false
-      - run: echo "${{ steps.release-info.outputs }}"
-      - run: echo "${{ steps.release-info.outputs.release-summary }}"
-      - run: echo "${{ steps.release-info.outputs.release-url }}"
       - name: Create single manifest.json and update paths
         run: |
           jq -s '{"name": "${{ inputs.name }}", "version": "${{ steps.esphome-build.outputs.project-version }}", "home_assistant_domain": "esphome", "new_install_improv_wait_time": 15, "builds":.}' output/*/manifest.json > output/tmp.json
