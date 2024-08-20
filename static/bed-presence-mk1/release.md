@@ -11,6 +11,3 @@ breadcrumb_list:
 
 ## 2024.8.0
 - Initial Release
-
-## 2024.8.1
-- Update trigger_percentile to 0.625 (5/8)

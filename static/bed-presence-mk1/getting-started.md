@@ -60,12 +60,15 @@ Welcome to Bed Presence for ESPHome! This page contains everything you need to g
 
 ## Automatic Sensor Calibration
 
-1. The calibration process requires you to get into and our of your bed. It records the sensor readings while the bed is both occupied and unoccupied and automatically calculates the best trigger pressure. This process is best performed when the bed has settled in the unoccupied state. For some beds, this is instant. For others, the unoccupied pressure may increase slowly over several hours. NOTE: you can always go back and update the unoccupied pressure at a later time when it's more convenient (e.g. you're at work and the bed has been unoccupied for several hours).
-2. Navigate to the device under Home Assistant Devices. Find the `Configuration` section.
-3. Press `Calibrate Unoccupied` for the desired side of the bed.
-4. Have the person you are calibrating for gently lay on their side of the bed.
-5. Let the sensor settle for a few seconds and press `Calibrate Occupied` for the desired side of the bed.
-6. The goal of the automatic calibration is to get the value close to optimal. If you find that you are getting false triggers, want to increase/decrease sensitivity, etc, continue to `Manual Sensor Calibration`.
+The calibration process requires you to get into and our of your bed. It records the sensor readings while the bed is both occupied and unoccupied and automatically calculates the best trigger pressure.
+
+1. Navigate to the device under Home Assistant Devices. Find the `Configuration` section.
+2. Have the person you are calibration for gently lay on their side of the bed.
+3. Let the sensor settle for a few seconds and press `Calibrate Occupied` for the desired side of the bed.
+4. Get out of bed.
+5. Leave the entire bed unoccupied for a couple minutes, then press `Calibrate Unoccupied` for the desired side of the bed.
+6. Repeat for other side of bed.
+7. The goal of the automatic calibration is to get the value close to optimal. If you find that you are getting false triggers, want to increase/decrease sensitivity, etc, continue to `Manual Sensor Calibration`.
 
 ## Manual Sensor Calibration
 1. Alternatively, you can manually set the `Trigger Pressure`. Viewing the graph of the sensor pressure can help guide your desired pressure.
