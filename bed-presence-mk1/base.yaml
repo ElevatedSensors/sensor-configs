@@ -38,8 +38,6 @@ sensor:
 - platform: debug
   free:
     name: "Heap Free"
-  fragmentation:
-    name: "Heap Fragmentation"
   block:
     name: "Heap Max Block"
   loop_time:
