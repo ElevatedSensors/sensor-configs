@@ -54,6 +54,9 @@ text_sensor:
     name: "Device Info"
   reset_reason:
     name: "Reset Reason"
+
+debug:
+  update_interval: 5s
 # /DEBUG
 
 binary_sensor:
