@@ -45,7 +45,6 @@ sensor:
 
 text_sensor:
 - platform: debug
-  id: bed_presence_reset_reason
   device:
     name: "Device Info"
   reset_reason:
