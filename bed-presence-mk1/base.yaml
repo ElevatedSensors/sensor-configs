@@ -29,31 +29,6 @@ sensor:
   entity_category: "diagnostic"
   device_class: ""
 
-# DEBUG
-- platform: uptime
-  type: seconds
-  id: bed_presence_uptime
-  name: "Uptime"
-
-- platform: debug
-  free:
-    name: "Heap Free"
-  block:
-    name: "Heap Max Block"
-  loop_time:
-    name: "Loop Time"
-
-text_sensor:
-- platform: debug
-  device:
-    name: "Device Info"
-  reset_reason:
-    name: "Reset Reason"
-
-debug:
-  update_interval: 5s
-# /DEBUG
-
 binary_sensor:
 - platform: template
   name: Bed Occupied Both (Fast)
