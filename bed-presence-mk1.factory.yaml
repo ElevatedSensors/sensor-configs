@@ -4,7 +4,7 @@ packages:
 esphome:
   project:
     name: ElevatedSensors.BedPresenceMk1
-    version: 2024.8.1
+    version: 2024.8.0
 
 # Allow ESPHome Adoption
 dashboard_import:
@@ -18,10 +18,6 @@ improv_serial:
 # to provision wifi credentials to the device.
 esp32_improv:
   authorizer: none
-
-# Remove web_server(from bed-presence-mk1 package) from factory config
-# web_server + esp32_improv (required for Made for ESPHome) uses too much RAM, causing crashes
-web_server: !remove
 
 # Managed updates from Elevated Sensors
 ota:

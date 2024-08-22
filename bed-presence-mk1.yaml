@@ -47,37 +47,9 @@ wifi:
 # to provision wifi credentials to the device via WiFi AP.
 captive_portal:
 
-# Enable web server
-web_server:
-
 # Enable esphome OTA updates
 ota:
   - platform: esphome
-    id: ota_esphome
-
-# Debug sensors
-debug:
-  update_interval: 5s
-
-sensor:
-- platform: uptime
-  type: seconds
-  name: "Uptime"
-
-- platform: debug
-  free:
-    name: "Heap Free"
-  block:
-    name: "Heap Max Block"
-  loop_time:
-    name: "Loop Time"
-
-text_sensor:
-- platform: debug
-  device:
-    name: "Device Info"
-  reset_reason:
-    name: "Reset Reason"
 
 ################################################################################
 packages:
