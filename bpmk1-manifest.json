@@ -1,6 +1,6 @@
 {
   "name": "Bed Presence Mk1",
-  "version": "2024.8.1",
+  "version": "2024.8.0",
   "home_assistant_domain": "esphome",
   "new_install_improv_wait_time": 15,
   "builds": [
@@ -8,7 +8,7 @@
       "chipFamily": "ESP32-C3",
       "ota": {
         "path": "bed-presence-esp32c3/bed-presence-esp32c3.ota.bin",
-        "md5": "f9aa3ea366afff5165304c5855c946bf",
+        "md5": "199522a079d90e4caf85c8be7e7ac59c",
         "release_url": "https://docs.elevatedsensors.com/bed-presence-mk1/release"
       },
       "parts": [
