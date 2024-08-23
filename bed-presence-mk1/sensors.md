@@ -23,15 +23,15 @@ Learn about the details of each sensor and what they mean.
 
 ## Values
 
-| Value Name                         | Type                | Values          |  Details                                    |
-|------------------------------------|---------------------|-----------------|---------------------------------------------|
-| `[Right/Left] Trigger Pressure`    | Number (Pressure&nbsp;%) [0% -> 100%] | When `[Right/Left] Pressure` is above this value, `[Right/Left] Bed Occupied` will register **Detected**. The calibration process will set this value, but it can also be adjusted manually. |
-| `[Right/Left] Unoccupied Pressure` | Number (Pressure&nbsp;%) [0% -> 100%] | Indicates the sensor value when the bed is unoccupied. Used for calculating the ideal `[Right/Left] Trigger Pressure`. The calibration process will set this value, but it can also be adjust manually. |
-| `[Right/Left] Occupied Pressure`   | Number (Pressure&nbsp;%) [0% -> 100%] | Indicates the sensor value when the bed is occupied. Used for calculating the ideal `[Right/Left] Trigger Pressure`. The calibration process will set this value, but it can also be adjusted manually. |
+| Value Name                         | Type                                  |  Details                                    |
+|------------------------------------|---------------------------------------|---------------------------------------------|
+| `[Right/Left] Trigger Pressure`    | Number (Pressure&nbsp;%) [0%&nbsp;->&nbsp;100%] | When `[Right/Left] Pressure` is above this value, `[Right/Left] Bed Occupied` will register **Detected**. The calibration process will set this value, but it can also be adjusted manually. |
+| `[Right/Left] Unoccupied Pressure` | Number (Pressure&nbsp;%) [0%&nbsp;->&nbsp;100%] | Indicates the sensor value when the bed is unoccupied. Used for calculating the ideal `[Right/Left] Trigger Pressure`. The calibration process will set this value, but it can also be adjust manually. |
+| `[Right/Left] Occupied Pressure`   | Number (Pressure&nbsp;%) [0%&nbsp;->&nbsp;100%] | Indicates the sensor value when the bed is occupied. Used for calculating the ideal `[Right/Left] Trigger Pressure`. The calibration process will set this value, but it can also be adjusted manually. |
 
 ## Calibration
 
-| Method Name                         | Details                                     |
-|-------------------------------------|---------------------------------------------|
+| Method Name                         | Details                                                                                   |
+|-------------------------------------|-------------------------------------------------------------------------------------------|
 | `Calibrate [Right/Left] Unoccupied` | Sets the `[Right/Left] Unoccupied Pressure` using the value from `[Right/Left] Pressure`. |
-| `Calibrate [Right/Left] Occupied`   | Sets the `[Right/Left] Occupied Pressure` using the value from `[Right/Left] Pressure`. |
+| `Calibrate [Right/Left] Occupied`   | Sets the `[Right/Left] Occupied Pressure` using the value from `[Right/Left] Pressure`.   |
