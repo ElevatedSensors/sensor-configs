@@ -34,7 +34,7 @@ binary_sensor:
   name: Bed Occupied Both (Fast)
   id: bed_occupied_both_fast
   device_class: occupancy
-  icon: mdi:bed
+  icon: mdi:bunk-bed
   disabled_by_default: true
   lambda: return id(bed_occupied_left_fast).state && id(bed_occupied_right_fast).state;
 
@@ -42,7 +42,7 @@ binary_sensor:
   name: Bed Occupied Either (Fast)
   id: bed_occupied_either_fast
   device_class: occupancy
-  icon: mdi:bed
+  icon: mdi:bunk-bed
   disabled_by_default: true
   lambda: return id(bed_occupied_left_fast).state || id(bed_occupied_right_fast).state;
 
@@ -50,14 +50,14 @@ binary_sensor:
   name: Bed Occupied Both
   id: bed_occupied_both
   device_class: occupancy
-  icon: mdi:bed
+  icon: mdi:bunk-bed
   lambda: return id(bed_occupied_left).state && id(bed_occupied_right).state;
 
 - platform: template
   name: Bed Occupied Either
   id: bed_occupied_either
   device_class: occupancy
-  icon: mdi:bed
+  icon: mdi:bunk-bed
   lambda: return id(bed_occupied_left).state || id(bed_occupied_right).state;
 
 button:
