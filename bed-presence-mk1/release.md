@@ -9,5 +9,5 @@ breadcrumb_list:
       url: /bed-presence-mk1
 ---
 
-## 2024.8.0
+## 2024.9.0
 - Initial Release
