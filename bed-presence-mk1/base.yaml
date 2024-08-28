@@ -31,7 +31,7 @@ sensor:
 
 - platform: uptime
   type: seconds
-  id: uptime
+  id: bed_presence_uptime
   name: "Uptime"
 
 binary_sensor:
