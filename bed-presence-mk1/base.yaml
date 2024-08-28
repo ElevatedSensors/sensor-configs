@@ -29,6 +29,11 @@ sensor:
   entity_category: "diagnostic"
   device_class: ""
 
+- platform: uptime
+  type: seconds
+  id: uptime
+  name: "Uptime"
+
 binary_sensor:
 - platform: template
   name: Bed Occupied Both (Fast)
