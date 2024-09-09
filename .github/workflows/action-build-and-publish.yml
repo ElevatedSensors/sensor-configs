@@ -98,7 +98,7 @@ jobs:
         run: find output/
 
       - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4.6.3
+        uses: JamesIves/github-pages-deploy-action@v4.6.4
         with:
           branch: gh-pages
           folder: output
