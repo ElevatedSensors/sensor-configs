@@ -22,6 +22,7 @@ jobs:
         uses: actions/checkout@v4.1.7
       - name: Build ESPHome firmware to verify configuration
         uses: esphome/build-action@v4.0.1
+        id: esphome-build
         with:
           yaml-file: ${{ matrix.file }}
       - uses: actions/upload-artifact@v4.3.6
