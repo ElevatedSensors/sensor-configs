@@ -2,6 +2,12 @@ name: CI
 
 on:
   pull_request:
+  push:
+    branches:
+      - '!main'
+      - '!dependabot/**'
+      - '!gh-pages'
+  workflow_dispatch:
 
 jobs:
   ci:
@@ -10,7 +16,7 @@ jobs:
     strategy:
       matrix:
         file:
-          - bed-presence-mk1.yaml
+          - bed-presence-mk1.factory.yaml
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4.1.7
@@ -18,3 +24,7 @@ jobs:
         uses: esphome/build-action@v4.0.1
         with:
           yaml-file: ${{ matrix.file }}
+      - uses: actions/upload-artifact@v4.3.6
+        with:
+          name: ${{ matrix.file }}
+          path: ${{ steps.esphome-build.outputs.name }}
