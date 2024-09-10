@@ -19,17 +19,17 @@ improv_serial:
 esp32_improv:
   authorizer: none
 
-# Managed updates from Elevated Sensors
-ota:
-  - platform: http_request
-    id: ota_http_request
+# # Managed updates from Elevated Sensors
+# ota:
+#   - platform: http_request
+#     id: ota_http_request
 
-update:
-  - platform: http_request
-    id: update_http_request
-    name: Firmware
-    source: https://docs.elevatedsensors.com/bpmk1-manifest.json
-    update_interval: 6h
+# update:
+#   - platform: http_request
+#     id: update_http_request
+#     name: Firmware
+#     source: https://docs.elevatedsensors.com/bpmk1-manifest.json
+#     update_interval: 6h
 
-http_request:
-  verify_ssl: true
+# http_request:
+#   verify_ssl: true
