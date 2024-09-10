@@ -6,13 +6,13 @@ esphome:
     name: ElevatedSensors.BedPresenceMk1
     version: 2024.9.0
 
-# Allow ESPHome Adoption
-dashboard_import:
-  package_import_url: github://ElevatedSensors/sensor-configs/bed-presence-mk1.yaml@main
-  import_full_config: true
+# # Allow ESPHome Adoption
+# dashboard_import:
+#   package_import_url: github://ElevatedSensors/sensor-configs/bed-presence-mk1.yaml@main
+#   import_full_config: true
 
-# # Allow provisioning Wi-Fi via serial
-# improv_serial:
+# Allow provisioning Wi-Fi via serial
+improv_serial:
 
 # Sets up Bluetooth LE to allow the user
 # to provision wifi credentials to the device.
