@@ -4,6 +4,16 @@ esphome:
   platformio_options:
     board_build.flash_mode: dio
     board_build.mcu: esp32s3
+  on_boot:
+     - priority: -100
+       then:
+         - wait_until: api.connected
+         - delay: 1s
+         - if:
+             condition:
+               switch.is_on: use_wake_word
+             then:
+               - voice_assistant.start_continuous:
   # on_boot:
   #   then:
   #     - if:
@@ -41,138 +51,227 @@ wifi:
 captive_portal:
 
 external_components:
-  - source: github://QingWind6/ESPHome_XIAO-ESP32S3
+  #- source: github://QingWind6/ESPHome_XIAO-ESP32S3
+  - source:
+      type: git
+      url: https://github.com/gnumpi/esphome_audio
+      ref: main
+    components: [ adf_pipeline, i2s_audio ]
 
-i2s_audio_xiao:
-  i2s_lrclk_pin: GPIO7
-  i2s_bclk_pin: GPIO8
-  i2s_mclk_pin: GPIO9
+#i2s_audio_xiao:
+#  i2s_lrclk_pin: GPIO7
+#  i2s_bclk_pin: GPIO8
+#  i2s_mclk_pin: GPIO9
 
-microphone:
-  - platform: i2s_audio_xiao
-    id: xiao_mic
-    adc_type: external
+i2s_audio:
+  - id: i2s_shared
+    i2s_lrclk_pin: GPIO7
+    i2s_bclk_pin: GPIO8
+    access_mode: exclusive
+
+adf_pipeline:
+  - platform: i2s_audio
+    type: audio_out
+    id: adf_i2s_out
+    i2s_audio_id: i2s_shared
+    i2s_dout_pin: GPIO43
+    fixed_settings: false
+
+  - platform: i2s_audio
+    type: audio_in
+    id: adf_i2s_in
+    i2s_audio_id: i2s_shared
     i2s_din_pin: GPIO44
     pdm: false
-    bits_per_sample: 32bit
     channel: left
+    sample_rate: 16000
+    bits_per_sample: 32bit
+    fixed_settings: true
 
-speaker:
-  - platform: i2s_audio_xiao
-    id: xiao_speaker
-    dac_type: external
-    i2s_dout_pin: GPIO43
-    mode: stereo
+#microphone:
+#  - platform: i2s_audio_xiao
+#    id: xiao_mic
+#    adc_type: external
+#    i2s_din_pin: GPIO44
+#    pdm: false
+#    bits_per_sample: 32bit
+#    channel: left
+
+microphone:
+  - platform: adf_pipeline
+    id: adf_microphone
+    gain_log2: 3
+    keep_pipeline_alive: false
+    pipeline:
+      - adf_i2s_in
+      - self
+
+#speaker:
+#  - platform: i2s_audio_xiao
+#    id: xiao_speaker
+#    dac_type: external
+#    i2s_dout_pin: GPIO43
+#    mode: mono
+
+media_player:
+  - platform: adf_pipeline
+    id: adf_media_player
+    name: s3-dev_media_player
+    keep_pipeline_alive: false
+    internal: false
+    pipeline:
+      - self
+      - adf_i2s_out
 
 voice_assistant:
-  microphone: xiao_mic
-  use_wake_word: true
-  noise_suppression_level: 0
-  auto_gain: 0dBFS
-  volume_multiplier: 1
-  speaker: xiao_speaker
+  microphone: adf_microphone
+  use_wake_word: false
+  noise_suppression_level: 2
+  auto_gain: 31dBFS
+  volume_multiplier: 3.0
+  media_player: adf_media_player
   id: assist
-  on_listening:
-    - light.turn_on:
-        id: led
-        blue: 100%
-        red: 0%
-        green: 0%
-        effect: "Slow Pulse"
-  on_stt_vad_end:
-    - light.turn_on:
-        id: led
-        blue: 100%
-        red: 0%
-        green: 0%
-        effect: "Fast Pulse"
-  on_tts_start:
-    - light.turn_on:
-        id: led
-        blue: 100%
-        red: 0%
-        green: 0%
-        brightness: 100%
-        effect: none
-  on_end:
-    - delay: 100ms
-    - wait_until:
-        not:
-          speaker.is_playing:
-    - script.execute: reset_led
-  on_error:
-    - light.turn_on:
-        id: led
-        red: 100%
-        green: 0%
-        blue: 0%
-        brightness: 100%
-        effect: none
-    - delay: 1s
-    - script.execute: reset_led
-  on_client_connected:
-    - if:
-        condition:
-          switch.is_on: use_wake_word
-        then:
-          - voice_assistant.start_continuous:
-          - script.execute: reset_led
-  on_client_disconnected:
-    - if:
-        condition:
-          switch.is_on: use_wake_word
-        then:
-          - voice_assistant.stop:
-          - light.turn_off: led
 
-light:
-  - platform: esp32_rmt_led_strip
-    id: led
-    name: None
-    disabled_by_default: true
-    entity_category: config
-    pin: GPIO1
-    default_transition_length: 0s
-    chipset: ws2812
-    num_leds: 1
-    rgb_order: grb
-    rmt_channel: 0
-    effects:
-      - pulse:
-          name: "Slow Pulse"
-          transition_length: 250ms
-          update_interval: 250ms
-          min_brightness: 50%
-          max_brightness: 100%
-      - pulse:
-          name: "Fast Pulse"
-          transition_length: 100ms
-          update_interval: 100ms
-          min_brightness: 50%
-          max_brightness: 100%
+#voice_assistant:
+#  microphone: xiao_mic
+#  use_wake_word: true
+#  noise_suppression_level: 0
+#  auto_gain: 0dBFS
+#  volume_multiplier: 1
+#  speaker: xiao_speaker
+#  id: assist
+#  on_listening:
+#    - light.turn_on:
+#        id: led
+#        blue: 100%
+#        red: 0%
+#        green: 0%
+#        effect: "Slow Pulse"
+#  on_stt_vad_end:
+#    - light.turn_on:
+#        id: led
+#        blue: 100%
+#        red: 0%
+#        green: 0%
+#        effect: "Fast Pulse"
+#  on_tts_start:
+#    - light.turn_on:
+#        id: led
+#        blue: 100%
+#        red: 0%
+#        green: 0%
+#        brightness: 100%
+#        effect: none
+#  on_end:
+#    - delay: 100ms
+#    - wait_until:
+#        not:
+#          speaker.is_playing:
+#    - script.execute: reset_led
+#  on_error:
+#    - light.turn_on:
+#        id: led
+#        red: 100%
+#        green: 0%
+#        blue: 0%
+#        brightness: 100%
+#        effect: none
+#    - delay: 1s
+#    - script.execute: reset_led
+#  on_client_connected:
+#    - if:
+#        condition:
+#          switch.is_on: use_wake_word
+#        then:
+#          - voice_assistant.start_continuous:
+#          - script.execute: reset_led
+#  on_client_disconnected:
+#    - if:
+#        condition:
+#          switch.is_on: use_wake_word
+#        then:
+#          - voice_assistant.stop:
+#          - light.turn_off: led
 
-output:
-  - platform: ledc
-    id: light_output
-    pin: GPIO21
-    inverted: true
+#light:
+#  - platform: esp32_rmt_led_strip
+#    id: led
+#    name: None
+#    disabled_by_default: false
+#    entity_category: config
+#    pin: GPIO1
+#    default_transition_length: 0s
+#    chipset: ws2812
+#    num_leds: 1
+#    rgb_order: grb
+#    rmt_channel: 0
+#    effects:
+#      - pulse:
+#          name: "Slow Pulse"
+#          transition_length: 250ms
+#          update_interval: 250ms
+#          min_brightness: 50%
+#          max_brightness: 100%
+#      - pulse:
+#          name: "Fast Pulse"
+#          transition_length: 100ms
+#          update_interval: 100ms
+#          min_brightness: 50%
+#          max_brightness: 100%
 
-script:
-  - id: reset_led
-    then:
-      - if:
-          condition:
-            - switch.is_on: use_wake_word
-            - switch.is_on: use_listen_light
-          then:
-            - light.turn_on:
-                id: led
-                effect: none
+#output:
+#  - platform: ledc
+#    id: light_output
+#    pin: GPIO21
+#    inverted: true
 
-          else:
-            - light.turn_off:
-               id: led
 
+#script:
+#  - id: reset_led
+#    then:
+#      - if:
+#          condition:
+#            - switch.is_on: use_wake_word
+#            - switch.is_on: use_listen_light
+#          then:
+#            - light.turn_on:
+#                id: led
+#                effect: none
+
+#          else:
+#            - light.turn_off:
+#               id: led
+
+
+#switch:
+#  - platform: template
+#    name: Use wake word
+#    id: use_wake_word
+#    optimistic: true
+#    restore_mode: RESTORE_DEFAULT_ON
+#    entity_category: config
+#    on_turn_on:
+#      - lambda: id(assist).set_use_wake_word(true);
+#      - if:
+#          condition:
+#            not:
+#              - voice_assistant.is_running
+#          then:
+#            - voice_assistant.start_continuous
+#    on_turn_off:
+#      - voice_assistant.stop
+#      - lambda: id(assist).set_use_wake_word(false);
+
+#  - platform: template
+#    name: Use Listen Light
+#    id: use_listen_light
+#    optimistic: true
+#    restore_mode: RESTORE_DEFAULT_ON
+#    entity_category: config
+#    on_turn_on:
+#      - script.execute: reset_led
+#    on_turn_off:
+#      - script.execute: reset_led
 switch:
   - platform: template
     name: Use wake word
@@ -191,14 +290,3 @@ switch:
     on_turn_off:
       - voice_assistant.stop
       - lambda: id(assist).set_use_wake_word(false);
-
-  - platform: template
-    name: Use Listen Light
-    id: use_listen_light
-    optimistic: true
-    restore_mode: RESTORE_DEFAULT_ON
-    entity_category: config
-    on_turn_on:
-      - script.execute: reset_led
-    on_turn_off:
-      - script.execute: reset_led
