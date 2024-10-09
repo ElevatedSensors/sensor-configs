@@ -1,3 +1,30 @@
+# Override these values by including a substitutions section in the yaml config that imports this package
+substitutions:
+  # Calibrate Trigger Percentile
+  # This controls how the trigger threshold is set during calibration. During calibration, the unoccupied and occupied
+  # pressure values are determined. This is the percentage of the difference between those values required to trigger
+  # the "occupied" state.
+  #     - 0.75  Requires 75% of the occupied pressure to trigger (Default)
+  #     - 0.50   Set trigger exactly in the middle of unoccupied and occupied pressures
+  #     - 0.25  More sensitive, likely to be triggered by partner
+  trigger_percentile: '0.75'
+
+  # Fast Sensor Delay
+  # This controls how long the "Fast" sensor must register its value before updating. Without any delay, the sensor
+  # will register frequent fall negatives as you shift in bed.
+  #     - 2s    Same response as standard sensor
+  #     - 500ms Good starting point for getting speed without too many false negatives (Default)
+  #     - 0ms   No delay, expect frequent false negatives
+  fast_delayed_off: '500ms'
+
+  # Reporting Delta
+  # The pressure % must change by this amount before it is reported (note the sensor updates every 60s regardless
+  # of this delta)
+  #     - 10.0  Only report very large changes
+  #     - 1.0   Relatively sensitive with much less reporting (default)
+  #     - 0.1   Very sensitive, will report frequently
+  reporting_delta: 1.0
+
 binary_sensor:
 - platform: template
   name: Bed Occupied ${sensor_name} (Fast)
@@ -36,7 +63,7 @@ sensor:
       max_value: 100.0
       min_value: 0.0
   - or:
-    - delta: 0.1                  # only send if sensor changes by +/-0.1% (eliminate sensor noise)
+    - delta: ${reporting_delta}   # only send if sensor changes by `reporting_delta` (eliminate sensor noise)
     - throttle: 60s               # but still update every minute
 
 number:

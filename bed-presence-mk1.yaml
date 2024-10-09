@@ -6,7 +6,7 @@ substitutions:
   #     - 0.75  Requires 75% of the occupied pressure to trigger (Default)
   #     - 0.50   Set trigger exactly in the middle of unoccupied and occupied pressures
   #     - 0.25  More sensitive, likely to be triggered by partner
-  trigger_percentile: '0.75'
+  # trigger_percentile: '0.75'
 
   # Fast Sensor Delay
   # This controls how long the "Fast" sensor must register its value before updating. Without any delay, the sensor
@@ -14,7 +14,15 @@ substitutions:
   #     - 2s    Same response as standard sensor
   #     - 500ms Good starting point for getting speed without too many false negatives (Default)
   #     - 0ms   No delay, expect frequent false negatives
-  fast_delayed_off: '500ms'
+  # fast_delayed_off: '500ms'
+  #
+  # Reporting Delta
+  # The pressure % must change by this amount before it is reported (note the sensor updates every 60s regardless
+  # of this delta).
+  #     - 10.0  Only report very large changes
+  #     - 1.0   Relatively sensitive with much less reporting (default)
+  #     - 0.1   Very sensitive, will report frequently
+  # reporting_delta: 1.0
 
 esphome:
   name: bed-presence
@@ -25,12 +33,12 @@ esphome:
     name: ElevatedSensors.BedPresenceMk1
     version: "DIY"
   platformio_options:
-    board_build.flash_mode: dio # dio flash_mode fixes issue where board bootloops using esp-idf
+    board_build.flash_mode: dio
 
 esp32:
   board: esp32-c3-devkitm-1
   framework:
-    type: esp-idf # using arduino causes board to reset multiple times/day
+    type: esp-idf
 
 # Enable logging
 logger:
