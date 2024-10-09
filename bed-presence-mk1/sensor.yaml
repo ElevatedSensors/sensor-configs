@@ -23,7 +23,7 @@ substitutions:
   #     - 10.0  Only report very large changes
   #     - 1.0   Relatively sensitive with much less reporting (default)
   #     - 0.1   Very sensitive, will report frequently
-  reporting_delta: 1.0
+  reporting_delta: '1.0'
 
 binary_sensor:
 - platform: template
