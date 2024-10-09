@@ -18,12 +18,15 @@ substitutions:
   fast_delayed_off: '500ms'
 
   # Reporting Delta
-  # The pressure % must change by this amount before it is reported (note the sensor updates every 60s regardless
-  # of this delta)
+  # The sensor must change by this amount before an update is sent (or the reporting_duration_max has been hit)
   #     - 10.0  Only report very large changes
   #     - 1.0   Relatively sensitive with much less reporting (default)
   #     - 0.1   Very sensitive, will report frequently
   reporting_delta: '1.0'
+
+  # Reporting Duration (Max)
+  # The max amount of time between sensor reports (even if the value hasn't changed)
+  reporting_duration_max: '60s'
 
 binary_sensor:
 - platform: template
@@ -63,8 +66,8 @@ sensor:
       max_value: 100.0
       min_value: 0.0
   - or:
-    - delta: ${reporting_delta}   # only send if sensor changes by `reporting_delta` (eliminate sensor noise)
-    - throttle: 60s               # but still update every minute
+    - delta: ${reporting_delta}           # only send if sensor changes by `reporting_delta` (eliminate sensor noise)
+    - throttle: ${reporting_duration_max} # but still update every `reporting_duration_max`
 
 number:
 - platform: template
