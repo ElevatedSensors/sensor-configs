@@ -10,12 +10,17 @@ substitutions:
   trigger_percentile: '0.75'
 
   # Fast Sensor Delay
-  # This controls how long the "Fast" sensor must register its value before updating. Without any delay, the sensor
-  # will register frequent fall negatives as you shift in bed.
+  # This controls how long the "Fast" sensor must register "unoccupied" before reporting. "occupied" is reported
+  # instantly. Without any delay, the sensor will register frequent false negatives as you shift in bed.
   #     - 2s    Same response as standard sensor
   #     - 500ms Good starting point for getting speed without too many false negatives (Default)
   #     - 0ms   No delay, expect frequent false negatives
   fast_delayed_off: '500ms'
+
+  # Standard Sensor Delay
+  # This controls how long the standard sensor must register "unoccupied" or "occupied" before reporting. This
+  # ensures stability and prevents shifting in bed from registering "unoccupied".
+  standard_delayed_on_off: '2s'
 
   # Reporting Delta
   # The sensor must change by this amount before an update is sent (or the reporting_duration_max has been hit)
@@ -27,6 +32,7 @@ substitutions:
   # Reporting Duration (Max)
   # The max amount of time between sensor reports (even if the value hasn't changed)
   reporting_duration_max: '60s'
+
 
 binary_sensor:
 - platform: template
@@ -45,7 +51,7 @@ binary_sensor:
   device_class: occupancy
   icon: mdi:bed
   filters:
-  - delayed_on_off: 2s                # ensure stability
+  - delayed_on_off: ${standard_delayed_on_off}
   lambda: return id(bed_sensor_${sensor_id}).state > id(val_trigger_${sensor_id}).state;
 
 sensor:
