@@ -19,7 +19,7 @@ jobs:
           - bed-presence-mk1.factory.yaml
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.1
       - name: Build ESPHome firmware to verify configuration
         uses: esphome/build-action@v4.0.1
         id: esphome-build
