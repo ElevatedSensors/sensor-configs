@@ -75,9 +75,9 @@ sensor:
       datapoints:
         - 408000 -> 100.0         # 6800Hz (sensor shorted/0ohms)
         - 276000 -> 0.0           # 4600Hz (breakforce/10k)
-  # - clamp:
+  - clamp:
   #     max_value: 100.0
-  #     min_value: 0.0
+      min_value: 0.0
   # - or:
   #   - delta: ${reporting_delta}           # only send if sensor changes by `reporting_delta` (eliminate sensor noise)
   #   - throttle: ${reporting_duration_max} # but still update every `reporting_duration_max`
