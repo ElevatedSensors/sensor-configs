@@ -53,11 +53,18 @@ binary_sensor:
   - delayed_on_off: ${standard_delayed_on_off}  # ensure stability
   lambda: return id(bed_sensor_${sensor_id}).state > id(val_trigger_${sensor_id}).state;
 
+- platform: template
+  name: Bed Occupied ${sensor_name} (Averaged)
+  id: bed_occupied_${sensor_id}_averaged
+  device_class: occupancy
+  icon: mdi:bed
+  lambda: return id(bed_sensor_${sensor_id}_averaged).state > id(val_trigger_${sensor_id}).state;
+
 sensor:
 - platform: pulse_counter
   pin: ${sensor_gpio}
-  name: ${sensor_name} Pressure
-  id: bed_sensor_${sensor_id}
+  name: ${sensor_name} Pressure Raw
+  id: bed_sensor_${sensor_id}_raw
   update_interval: 0.5s
   unit_of_measurement: '%'
   icon: mdi:gauge
@@ -67,9 +74,28 @@ sensor:
       datapoints:
         - 408000 -> 100.0         # 6800Hz (sensor shorted/0ohms)
         - 276000 -> 0.0           # 4600Hz (breakforce/10k)
-  - clamp:
-      max_value: 100.0
-      min_value: 0.0
+  # - clamp:
+  #     max_value: 100.0
+  #     min_value: 0.0
+  # - or:
+  #   - delta: ${reporting_delta}           # only send if sensor changes by `reporting_delta` (eliminate sensor noise)
+  #   - throttle: ${reporting_duration_max} # but still update every `reporting_duration_max`
+- platform: copy
+  source_id: bed_sensor_${sensor_id}
+  name: ${sensor_name} Pressure
+  id: bed_sensor_${sensor_id}
+  filters:
+  - or:
+    - delta: ${reporting_delta}           # only send if sensor changes by `reporting_delta` (eliminate sensor noise)
+    - throttle: ${reporting_duration_max} # but still update every `reporting_duration_max`
+- platform: copy
+  source_id: bed_sensor_${sensor_id}
+  name: ${sensor_name} Pressure Averaged
+  id: bed_sensor_${sensor_id}_averaged
+  filters:
+  - sliding_window_moving_average:
+      window_size: 10
+      send_every: 1
   - or:
     - delta: ${reporting_delta}           # only send if sensor changes by `reporting_delta` (eliminate sensor noise)
     - throttle: ${reporting_duration_max} # but still update every `reporting_duration_max`
