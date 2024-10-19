@@ -85,7 +85,7 @@ sensor:
   name: ${sensor_name} Pressure Calibrated
   id: bed_sensor_${sensor_id}_calibrated
   filters:
-    - lambda: return id(val_unoccupied_${sensor_id}).state+((x/100)*(id(val_occupied_${sensor_id}).state - id(val_unoccupied_${sensor_id})));
+    - lambda: return float(id(val_unoccupied_${sensor_id})).state+((x/100)*(id(val_occupied_${sensor_id}).state - float(id(val_unoccupied_${sensor_id}).state)));
 - platform: copy
   source_id: bed_sensor_${sensor_id}
   name: ${sensor_name} Pressure
