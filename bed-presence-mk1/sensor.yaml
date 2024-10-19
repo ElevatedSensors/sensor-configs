@@ -31,7 +31,7 @@ substitutions:
 
   # Reporting Duration (Max)
   # The max amount of time between sensor reports (even if the value hasn't changed)
-  reporting_duration_max: '60s'
+  reporting_duration_max: '180s'
 
 binary_sensor:
 - platform: template
@@ -65,6 +65,7 @@ sensor:
   pin: ${sensor_gpio}
   name: ${sensor_name} Pressure Raw
   id: bed_sensor_${sensor_id}_raw
+  disabled_by_default: true
   update_interval: 0.5s
   unit_of_measurement: '%'
   icon: mdi:gauge
@@ -80,12 +81,6 @@ sensor:
   # - or:
   #   - delta: ${reporting_delta}           # only send if sensor changes by `reporting_delta` (eliminate sensor noise)
   #   - throttle: ${reporting_duration_max} # but still update every `reporting_duration_max`
-# - platform: copy
-#   source_id: bed_sensor_${sensor_id}
-#   name: ${sensor_name} Pressure Calibrated
-#   id: bed_sensor_${sensor_id}_calibrated
-#   filters:
-#     - lambda: return float(id(val_unoccupied_${sensor_id})).state+((x/100)*(id(val_occupied_${sensor_id}).state - float(id(val_unoccupied_${sensor_id}).state)));
 - platform: copy
   source_id: bed_sensor_${sensor_id}_raw
   name: ${sensor_name} Pressure
@@ -107,6 +102,23 @@ sensor:
     - or:
       - delta: ${reporting_delta}           # only send if sensor changes by `reporting_delta` (eliminate sensor noise)
       - throttle: ${reporting_duration_max} # but still update every `reporting_duration_max`
+- platform: copy
+  source_id: bed_sensor_${sensor_id}_averaged
+  name: ${sensor_name} Pressure Calibrated
+  id: bed_sensor_${sensor_id}_calibrated
+  filters:
+    - lambda: |-
+        float val_cal_top = (x - id(val_unoccupied_${sensor_id}).state) * 100;
+        float val_cal_bot = id(val_occupied_${sensor_id}).state - id(val_unoccupied_${sensor_id}).state;
+        float val_calibrated = val_cal_top/val_cal_bot;
+
+        if (val_calibrated > 100.0 {
+          val_calibrated = 100.0;
+        } else if (val_calibrated < 0.0) {
+          val_calibrated = 0.0;
+        }
+
+        return val_calibrated;
 
 number:
 - platform: template
