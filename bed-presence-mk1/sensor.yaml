@@ -112,7 +112,7 @@ sensor:
         float val_cal_bot = id(val_occupied_${sensor_id}).state - id(val_unoccupied_${sensor_id}).state;
         float val_calibrated = val_cal_top/val_cal_bot;
 
-        if (val_calibrated > 100.0 {
+        if (val_calibrated > 100.0) {
           val_calibrated = 100.0;
         } else if (val_calibrated < 0.0) {
           val_calibrated = 0.0;
