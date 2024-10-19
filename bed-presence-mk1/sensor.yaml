@@ -80,12 +80,12 @@ sensor:
   # - or:
   #   - delta: ${reporting_delta}           # only send if sensor changes by `reporting_delta` (eliminate sensor noise)
   #   - throttle: ${reporting_duration_max} # but still update every `reporting_duration_max`
-- platform: copy
-  source_id: bed_sensor_${sensor_id}
-  name: ${sensor_name} Pressure Calibrated
-  id: bed_sensor_${sensor_id}_calibrated
-  filters:
-    - lambda: return float(id(val_unoccupied_${sensor_id})).state+((x/100)*(id(val_occupied_${sensor_id}).state - float(id(val_unoccupied_${sensor_id}).state)));
+# - platform: copy
+#   source_id: bed_sensor_${sensor_id}
+#   name: ${sensor_name} Pressure Calibrated
+#   id: bed_sensor_${sensor_id}_calibrated
+#   filters:
+#     - lambda: return float(id(val_unoccupied_${sensor_id})).state+((x/100)*(id(val_occupied_${sensor_id}).state - float(id(val_unoccupied_${sensor_id}).state)));
 - platform: copy
   source_id: bed_sensor_${sensor_id}
   name: ${sensor_name} Pressure
