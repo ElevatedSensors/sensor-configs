@@ -82,23 +82,31 @@ sensor:
   #   - throttle: ${reporting_duration_max} # but still update every `reporting_duration_max`
 - platform: copy
   source_id: bed_sensor_${sensor_id}
+  name: ${sensor_name} Pressure Calibrated
+  id: bed_sensor_${sensor_id}_calibrated
+  filters:
+    - lambda: return id(val_unoccupied_${sensor_id})-((x/100)*(id(val_occupied_${sensor_id} - id(val_unoccupied_${sensor_id}))));
+- platform: copy
+  source_id: bed_sensor_${sensor_id}
   name: ${sensor_name} Pressure
   id: bed_sensor_${sensor_id}
   filters:
-  - or:
-    - delta: ${reporting_delta}           # only send if sensor changes by `reporting_delta` (eliminate sensor noise)
-    - throttle: ${reporting_duration_max} # but still update every `reporting_duration_max`
+    - lambda: return x;
+    - or:
+      - delta: ${reporting_delta}           # only send if sensor changes by `reporting_delta` (eliminate sensor noise)
+      - throttle: ${reporting_duration_max} # but still update every `reporting_duration_max`
 - platform: copy
   source_id: bed_sensor_${sensor_id}
   name: ${sensor_name} Pressure Averaged
   id: bed_sensor_${sensor_id}_averaged
   filters:
-  - sliding_window_moving_average:
-      window_size: 10
-      send_every: 1
-  - or:
-    - delta: ${reporting_delta}           # only send if sensor changes by `reporting_delta` (eliminate sensor noise)
-    - throttle: ${reporting_duration_max} # but still update every `reporting_duration_max`
+    - lambda: return x;
+    - sliding_window_moving_average:
+        window_size: 10
+        send_every: 1
+    - or:
+      - delta: ${reporting_delta}           # only send if sensor changes by `reporting_delta` (eliminate sensor noise)
+      - throttle: ${reporting_duration_max} # but still update every `reporting_duration_max`
 
 number:
 - platform: template
