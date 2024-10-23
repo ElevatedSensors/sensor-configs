@@ -83,9 +83,9 @@ sensor:
       datapoints:
         - ${calibrate_linear_100} -> 100.0         # 6800Hz (sensor shorted/0ohms)
         - ${calibrate_linear_0} -> 0.0           # 4600Hz (breakforce/10k)
-    - sliding_window_moving_average:
-        window_size: ${averaging_window_samples}
-        send_every: 1
+  - sliding_window_moving_average:
+      window_size: ${averaging_window_samples}
+      send_every: 1
   - clamp:
       min_value: 0.0
   - or:
