@@ -72,7 +72,6 @@ sensor:
   pin: ${sensor_gpio}
   name: ${sensor_name} Pressure
   id: bed_sensor_${sensor_id}
-  disabled_by_default: true
   update_interval: 0.5s
   unit_of_measurement: '%'
   entity_category: diagnostic
@@ -95,6 +94,7 @@ sensor:
   source_id: bed_sensor_${sensor_id}
   name: ${sensor_name} Pressure Calibrated
   id: bed_sensor_${sensor_id}_calibrated
+  entity_category: ''
   filters:
     - lambda: |-
         float val_cal_top = (x - id(val_unoccupied_${sensor_id}).state) * 100;
