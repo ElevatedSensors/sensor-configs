@@ -18,8 +18,8 @@ substitutions:
   fast_delayed_off: '500ms'
 
   # Standard Sensor Delay
-  # This controls how long the standard sensor must register "unoccupied" or "occupied" before reporting. This
-  # ensures stability and prevents shifting in bed from registering "unoccupied".
+  # This controls how long the standard sensor must register "unoccupied" or "occupied" before reporting. This ensures
+  # stability and prevents shifting in bed from registering "unoccupied".
   standard_delayed_on_off: '2s'
 
   # Reporting Delta
@@ -34,16 +34,16 @@ substitutions:
   reporting_duration_max: '180s'
 
   # Window Averaging Samples
-  # Add a sliding window moving average to the incoming sensor samples. This specifies the number of samples to
-  # average over. Each sample is 1/2 second.
+  # Add a sliding window moving average to the incoming sensor samples. This specifies the number of samples to average
+  # over. Each sample is 1/2 second.
   #     - 1   Don't perform averaging (DEFAULT)
   #     - 2   Average over 2 samples (1 second)
   #     - 10  Average over 10 samples (5 seconds)
   averaging_window_samples: '1'
 
   # Linear Calibration Points
-  # Change the linear calibration points for the FSR sensor. These values correspond with the raw pulses per
-  # minute from the pulse_counter. Only mess with this if you know what you're doing.
+  # Change the linear calibration points for the FSR sensor. These values correspond with the raw pulses per minute from
+  # the pulse_counter. Only mess with this if you know what you're doing.
   calibrate_linear_100: '408000'
   calibrate_linear_0: '276000'
 
