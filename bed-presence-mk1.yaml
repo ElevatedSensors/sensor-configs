@@ -41,11 +41,11 @@ packages:
     files: ['bed-presence-mk1/base.yaml']
     refresh: 1s
 
-#See https://github.com/ElevatedSensors/sensor-configs/bed-presence-mk1/sensor.yaml for substitution descriptions
-#substitutions:
-#  trigger_percentile: '0.75'
-#  fast_delayed_off: '500ms'
-#  standard_delayed_on_off: '2s'
-#  reporting_delta: '1.0'
-#  reporting_duration_max: '180s'
-#  averaging_window_samples: '1'
+# See https://github.com/ElevatedSensors/sensor-configs/bed-presence-mk1/sensor.yaml for substitution descriptions
+# substitutions:
+#   trigger_percentile: '0.75'
+#   fast_delayed_off: '500ms'
+#   standard_delayed_on_off: '2s'
+#   reporting_delta: '1.0'
+#   reporting_duration_max: '180s'
+#   averaging_window_samples: '1'

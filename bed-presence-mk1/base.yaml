@@ -14,59 +14,59 @@ packages:
       sensor_gpio: GPIO20
 
 sensor:
-- platform: wifi_signal # Reports the WiFi signal strength in dB
-  name: WiFi Signal dB
-  id: wifi_signal_db
-  update_interval: 60s
+  - platform: wifi_signal   # Reports the WiFi signal strength in dB
+    name: WiFi Signal dB
+    id: wifi_signal_db
+    update_interval: 60s
 
-- platform: copy # Reports the WiFi signal strength in %
-  source_id: wifi_signal_db
-  name: "WiFi Signal Percent"
-  id: wifi_signal_percent
-  filters:
-    - lambda: return min(max(2 * (x + 100.0), 0.0), 100.0);
-  unit_of_measurement: "%"
-  entity_category: "diagnostic"
-  device_class: ""
+  - platform: copy          # Reports the WiFi signal strength in %
+    source_id: wifi_signal_db
+    name: "WiFi Signal Percent"
+    id: wifi_signal_percent
+    filters:
+      - lambda: return min(max(2 * (x + 100.0), 0.0), 100.0);
+    unit_of_measurement: "%"
+    entity_category: "diagnostic"
+    device_class: ""
 
-- platform: uptime
-  type: seconds
-  id: bed_presence_uptime
-  name: "Uptime"
+  - platform: uptime
+    type: seconds
+    id: bed_presence_uptime
+    name: "Uptime"
 
 binary_sensor:
-- platform: template
-  name: Bed Occupied Both (Fast)
-  id: bed_occupied_both_fast
-  device_class: occupancy
-  icon: mdi:bunk-bed
-  disabled_by_default: true
-  lambda: return id(bed_occupied_left_fast).state && id(bed_occupied_right_fast).state;
+  - platform: template
+    name: Bed Occupied Both (Fast)
+    id: bed_occupied_both_fast
+    device_class: occupancy
+    icon: mdi:bunk-bed
+    disabled_by_default: true
+    lambda: return id(bed_occupied_left_fast).state && id(bed_occupied_right_fast).state;
 
-- platform: template
-  name: Bed Occupied Either (Fast)
-  id: bed_occupied_either_fast
-  device_class: occupancy
-  icon: mdi:bunk-bed
-  disabled_by_default: true
-  lambda: return id(bed_occupied_left_fast).state || id(bed_occupied_right_fast).state;
+  - platform: template
+    name: Bed Occupied Either (Fast)
+    id: bed_occupied_either_fast
+    device_class: occupancy
+    icon: mdi:bunk-bed
+    disabled_by_default: true
+    lambda: return id(bed_occupied_left_fast).state || id(bed_occupied_right_fast).state;
 
-- platform: template
-  name: Bed Occupied Both
-  id: bed_occupied_both
-  device_class: occupancy
-  icon: mdi:bunk-bed
-  lambda: return id(bed_occupied_left).state && id(bed_occupied_right).state;
+  - platform: template
+    name: Bed Occupied Both
+    id: bed_occupied_both
+    device_class: occupancy
+    icon: mdi:bunk-bed
+    lambda: return id(bed_occupied_left).state && id(bed_occupied_right).state;
 
-- platform: template
-  name: Bed Occupied Either
-  id: bed_occupied_either
-  device_class: occupancy
-  icon: mdi:bunk-bed
-  lambda: return id(bed_occupied_left).state || id(bed_occupied_right).state;
+  - platform: template
+    name: Bed Occupied Either
+    id: bed_occupied_either
+    device_class: occupancy
+    icon: mdi:bunk-bed
+    lambda: return id(bed_occupied_left).state || id(bed_occupied_right).state;
 
 button:
-- platform: restart
-  name: Restart
-  id: btn_restart
-  entity_category: "diagnostic"
+  - platform: restart
+    name: Restart
+    id: btn_restart
+    entity_category: "diagnostic"
