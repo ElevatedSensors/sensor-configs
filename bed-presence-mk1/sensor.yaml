@@ -4,7 +4,7 @@ substitutions:
   # This controls how the trigger threshold is set during calibration. During calibration, the unoccupied and occupied
   # pressure values are determined. This is the percentage of the difference between those values required to trigger
   # the "occupied" state.
-  #     - 0.75  Requires 75% of the occupied pressure to trigger (Default)
+  #     - 0.75  Requires 75% of the occupied pressure to trigger (DEFAULT)
   #     - 0.50   Set trigger exactly in the middle of unoccupied and occupied pressures
   #     - 0.25  More sensitive, likely to be triggered by partner
   trigger_percentile: '0.75'
@@ -13,7 +13,7 @@ substitutions:
   # This controls how long the "Fast" sensor must register "unoccupied" before reporting. "occupied" is reported
   # instantly. Without any delay, the sensor will register frequent false negatives as you shift in bed.
   #     - 2s    Same response as standard sensor
-  #     - 500ms Good starting point for getting speed without too many false negatives (Default)
+  #     - 500ms Good starting point for getting speed without too many false negatives (DEFAULT)
   #     - 0ms   No delay, expect frequent false negatives
   fast_delayed_off: '500ms'
 
@@ -25,7 +25,7 @@ substitutions:
   # Reporting Delta
   # The sensor must change by this amount before an update is sent (or the reporting_duration_max has been hit)
   #     - 10.0  Only report very large changes
-  #     - 1.0   Relatively sensitive with much less reporting (default)
+  #     - 1.0   Relatively sensitive with much less reporting (DEFAULT)
   #     - 0.1   Very sensitive, will report frequently
   reporting_delta: '1.0'
 
@@ -36,7 +36,7 @@ substitutions:
   # Window Averaging Samples
   # Add a sliding window moving average to the incoming sensor samples. This specifies the number of samples to
   # average over. Each sample is 1/2 second.
-  #     - 1   Don't perform averaging (default)
+  #     - 1   Don't perform averaging (DEFAULT)
   #     - 2   Average over 2 samples (1 second)
   #     - 10  Average over 10 samples (5 seconds)
   averaging_window_samples: '1'
