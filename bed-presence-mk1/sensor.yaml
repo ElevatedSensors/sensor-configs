@@ -123,6 +123,7 @@ number:
     min_value: 0
     max_value: 110
     step: 1.0
+    mode: box
     on_value:
       then:
         - lambda: |-  # Update status and trigger
@@ -140,6 +141,7 @@ number:
     min_value: 0
     max_value: 110
     step: 1.0
+    mode: box
     on_value:
       then:
         - lambda: |-  # Update status and trigger
@@ -154,6 +156,7 @@ number:
     min_value: 0
     max_value: 110
     step: 1.0
+    mode: box
     icon: mdi:gauge
     unit_of_measurement: '% Raw'
     entity_category: config
