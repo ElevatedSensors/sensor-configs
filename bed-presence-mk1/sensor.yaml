@@ -70,7 +70,7 @@ binary_sensor:
 sensor:
   - platform: pulse_counter   # Raw Sensor
     pin: ${sensor_gpio}
-    name: ${sensor_name} Pressure Raw
+    name: ${sensor_name} Pressure
     id: bed_sensor_${sensor_id}
     update_interval: 0.5s
     unit_of_measurement: '% Raw'
