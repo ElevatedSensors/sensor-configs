@@ -65,6 +65,10 @@ binary_sensor:
     icon: mdi:bunk-bed
     lambda: return id(bed_occupied_left).state || id(bed_occupied_right).state;
 
+  - platform: status
+    id: bed_presence_status
+    name: Status
+
 button:
   - platform: restart
     name: Restart
