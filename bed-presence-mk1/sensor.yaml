@@ -73,7 +73,7 @@ sensor:
     name: ${sensor_name} Pressure Raw
     id: bed_sensor_${sensor_id}
     update_interval: 0.5s
-    unit_of_measurement: '% raw'
+    unit_of_measurement: '% Raw'
     entity_category: diagnostic
     icon: mdi:gauge
     filters:
@@ -94,6 +94,7 @@ sensor:
     source_id: bed_sensor_${sensor_id}
     name: ${sensor_name} Pressure Calibrated
     id: bed_sensor_${sensor_id}_calibrated
+    unit_of_measurement: '%'
     entity_category: ''
     filters:
       - lambda: |-
@@ -114,7 +115,7 @@ number:
     name: ${sensor_name} Unoccupied Pressure
     id: val_unoccupied_${sensor_id}
     icon: mdi:gauge-empty
-    unit_of_measurement: '% raw'
+    unit_of_measurement: '% Raw'
     entity_category: diagnostic
     optimistic: true
     restore_value: true
@@ -131,7 +132,7 @@ number:
     name: ${sensor_name} Occupied Pressure
     id: val_occupied_${sensor_id}
     icon: mdi:gauge-full
-    unit_of_measurement: '% raw'
+    unit_of_measurement: '% Raw'
     entity_category: diagnostic
     optimistic: true
     restore_value: true
@@ -154,7 +155,7 @@ number:
     max_value: 110
     step: 0.1
     icon: mdi:gauge
-    unit_of_measurement: '% raw'
+    unit_of_measurement: '% Raw'
     entity_category: config
 
 button:
