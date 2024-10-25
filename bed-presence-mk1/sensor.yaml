@@ -122,7 +122,7 @@ number:
     initial_value: 0
     min_value: 0
     max_value: 110
-    step: 0.1
+    step: 1.0
     on_value:
       then:
         - lambda: |-  # Update status and trigger
@@ -139,7 +139,7 @@ number:
     initial_value: 100
     min_value: 0
     max_value: 110
-    step: 0.1
+    step: 1.0
     on_value:
       then:
         - lambda: |-  # Update status and trigger
@@ -153,7 +153,7 @@ number:
     initial_value: 50
     min_value: 0
     max_value: 110
-    step: 0.1
+    step: 1.0
     icon: mdi:gauge
     unit_of_measurement: '% Raw'
     entity_category: config
@@ -168,7 +168,8 @@ button:
       then:
         - number.set:
             id: val_unoccupied_${sensor_id}
-            value: !lambda return id(bed_sensor_${sensor_id}).state;
+                                # round to 2 decimal places
+            value: !lambda return round(id(bed_sensor_${sensor_id}).state * 100)/100.0;
   - platform: template
     name: Calibrate ${sensor_name} Occupied
     id: calibration_${sensor_id}_set_occupied
@@ -178,7 +179,8 @@ button:
       then:
         - number.set:
             id: val_occupied_${sensor_id}
-            value: !lambda return id(bed_sensor_${sensor_id}).state;
+                                # round to 2 decimal places
+            value: !lambda return round(id(bed_sensor_${sensor_id}).state * 100)/100.0;
 
 script:
   - id: update_trigger_${sensor_id}
