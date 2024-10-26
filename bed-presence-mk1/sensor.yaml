@@ -153,7 +153,7 @@ button:
       then:
         - number.set:
             id: val_unoccupied_${sensor_id}
-                                # round to 2 decimal places
+            # round to 2 decimal places
             value: !lambda return round(id(bed_sensor_${sensor_id}).state * 100)/100.0;
   - platform: template
     name: Calibrate ${sensor_name} Occupied
@@ -164,12 +164,12 @@ button:
       then:
         - number.set:
             id: val_occupied_${sensor_id}
-                                # round to 2 decimal places
+            # round to 2 decimal places
             value: !lambda return round(id(bed_sensor_${sensor_id}).state * 100)/100.0;
 
 switch:
   - platform: template
-    name: "Clamp Negative Range"
+    name: "Expand Negative Range"
     id: expand_negative_range
     optimistic: true
     restore_mode: RESTORE_DEFAULT_OFF
