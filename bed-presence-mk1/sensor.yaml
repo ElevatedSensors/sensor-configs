@@ -1,4 +1,3 @@
-# Override these values by including a substitutions section in the yaml config that imports this package
 substitutions:
   # Calibrate Trigger Percentile
   # This controls how the trigger threshold is set during calibration. During calibration, the unoccupied and occupied
@@ -75,14 +74,9 @@ sensor:
     name: ${sensor_name} Pressure
     id: bed_sensor_${sensor_id}
     update_interval: 0.5s
-    unit_of_measurement: '%'
+    unit_of_measurement: %
     icon: mdi:gauge
     filters:
-      # - calibrate_linear:                         # scale pulses/minute to 0->100%
-      #     method: least_squares
-      #     datapoints:
-      #       - ${calibrate_linear_100} -> 100.0    # 6800Hz (sensor shorted/0ohms)
-      #       - ${calibrate_linear_0} -> 0.0        # 4600Hz (breakforce/10k)
       - lambda: |-                                # scale pulses/minute to 0%->100%
           float cal_0 = id(full_range).state ? 0 : ${calibrate_0};
 
@@ -121,7 +115,7 @@ number:
     name: ${sensor_name} Unoccupied Pressure
     id: val_unoccupied_${sensor_id}
     icon: mdi:gauge-empty
-    unit_of_measurement: '%'
+    unit_of_measurement: %
     entity_category: diagnostic
     optimistic: true
     restore_value: true
@@ -138,7 +132,7 @@ number:
     name: ${sensor_name} Occupied Pressure
     id: val_occupied_${sensor_id}
     icon: mdi:gauge-full
-    unit_of_measurement: '%'
+    unit_of_measurement: %
     entity_category: diagnostic
     optimistic: true
     restore_value: true
@@ -162,7 +156,7 @@ number:
     step: 1.0
     mode: box
     icon: mdi:gauge
-    unit_of_measurement: '%'
+    unit_of_measurement: %
     entity_category: config
 
 button:

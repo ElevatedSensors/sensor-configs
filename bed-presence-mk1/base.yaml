@@ -21,18 +21,18 @@ sensor:
 
   - platform: copy          # Reports the WiFi signal strength in %
     source_id: wifi_signal_db
-    name: "WiFi Signal Percent"
+    name: WiFi Signal Percent
     id: wifi_signal_percent
     filters:
       - lambda: return min(max(2 * (x + 100.0), 0.0), 100.0);
-    unit_of_measurement: "%"
-    entity_category: "diagnostic"
+    unit_of_measurement: %
+    entity_category: diagnostic
     device_class: ""
 
   - platform: uptime
     type: seconds
     id: bed_presence_uptime
-    name: "Uptime"
+    name: Uptime
 
 binary_sensor:
   - platform: template
@@ -73,7 +73,7 @@ button:
   - platform: restart
     name: Restart
     id: btn_restart
-    entity_category: "diagnostic"
+    entity_category: diagnostic
 
 switch:
   - platform: template
@@ -81,5 +81,5 @@ switch:
     id: full_range
     optimistic: true
     restore_mode: RESTORE_DEFAULT_OFF
-    entity_category: "config"
+    entity_category: config
     icon: mdi:arrow-expand
