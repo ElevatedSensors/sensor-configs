@@ -92,7 +92,7 @@ sensor:
           // 276000ppm = 4600Hz (breakforce/10kohms)
           // 0ppm      = 0Hz    (use full range)
           float calibrate_100 = 408000;
-          float calibrate_0 = id(full_range).state ? 0 : 276000
+          float calibrate_0 = id(full_range).state ? 0 : 276000;
 
           float val_cal_top = (x - calibrate_0) * 100;
           float val_cal_bot = calibrate_100 - calibrate_0;
