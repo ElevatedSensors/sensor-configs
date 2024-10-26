@@ -84,8 +84,8 @@ sensor:
       - sliding_window_moving_average:
           window_size: ${averaging_window_samples}
           send_every: 1
-      - lambda: |-                                # clamp to a min_value of 0 unless expand_negative_range is True
-            if (x >= 0 || id(expand_negative_range).state) {
+      - lambda: |-                                # clamp to a min_value of 0 unless expand_range is True
+            if (x >= 0 || id(expand_${sensor_id}_range).state) {
                 return x;
             } else {
                 return 0;
@@ -104,7 +104,7 @@ number:
     optimistic: true
     restore_value: true
     initial_value: 0
-    min_value: -210   # -210 == 0 pulses/minute (expand_negative_range)
+    min_value: -210   # -210 == 0 pulses/minute (expand_range)
     max_value: 110
     step: 1.0
     mode: box
@@ -121,7 +121,7 @@ number:
     optimistic: true
     restore_value: true
     initial_value: 100
-    min_value: -210   # -210 == 0 pulses/minute (expand_negative_range)
+    min_value: -210   # -210 == 0 pulses/minute (expand_range)
     max_value: 110
     step: 1.0
     mode: box
@@ -135,7 +135,7 @@ number:
     optimistic: true
     restore_value: true
     initial_value: 50
-    min_value: -210   # -210 == 0 pulses/minute (expand_negative_range)
+    min_value: -210   # -210 == 0 pulses/minute (expand_range)
     max_value: 110
     step: 1.0
     mode: box
@@ -169,8 +169,8 @@ button:
 
 switch:
   - platform: template
-    name: "Expand Negative Range"
-    id: expand_negative_range
+    name: Expand ${sensor_name} Range
+    id: expand_${sensor_id}_range
     optimistic: true
     restore_mode: RESTORE_DEFAULT_OFF
 
