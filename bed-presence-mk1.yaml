@@ -45,10 +45,12 @@ packages:
 # See https://github.com/ElevatedSensors/sensor-configs/bed-presence-mk1/sensor.yaml for substitution descriptions
 # substitutions:
 #   trigger_percentile: '0.75'
-#   fast_delayed_off: '500ms'
-#   standard_delayed_on_off: '2s'
+#   averaging_window_samples: '1'
+#   fast_delayed_on: '0ms'
+#   fast_delayed_off: '0ms'
+#   standard_delayed_on: '0s'
+#   standard_delayed_off: '1s'
 #   reporting_delta: '1.0'
 #   reporting_interval_max: '180s'
-#   averaging_window_samples: '1'
 #   calibrate_100: '408000'
 #   calibrate_0: '276000'

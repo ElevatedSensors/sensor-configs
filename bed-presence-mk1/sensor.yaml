@@ -8,18 +8,28 @@ substitutions:
   #     - 0.25  More sensitive, likely to be triggered by partner
   trigger_percentile: '0.75'
 
+  # Window Averaging Samples
+  # Add a sliding window moving average to the incoming sensor samples. This specifies the number of samples to average
+  # over. Each sample is 1/2 second.
+  #     - 1   Don't perform averaging
+  #     - 5   Average over 5 samples (2.5 seconds) (DEFAULT)
+  #     - 10  Average over 10 samples (5 seconds)
+  averaging_window_samples: '5'
+
   # Fast Sensor Delay
-  # This controls how long the "Fast" sensor must register "unoccupied" before reporting. "occupied" is reported
-  # instantly. Without any delay, the sensor will register frequent false negatives as you shift in bed.
+  # This controls how long the "Fast" sensor must register "unoccupied" or "occupied" before reporting. Averaging or
+  # delay is encourage to prevent frequent false negatives as you shift in bed.
   #     - 2s    Same response as standard sensor
-  #     - 500ms Good starting point for getting speed without too many false negatives (DEFAULT)
-  #     - 0ms   No delay, expect frequent false negatives
-  fast_delayed_off: '500ms'
+  #     - 500ms Good starting point for getting speed without too many false negatives
+  #     - 0ms   No delay (DEFAULT)
+  fast_delayed_on: '0ms'
+  fast_delayed_off: '0ms'
 
   # Standard Sensor Delay
-  # This controls how long the standard sensor must register "unoccupied" or "occupied" before reporting. This ensures
-  # stability and prevents shifting in bed from registering "unoccupied".
-  standard_delayed_on_off: '2s'
+  # This controls how long the standard sensor must register "unoccupied" or "occupied" before reporting. Averaging or
+  # delay is enocuraged to ensure stability.
+  standard_delayed_on: '0s'
+  standard_delayed_off: '1s'
 
   # Reporting Delta
   # The sensor must change by this amount before an update is sent (or the reporting_interval_max has been hit)
@@ -31,14 +41,6 @@ substitutions:
   # Reporting Interval (Max)
   # The max amount of time between sensor reports (even if the value hasn't changed)
   reporting_interval_max: '180s'
-
-  # Window Averaging Samples
-  # Add a sliding window moving average to the incoming sensor samples. This specifies the number of samples to average
-  # over. Each sample is 1/2 second.
-  #     - 1   Don't perform averaging (DEFAULT)
-  #     - 2   Average over 2 samples (1 second)
-  #     - 10  Average over 10 samples (5 seconds)
-  averaging_window_samples: '1'
 
   # Linear Calibration Points
   # Change the linear calibration points for the FSR sensor. These values correspond with the raw pulses per minute from
@@ -56,6 +58,7 @@ binary_sensor:
     icon: mdi:bed
     disabled_by_default: true
     filters:
+      - delayed_on: ${fast_delayed_on}
       - delayed_off: ${fast_delayed_off}  # prevent shifting in bed from registering "off"
     lambda: return id(bed_sensor_${sensor_id}).state > id(val_trigger_${sensor_id}).state;
 
@@ -65,7 +68,8 @@ binary_sensor:
     device_class: occupancy
     icon: mdi:bed
     filters:
-      - delayed_on_off: ${standard_delayed_on_off}  # ensure stability
+      - delayed_on: ${standard_delayed_on}
+      - delayed_off: ${standard_delayed_off}
     lambda: return id(bed_sensor_${sensor_id}).state > id(val_trigger_${sensor_id}).state;
 
 sensor:
