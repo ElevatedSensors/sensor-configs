@@ -41,11 +41,13 @@ substitutions:
   #     - 10  Average over 10 samples (5 seconds)
   averaging_window_samples: '1'
 
-  # # Linear Calibration Points
-  # # Change the linear calibration points for the FSR sensor. These values correspond with the raw pulses per minute from
-  # # the pulse_counter. Only mess with this if you know what you're doing.
-  # calibrate_linear_100: '408000'
-  # calibrate_linear_0: '276000'
+  # Linear Calibration Points
+  # Change the linear calibration points for the FSR sensor. These values correspond with the raw pulses per minute from
+  # the pulse_counter. Only mess with this if you know what you're doing. In standard mode (Full Range = False), the
+  # sensor is linearly calibrated between calibrate_0 (0%) and calibreate_100 (100%). When Full Range = True,
+  # calibrate_0 is set to 0.
+  calibrate_100: '408000'
+  calibrate_0: '276000'
 
 binary_sensor:
   - platform: template
@@ -81,25 +83,21 @@ sensor:
       #     datapoints:
       #       - ${calibrate_linear_100} -> 100.0    # 6800Hz (sensor shorted/0ohms)
       #       - ${calibrate_linear_0} -> 0.0        # 4600Hz (breakforce/10k)
+      - lambda: |-                                # scale pulses/minute to 0%->100%
+          float cal_0 = id(full_range).state ? 0 : ${calibrate_0};
+
+          float val = (x - cal_0) * 100;
+          float range = ${calibrate_100} - cal_0;
+
+          return val/range;
+      - clamp:
+          min_value: 0
       - sliding_window_moving_average:
           window_size: ${averaging_window_samples}
           send_every: 1
       - or:
           - delta: ${reporting_delta}             # only send if sensor changes by `reporting_delta` (eliminate sensor noise)
           - throttle: ${reporting_duration_max}   # but still update every `reporting_duration_max`
-      - lambda: |-                                # scale pulses/minute to 0%->100%
-          // 408000ppm = 6800Hz (sensor shorted/0ohms)
-          // 276000ppm = 4600Hz (breakforce/10kohms)
-          // 0ppm      = 0Hz    (use full range)
-          float calibrate_100 = 408000;
-          float calibrate_0 = id(full_range).state ? 0 : 276000;
-
-          float val_cal_top = (x - calibrate_0) * 100;
-          float val_cal_bot = calibrate_100 - calibrate_0;
-
-          return val_cal_top/val_cal_bot;
-      - clamp:
-          min_value: 0
 
 number:
   - platform: template
