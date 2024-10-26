@@ -74,3 +74,11 @@ button:
     name: Restart
     id: btn_restart
     entity_category: "diagnostic"
+
+switch:
+  - platform: template
+    name: Expand Range
+    id: expand_range
+    optimistic: true
+    restore_mode: RESTORE_DEFAULT_OFF
+    entity_category: "configuration"

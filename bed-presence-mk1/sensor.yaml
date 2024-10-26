@@ -85,7 +85,7 @@ sensor:
           window_size: ${averaging_window_samples}
           send_every: 1
       - lambda: |-                                # clamp to a min_value of 0 unless expand_range is True
-            if (x >= 0 || id(expand_${sensor_id}_range).state) {
+            if (x >= 0 || id(expand_range).state) {
                 return x;
             } else {
                 return 0;
@@ -166,13 +166,6 @@ button:
             id: val_occupied_${sensor_id}
             # round to 2 decimal places
             value: !lambda return round(id(bed_sensor_${sensor_id}).state * 100)/100.0;
-
-switch:
-  - platform: template
-    name: Expand ${sensor_name} Range
-    id: expand_${sensor_id}_range
-    optimistic: true
-    restore_mode: RESTORE_DEFAULT_OFF
 
 script:
   - id: update_trigger_${sensor_id}
