@@ -82,3 +82,4 @@ switch:
     optimistic: true
     restore_mode: RESTORE_DEFAULT_OFF
     entity_category: "config"
+    icon: mdi:arrow-expand-down
