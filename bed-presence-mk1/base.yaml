@@ -77,9 +77,9 @@ button:
 
 switch:
   - platform: template
-    name: Expand Range
-    id: expand_range
+    name: Full Range
+    id: full_range
     optimistic: true
     restore_mode: RESTORE_DEFAULT_OFF
     entity_category: "config"
-    icon: mdi:arrow-expand-down
+    icon: mdi:arrow-expand
