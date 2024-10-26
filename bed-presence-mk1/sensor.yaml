@@ -112,6 +112,9 @@ sensor:
           float range = cal_100 - cal_0;
 
           return val/range;
+      - clamp:
+          max_value: 100
+          min_value: 0
 
 number:
   - platform: template
