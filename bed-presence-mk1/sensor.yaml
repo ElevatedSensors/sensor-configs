@@ -74,7 +74,7 @@ sensor:
     name: ${sensor_name} Pressure
     id: bed_sensor_${sensor_id}
     update_interval: 0.5s
-    unit_of_measurement: %
+    unit_of_measurement: '%'
     icon: mdi:gauge
     filters:
       - lambda: |-                                # scale pulses/minute to 0%->100%
@@ -115,7 +115,7 @@ number:
     name: ${sensor_name} Unoccupied Pressure
     id: val_unoccupied_${sensor_id}
     icon: mdi:gauge-empty
-    unit_of_measurement: %
+    unit_of_measurement: '%'
     entity_category: diagnostic
     optimistic: true
     restore_value: true
@@ -132,7 +132,7 @@ number:
     name: ${sensor_name} Occupied Pressure
     id: val_occupied_${sensor_id}
     icon: mdi:gauge-full
-    unit_of_measurement: %
+    unit_of_measurement: '%'
     entity_category: diagnostic
     optimistic: true
     restore_value: true
@@ -156,7 +156,7 @@ number:
     step: 1.0
     mode: box
     icon: mdi:gauge
-    unit_of_measurement: %
+    unit_of_measurement: '%'
     entity_category: config
 
 button:
