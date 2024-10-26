@@ -23,15 +23,15 @@ substitutions:
   standard_delayed_on_off: '2s'
 
   # Reporting Delta
-  # The sensor must change by this amount before an update is sent (or the reporting_duration_max has been hit)
+  # The sensor must change by this amount before an update is sent (or the reporting_interval_max has been hit)
   #     - 10.0  Only report very large changes
   #     - 1.0   Relatively sensitive with much less reporting (DEFAULT)
   #     - 0.1   Very sensitive, will report frequently
   reporting_delta: '1.0'
 
-  # Reporting Duration (Max)
+  # Reporting Interval (Max)
   # The max amount of time between sensor reports (even if the value hasn't changed)
-  reporting_duration_max: '180s'
+  reporting_interval_max: '180s'
 
   # Window Averaging Samples
   # Add a sliding window moving average to the incoming sensor samples. This specifies the number of samples to average
@@ -97,7 +97,7 @@ sensor:
           send_every: 1
       - or:
           - delta: ${reporting_delta}             # only send if sensor changes by `reporting_delta` (eliminate sensor noise)
-          - throttle: ${reporting_duration_max}   # but still update every `reporting_duration_max`
+          - throttle: ${reporting_interval_max}   # but still update every `reporting_interval_max`
 
 number:
   - platform: template

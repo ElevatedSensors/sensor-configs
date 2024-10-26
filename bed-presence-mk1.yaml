@@ -48,5 +48,7 @@ packages:
 #   fast_delayed_off: '500ms'
 #   standard_delayed_on_off: '2s'
 #   reporting_delta: '1.0'
-#   reporting_duration_max: '180s'
+#   reporting_interval_max: '180s'
 #   averaging_window_samples: '1'
+#   calibrate_100: '408000'
+#   calibrate_0: '276000'
