@@ -94,7 +94,7 @@ sensor:
           - throttle: ${reporting_interval_max}   # but still update every `reporting_interval_max`
   - platform: copy
     source_id: bed_sensor_${sensor_id}
-    name: ${sensor_name} Pressure Calibrated
+    name: Calibrated ${sensor_name} Pressure
     id: bed_sensor_${sensor_id}_calibrated
     icon: mdi:scale-balance
     filters:
