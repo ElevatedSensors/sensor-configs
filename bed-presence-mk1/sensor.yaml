@@ -98,6 +98,20 @@ sensor:
       - or:
           - delta: ${reporting_delta}             # only send if sensor changes by `reporting_delta` (eliminate sensor noise)
           - throttle: ${reporting_interval_max}   # but still update every `reporting_interval_max`
+  - platform: copy
+    source_id: bed_sensor_${sensor_id}
+    name: ${sensor_name} Pressure Calibrated
+    id: bed_sensor_${sensor_id}_calibrated
+    icon: mdi:scale-balance
+    filters:
+      - lambda: |-                                # scale between val_unoccupied and val_occupied
+          float cal_0 = id(val_unoccupied_${sensor_id}).state;
+          float cal_100 = id(val_occupied_${sensor_id}).state;
+
+          float val = (x - cal_0) * 100;
+          float range = cal100 - cal_0;
+
+          return val/range;
 
 number:
   - platform: template
