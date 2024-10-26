@@ -109,7 +109,7 @@ sensor:
           float cal_100 = id(val_occupied_${sensor_id}).state;
 
           float val = (x - cal_0) * 100;
-          float range = cal100 - cal_0;
+          float range = cal_100 - cal_0;
 
           return val/range;
 
