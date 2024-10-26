@@ -68,13 +68,12 @@ binary_sensor:
     lambda: return id(bed_sensor_${sensor_id}).state > id(val_trigger_${sensor_id}).state;
 
 sensor:
-  - platform: pulse_counter   # Raw Sensor
+  - platform: pulse_counter
     pin: ${sensor_gpio}
     name: ${sensor_name} Pressure
     id: bed_sensor_${sensor_id}
     update_interval: 0.5s
-    unit_of_measurement: '% Raw'
-    entity_category: diagnostic
+    unit_of_measurement: '%'
     icon: mdi:gauge
     filters:
       - calibrate_linear:             # scale pulses/minute to 0->100%
@@ -90,37 +89,18 @@ sensor:
       - or:
           - delta: ${reporting_delta}             # only send if sensor changes by `reporting_delta` (eliminate sensor noise)
           - throttle: ${reporting_duration_max}   # but still update every `reporting_duration_max`
-  - platform: copy  # Calibrated Sensor (Runs between val_unoccupied (0%) and val_occupied (100%))
-    source_id: bed_sensor_${sensor_id}
-    name: ${sensor_name} Pressure Calibrated
-    id: bed_sensor_${sensor_id}_calibrated
-    unit_of_measurement: '%'
-    entity_category: ''
-    filters:
-      - lambda: |-
-          float val_cal_top = (x - id(val_unoccupied_${sensor_id}).state) * 100;
-          float val_cal_bot = id(val_occupied_${sensor_id}).state - id(val_unoccupied_${sensor_id}).state;
-          float val_calibrated = val_cal_top/val_cal_bot;
-
-          if (val_calibrated > 100.0) {
-            val_calibrated = 100.0;
-          } else if (val_calibrated < 0.0) {
-            val_calibrated = 0.0;
-          }
-
-          return val_calibrated;
 
 number:
   - platform: template
     name: ${sensor_name} Unoccupied Pressure
     id: val_unoccupied_${sensor_id}
     icon: mdi:gauge-empty
-    unit_of_measurement: '% Raw'
+    unit_of_measurement: '%'
     entity_category: diagnostic
     optimistic: true
     restore_value: true
     initial_value: 0
-    min_value: 0
+    min_value: 0      # set to -200ish (calculate) and clamp below based on `extend_negative_range`
     max_value: 110
     step: 1.0
     mode: box
@@ -133,7 +113,7 @@ number:
     name: ${sensor_name} Occupied Pressure
     id: val_occupied_${sensor_id}
     icon: mdi:gauge-full
-    unit_of_measurement: '% Raw'
+    unit_of_measurement: '%'
     entity_category: diagnostic
     optimistic: true
     restore_value: true
@@ -158,7 +138,7 @@ number:
     step: 1.0
     mode: box
     icon: mdi:gauge
-    unit_of_measurement: '% Raw'
+    unit_of_measurement: '%'
     entity_category: config
 
 button:
