@@ -18,6 +18,8 @@ This is the first firmware update for Bed Presence Mk1. It will be available OTA
 
 **Calibrated Sensor** - If you're annoyed by a different response from each side of your bed, the `Calibrated Sensor` is for you. This is an additional sensor that scales your raw pressure values between the `Unoccupied Pressure` and `Occupied Pressure`.
 
+**Status Sensor** - Added a binary status sensor to expose the device's connectivity state.
+
 **Option to Use Full Range** - By default, Pressure [Right/Left] is focused on the most sensitive zone of the pressure sensor (Full Range = Off). This should perform well for most setups. By turning on Full Range, you can expand it to use the full range of the sensor. Consider turning ON Full Range if slight movements in bed quickly drop the sensor value to zero, causing frequent false negatives.
 
 **Lots of Customization** - If you import the device into the ESPHome Dashboard, there are now lots more substitutions within the package to customize behavior.
