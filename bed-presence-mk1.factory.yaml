@@ -4,7 +4,7 @@ packages:
 esphome:
   project:
     name: ElevatedSensors.BedPresenceMk1
-    version: 2024.9.0
+    version: 2024.9.1
 
 # Allow ESPHome Adoption
 dashboard_import:
@@ -29,7 +29,7 @@ update:
     id: update_http_request
     name: Firmware
     source: https://docs.elevatedsensors.com/bpmk1-manifest.json
-    update_interval: 6h
+    update_interval: 30s
 
 http_request:
   verify_ssl: true

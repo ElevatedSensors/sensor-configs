@@ -55,6 +55,6 @@ ota:
 packages:
   remote_package:
     url: https://github.com/ElevatedSensors/sensor-configs
-    ref: main
+    ref: testing-rapid-ota-updates
     files: ['bed-presence-mk1/base.yaml']
     refresh: 1s
