@@ -37,7 +37,7 @@ ota:
 packages:
   remote_package:
     url: https://github.com/ElevatedSensors/sensor-configs
-    ref: dev-tune-delta
+    ref: main
     files: ['bed-presence-mk1/base.yaml']
     refresh: 1s
 
