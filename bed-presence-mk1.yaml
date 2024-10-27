@@ -41,7 +41,9 @@ packages:
     files: ['bed-presence-mk1/base.yaml']
     refresh: 1s
 
-# See https://github.com/ElevatedSensors/sensor-configs/bed-presence-mk1/sensor.yaml for substitution descriptions
+# See https://github.com/ElevatedSensors/sensor-configs/blob/main/bed-presence-mk1/sensor.yaml for a detailed
+# description of available substitutions.
+#
 # substitutions:
 #   trigger_percentile: '0.75'
 #   averaging_window_samples: '5'
