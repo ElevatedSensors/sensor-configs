@@ -1,13 +1,13 @@
 name: Bed Presence Mk1 Firmware Changed
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'bed-presence-mk1.factory.yaml'
-      - 'bed-presence-mk1.yaml'
-      - 'bed-presence-mk1/*.yaml'
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - 'bed-presence-mk1.factory.yaml'
+  #     - 'bed-presence-mk1.yaml'
+  #     - 'bed-presence-mk1/*.yaml'
   workflow_dispatch:
 
 jobs:
