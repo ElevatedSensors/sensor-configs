@@ -1,129 +1,207 @@
-binary_sensor:
-- platform: template
-  name: Bed Occupied ${sensor_name} (Fast)
-  id: bed_occupied_${sensor_id}_fast
-  device_class: occupancy
-  icon: mdi:bed
-  disabled_by_default: true
-  filters:
-  - delayed_off: ${fast_delayed_off}  # prevent shifting in bed from registering "off"
-  lambda: return id(bed_sensor_${sensor_id}).state > id(val_trigger_${sensor_id}).state;
+substitutions:
+  # Calibrate Trigger Percentile
+  # This controls how the trigger threshold is set during calibration. During calibration, the unoccupied and occupied
+  # pressure values are determined. This is the percentage of the difference between those values required to trigger
+  # the "occupied" state.
+  #     - 0.75  Requires 75% of the occupied pressure to trigger (DEFAULT)
+  #     - 0.50   Set trigger exactly in the middle of unoccupied and occupied pressures
+  #     - 0.25  More sensitive, likely to be triggered by partner
+  trigger_percentile: '0.75'
 
-- platform: template
-  name: Bed Occupied ${sensor_name}
-  id: bed_occupied_${sensor_id}
-  device_class: occupancy
-  icon: mdi:bed
-  filters:
-  - delayed_on_off: 2s                # ensure stability
-  lambda: return id(bed_sensor_${sensor_id}).state > id(val_trigger_${sensor_id}).state;
+  # Window Averaging Samples
+  # Add a sliding window moving average to the incoming sensor samples. This specifies the number of samples to average
+  # over. Each sample is 1/2 second.
+  #     - 1   Don't perform averaging
+  #     - 5   Average over 5 samples (2.5 seconds) (DEFAULT)
+  #     - 10  Average over 10 samples (5 seconds)
+  averaging_window_samples: '5'
+
+  # Fast Sensor Delay
+  # This controls how long the "Fast" sensor must register "unoccupied" or "occupied" before reporting. Averaging or
+  # delay is encourage to prevent frequent false negatives as you shift in bed.
+  #     - 2s    Same response as standard sensor
+  #     - 500ms Good starting point for getting speed without too many false negatives
+  #     - 0ms   No delay (DEFAULT)
+  fast_delayed_on: '0ms'
+  fast_delayed_off: '0ms'
+
+  # Standard Sensor Delay
+  # This controls how long the standard sensor must register "unoccupied" or "occupied" before reporting. Averaging or
+  # delay is enocuraged to ensure stability.
+  standard_delayed_on: '0s'
+  standard_delayed_off: '1s'
+
+  # Reporting Delta
+  # The sensor must change by this amount before an update is sent (or the reporting_interval_max has been hit)
+  #     - 10.0  Only report very large changes
+  #     - 1.0   Relatively sensitive with much less reporting (DEFAULT)
+  #     - 0.1   Very sensitive, will report frequently
+  reporting_delta: '1.0'
+
+  # Reporting Interval (Max)
+  # The max amount of time between sensor reports (even if the value hasn't changed)
+  reporting_interval_max: '180s'
+
+  # Linear Calibration Points
+  # Change the linear calibration points for the FSR sensor. These values correspond with the raw pulses per minute from
+  # the pulse_counter. Only mess with this if you know what you're doing. In standard mode (Full Range = False), the
+  # sensor is linearly calibrated between calibrate_0 (0%) and calibreate_100 (100%). When Full Range = True,
+  # calibrate_0 is set to 0.
+  calibrate_100: '408000'
+  calibrate_0: '276000'
+
+binary_sensor:
+  - platform: template
+    name: Bed Occupied ${sensor_name} (Fast)
+    id: bed_occupied_${sensor_id}_fast
+    device_class: occupancy
+    icon: mdi:bed
+    disabled_by_default: true
+    filters:
+      - delayed_on: ${fast_delayed_on}
+      - delayed_off: ${fast_delayed_off}  # prevent shifting in bed from registering "off"
+    lambda: return id(bed_sensor_${sensor_id}).state > id(val_trigger_${sensor_id}).state;
+
+  - platform: template
+    name: Bed Occupied ${sensor_name}
+    id: bed_occupied_${sensor_id}
+    device_class: occupancy
+    icon: mdi:bed
+    filters:
+      - delayed_on: ${standard_delayed_on}
+      - delayed_off: ${standard_delayed_off}
+    lambda: return id(bed_sensor_${sensor_id}).state > id(val_trigger_${sensor_id}).state;
 
 sensor:
-- platform: pulse_counter
-  pin: ${sensor_gpio}
-  name: ${sensor_name} Pressure
-  id: bed_sensor_${sensor_id}
-  update_interval: 0.5s
-  unit_of_measurement: '%'
-  icon: mdi:gauge
-  filters:
-  - calibrate_linear:             # scale pulses/minute to 0->100%
-      method: least_squares
-      datapoints:
-        - 408000 -> 100.0         # 6800Hz (sensor shorted/0ohms)
-        - 276000 -> 0.0           # 4600Hz (breakforce/10k)
-  - clamp:
-      max_value: 100.0
-      min_value: 0.0
-  - or:
-    - delta: 0.1                  # only send if sensor changes by +/-0.1% (eliminate sensor noise)
-    - throttle: 60s               # but still update every minute
+  - platform: pulse_counter
+    pin: ${sensor_gpio}
+    name: ${sensor_name} Pressure
+    id: bed_sensor_${sensor_id}
+    update_interval: 0.5s
+    unit_of_measurement: '%'
+    icon: mdi:gauge
+    filters:
+      - lambda: |-                                # scale pulses/minute to 0%->100%
+          float cal_0 = id(full_range).state ? 0 : ${calibrate_0};
+
+          float val = (x - cal_0) * 100;
+          float range = ${calibrate_100} - cal_0;
+
+          return val/range;
+      - clamp:
+          min_value: 0
+      - sliding_window_moving_average:
+          window_size: ${averaging_window_samples}
+          send_every: 1
+      - or:
+          - delta: ${reporting_delta}             # only send if sensor changes by `reporting_delta` (eliminate sensor noise)
+          - throttle: ${reporting_interval_max}   # but still update every `reporting_interval_max`
+  - platform: copy
+    source_id: bed_sensor_${sensor_id}
+    name: Calibrated ${sensor_name} Pressure
+    id: bed_sensor_${sensor_id}_calibrated
+    icon: mdi:scale-balance
+    filters:
+      - lambda: |-                                # scale between val_unoccupied and val_occupied
+          float cal_0 = id(val_unoccupied_${sensor_id}).state;
+          float cal_100 = id(val_occupied_${sensor_id}).state;
+
+          float val = (x - cal_0) * 100;
+          float range = cal_100 - cal_0;
+
+          return val/range;
+      - clamp:
+          max_value: 100
+          min_value: 0
 
 number:
-- platform: template
-  name: ${sensor_name} Unoccupied Pressure
-  id: val_unoccupied_${sensor_id}
-  icon: mdi:gauge-empty
-  unit_of_measurement: '%'
-  entity_category: diagnostic
-  optimistic: true
-  restore_value: true
-  initial_value: 0
-  min_value: 0
-  max_value: 100
-  step: 0.1
-  on_value:
-    then:
-    - lambda: |-  # Update status and trigger
-        // id(val_unoccupied_status_${sensor_id}).publish_state(x);
-        id(update_trigger_${sensor_id})->execute();
-- platform: template
-  name: ${sensor_name} Occupied Pressure
-  id: val_occupied_${sensor_id}
-  icon: mdi:gauge-full
-  unit_of_measurement: '%'
-  entity_category: diagnostic
-  optimistic: true
-  restore_value: true
-  initial_value: 100
-  min_value: 0
-  max_value: 100
-  step: 0.1
-  on_value:
-    then:
-    - lambda: |-  # Update status and trigger
-        // id(val_occupied_status_${sensor_id}).publish_state(x);
-        id(update_trigger_${sensor_id})->execute();
-- platform: template
-  name: ${sensor_name} Trigger Pressure
-  id: val_trigger_${sensor_id}
-  optimistic: true
-  restore_value: true
-  initial_value: 50
-  min_value: 0
-  max_value: 100
-  step: 0.1
-  icon: mdi:gauge
-  unit_of_measurement: '%'
-  entity_category: config
+  - platform: template
+    name: ${sensor_name} Unoccupied Pressure
+    id: val_unoccupied_${sensor_id}
+    icon: mdi:gauge-empty
+    unit_of_measurement: '%'
+    entity_category: diagnostic
+    optimistic: true
+    restore_value: true
+    initial_value: 0
+    min_value: 0
+    max_value: 110
+    step: 1.0
+    mode: box
+    on_value:
+      then:
+        - lambda: |-  # Update trigger
+            id(update_trigger_${sensor_id})->execute();
+  - platform: template
+    name: ${sensor_name} Occupied Pressure
+    id: val_occupied_${sensor_id}
+    icon: mdi:gauge-full
+    unit_of_measurement: '%'
+    entity_category: diagnostic
+    optimistic: true
+    restore_value: true
+    initial_value: 100
+    min_value: 0
+    max_value: 110
+    step: 1.0
+    mode: box
+    on_value:
+      then:
+        - lambda: |-  # Update trigger
+            id(update_trigger_${sensor_id})->execute();
+  - platform: template
+    name: ${sensor_name} Trigger Pressure
+    id: val_trigger_${sensor_id}
+    optimistic: true
+    restore_value: true
+    initial_value: 50
+    min_value: 0
+    max_value: 110
+    step: 1.0
+    mode: box
+    icon: mdi:gauge
+    unit_of_measurement: '%'
+    entity_category: config
 
 button:
-- platform: template
-  name: Calibrate ${sensor_name} Unoccupied
-  id: calibration_${sensor_id}_set_unoccupied
-  icon: mdi:bed-empty
-  entity_category: config
-  on_press:
-    then:
-    - number.set:
-        id: val_unoccupied_${sensor_id}
-        value: !lambda return id(bed_sensor_${sensor_id}).state;
-- platform: template
-  name: Calibrate ${sensor_name} Occupied
-  id: calibration_${sensor_id}_set_occupied
-  icon: mdi:bed
-  entity_category: config
-  on_press:
-    then:
-    - number.set:
-        id: val_occupied_${sensor_id}
-        value: !lambda return id(bed_sensor_${sensor_id}).state;
+  - platform: template
+    name: Calibrate ${sensor_name} Unoccupied
+    id: calibration_${sensor_id}_set_unoccupied
+    icon: mdi:bed-empty
+    entity_category: config
+    on_press:
+      then:
+        - number.set:
+            id: val_unoccupied_${sensor_id}
+            # round to 2 decimal places
+            value: !lambda return round(id(bed_sensor_${sensor_id}).state * 100)/100.0;
+  - platform: template
+    name: Calibrate ${sensor_name} Occupied
+    id: calibration_${sensor_id}_set_occupied
+    icon: mdi:bed
+    entity_category: config
+    on_press:
+      then:
+        - number.set:
+            id: val_occupied_${sensor_id}
+            # round to 2 decimal places
+            value: !lambda return round(id(bed_sensor_${sensor_id}).state * 100)/100.0;
 
 script:
-- id: update_trigger_${sensor_id}
-  mode: queued
-  then:
-  - lambda: |-  # Set trigger to x% of difference between min/max
-      float unoccupied_pressure = id(val_unoccupied_${sensor_id}).state;
-      float occupied_pressure = id(val_occupied_${sensor_id}).state;
+  - id: update_trigger_${sensor_id}
+    mode: queued
+    then:
+      - lambda: |-  # Set trigger to x% of difference between min/max
+          float unoccupied_pressure = id(val_unoccupied_${sensor_id}).state;
+          float occupied_pressure = id(val_occupied_${sensor_id}).state;
 
-      // calculate new trigger value
-      float trigger_pressure = unoccupied_pressure + ((occupied_pressure - unoccupied_pressure) * float(${trigger_percentile}));
+          // calculate new trigger value
+          float trigger_pressure = unoccupied_pressure + ((occupied_pressure - unoccupied_pressure) * float(${trigger_percentile}));
 
-      // round to 2 decimal places
-      trigger_pressure = round(trigger_pressure * 100)/100.0;
+          // round to 2 decimal places
+          trigger_pressure = round(trigger_pressure * 100)/100.0;
 
-      // set value
-      auto call = id(val_trigger_${sensor_id}).make_call();
-      call.set_value(trigger_pressure);
-      call.perform();
+          // set value
+          auto call = id(val_trigger_${sensor_id}).make_call();
+          call.set_value(trigger_pressure);
+          call.perform();
