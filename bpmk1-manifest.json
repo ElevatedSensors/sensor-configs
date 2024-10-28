@@ -9,8 +9,9 @@
       "ota": {
         "path": "bed-presence-esp32c3/bed-presence-esp32c3.ota.bin",
         "md5": "0f375a315120e6732be36b9690bbf33b",
-        "release_url": "https://docs.elevatedsensors.com/bed-presence-mk1/release",
-        "release_summary": "Eliminate database bloat, improve sensor response, add 'calibrated' sensor."
+        "summary": "Eliminate database bloat, improve sensor response, add 'calibrated' sensor.",
+        "release_url": "https://docs.elevatedsensors.com/bed-presence-mk1/release"
+        
       },
       "parts": [
         {
