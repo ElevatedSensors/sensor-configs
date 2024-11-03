@@ -11,6 +11,10 @@ breadcrumb_list:
 
 Welcome to Bed Presence for ESPHome! This page contains everything you need to get started.
 
+## Bluetooth Provisioning
+
+1. If you have a Bluetooth proxy, simply connect USB-C power supply and skip to `Adding to Home Assistant`.
+
 ## WiFi Provisioning
 
 1. Connect USB-C power supply.
