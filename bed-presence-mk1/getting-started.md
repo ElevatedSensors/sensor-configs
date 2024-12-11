@@ -50,7 +50,7 @@ Welcome to Bed Presence for ESPHome! This page contains everything you need to g
     <img src="/assets/images/bp-install-3.jpg" class="rounded m-2" width="400"/>
     <img src="/assets/images/bp-install-4.jpg" class="rounded m-2" width="400"/>
 
-5. Insert the sensor strips, then peal the adhesive backing and affix the sensors to the bed slat. For a temporary setup, sensors may be gently taped in place around bed slat. Do not cover end of sensors, as there is a required vent opening.
+5. Insert the sensor strips, then peal the adhesive backing and affix the sensors to the bed slat. For a temporary setup, sensors may be gently taped in place around bed slat. Do not cover end of sensors, as there is a required vent opening. For King beds, consider using the included extension wires to space the sensors futher apart. Zip ties can be used to hold everything neatly in place.
 
     <img src="/assets/images/bp-install-5.jpg" class="rounded m-2" width="400"/>
     <img src="/assets/images/bp-install-6.jpg" class="rounded m-2" width="400"/>
