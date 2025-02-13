@@ -9,6 +9,7 @@
       "ota": {
         "path": "bed-presence-esp32c3/bed-presence-esp32c3.ota.bin",
         "md5": "3d7d5571b5ac9b47093bd63185d8bc5d",
+        "summary": "Increase calibration pressure max_values to 120%.",
         "release_url": "https://docs.elevatedsensors.com/bed-presence-mk1/release"
       },
       "parts": [
