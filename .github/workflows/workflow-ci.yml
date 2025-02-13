@@ -20,6 +20,11 @@ jobs:
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4.1.7
+      - name: Replace package_import_url branch to current dev branch
+        run: |
+          branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
+          echo ${branch}
+          sed -i "s/@main/@${branch}/g" ./*factory.yaml
       - name: Build ESPHome firmware to verify configuration
         uses: esphome/build-action@v4.0.1
         id: esphome-build

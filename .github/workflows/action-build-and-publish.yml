@@ -55,10 +55,6 @@ jobs:
         file: ${{ fromJson(needs.prepare.outputs.files) }}
     steps:
       - uses: actions/checkout@v4.1.7
-      - name: Replace package_import_url branch
-        run: |
-          branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
-          sed -i "s/@main/@$branch/g" ${{ matrix.file }}
       - uses: esphome/build-action@v4.0.1
         id: esphome-build
         with:
