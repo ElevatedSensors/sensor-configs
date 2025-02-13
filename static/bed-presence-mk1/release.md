@@ -10,7 +10,7 @@ breadcrumb_list:
 ---
 
 ## 2025.2.0
-**Fixed Calibration Cap**: Accomodate the increased sensitivity of revC boards, ensuring accurate pressure calibration up to
+**Fix Calibration Cap**: Accomodate the increased sensitivity of revC boards, ensuring accurate pressure calibration up to
 120% instead of being limited to 110%.
 
 ## 2024.10.0
