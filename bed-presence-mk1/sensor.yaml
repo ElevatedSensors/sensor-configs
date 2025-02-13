@@ -125,7 +125,7 @@ number:
     restore_value: true
     initial_value: 0
     min_value: 0
-    max_value: 110
+    max_value: 120
     step: 1.0
     mode: box
     on_value:
@@ -142,7 +142,7 @@ number:
     restore_value: true
     initial_value: 100
     min_value: 0
-    max_value: 110
+    max_value: 120
     step: 1.0
     mode: box
     on_value:
@@ -156,7 +156,7 @@ number:
     restore_value: true
     initial_value: 50
     min_value: 0
-    max_value: 110
+    max_value: 120
     step: 1.0
     mode: box
     icon: mdi:gauge
