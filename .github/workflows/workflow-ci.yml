@@ -20,6 +20,11 @@ jobs:
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4.1.7
+      - name: Change remote_package branch to current dev branch
+        run: |
+          branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
+          echo "Replacing @main with @${branch} in bed-presence-mk1.yaml"
+          sed -i "s/ref: main/ref: ${branch}/g" ./bed-presence-mk1.yaml
       - name: Build ESPHome firmware to verify configuration
         uses: esphome/build-action@v4.0.1
         id: esphome-build
