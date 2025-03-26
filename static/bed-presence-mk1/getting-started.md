@@ -7,6 +7,7 @@ show_breadcrumb: true
 breadcrumb_list:
     - label: Bed Presence for ESPHome
       url: /bed-presence-mk1
+show_toc: true
 ---
 
 Welcome to Bed Presence for ESPHome! This page contains everything you need to get started.
@@ -34,6 +35,9 @@ Welcome to Bed Presence for ESPHome! This page contains everything you need to g
 4. Click `Configure` then `Submit`. If desired, specify an area and click `Finish`.
 
 ## Installing Sensor on Bed
+If you are installing using the Universal Mounting Kit, select between [Queen/Full & Twin](#queenfull--twin-mounting-kit-install) and [King](#king-mounting-kit-install).
+
+### Slat Install
 
 1. Remove mattress from bed frame.
 
@@ -50,7 +54,7 @@ Welcome to Bed Presence for ESPHome! This page contains everything you need to g
     <img src="/assets/images/bp-install-3.jpg" class="rounded m-2" width="400"/>
     <img src="/assets/images/bp-install-4.jpg" class="rounded m-2" width="400"/>
 
-5. Insert the sensor strips, then peal the adhesive backing and affix the sensors to the bed slat. For a temporary setup, sensors may be gently taped in place around bed slat. Do not cover end of sensors, as there is a required vent opening. For King beds, consider using the included extension wires to space the sensors futher apart. Zip ties can be used to hold everything neatly in place.
+5. Insert the sensor strips, then peel the adhesive backing and affix the sensors to the bed slat. For a temporary setup, sensors may be gently taped in place around bed slat. Do not cover end of sensors with tape, as there is a required vent opening. For King beds, consider using the included extension wires to space the sensors futher apart. Zip ties can be used to hold everything neatly in place.
 
     <img src="/assets/images/bp-install-5.jpg" class="rounded m-2" width="400"/>
     <img src="/assets/images/bp-install-6.jpg" class="rounded m-2" width="400"/>
@@ -61,6 +65,68 @@ Welcome to Bed Presence for ESPHome! This page contains everything you need to g
     <img src="/assets/images/bp-install-8.jpg" class="rounded m-2" width="400"/>
 
 7. Carefully place the mattress back in place. This may require 2 people, as dragging the mattress across the sensors may dislodge them.
+
+### Queen/Full & Twin Mounting Kit Install
+
+1. Remove the flexible slat from the packaging and lay it on a flat surface such as a carpet.
+2. Align the main unit cradle under the center hole of the slat.
+
+    <img src="/assets/images/bp-mount-install/1-align_cradle.jpg" class="rounded m-2" width="400"/>
+
+3. Place the main unit into the cradle and loosely attach it using the blunt-tip screw.
+
+    <img src="/assets/images/bp-mount-install/2-install_main_unit.jpg" class="rounded m-2" width="400"/>
+
+4. Insert the sensor strips into the slots labeled "Left Sensor" and "Right Sensor".
+    - For the Twin Kit, attach the sensor to whichever side is most convenient based on your installation location.
+
+    <img src="/assets/images/bp-mount-install/3-sensor_strips.jpg" class="rounded m-2" width="400"/>
+
+5. Fully tighten the screw until the main unit is secure and no longer moves easily.
+    - Do not overtighten, as this may strip the plastic.
+6. Peel off the adhesive backing on each sensor strip and firmly stick them down.
+7. Connect USB-C power. The unit is now ready to install on top of a box spring, upholstered base, solid platform, or foundation.
+    - For beds with wooden slats or platforms, optionally use the provided wood screws to secure the ends of the flexible slat in place.
+
+### King Mounting Kit Install
+
+1. Remove the flexible slat from the packaging and lay it on a flat surface such as a carpet.
+2. Align the main unit cradle under the center hole of the slat.
+
+    <img src="/assets/images/bp-mount-install/1-align_cradle.jpg" class="rounded m-2" width="400"/>
+
+3. Place the main unit into the cradle and loosely attach it using the blunt-tip screw.
+
+    <img src="/assets/images/bp-mount-install/2-install_main_unit.jpg" class="rounded m-2" width="400"/>
+
+4. Insert the sensor extension wires into the slots labeled "Left Sensor" and "Right Sensor".
+
+    <img src="/assets/images/bp-mount-install/4-extension_wires.jpg" class="rounded m-2" width="400"/>
+
+5. Fully tighten the screw until the main unit is secure and no longer moves easily.
+    - Do not overtighten, as this may strip the plastic.
+6. Connect the sensor strips to the ends of the extension wires.
+
+    <img src="/assets/images/bp-mount-install/5-sensor_extensions.jpg" class="rounded m-2" width="400"/>
+
+7. Fully extend the extension wires, then peel off the adhesive backing on each sensor strip and firmly stick them down.
+    - Ensure the sensor strips are approximately centered top to bottom.
+
+    <img src="/assets/images/bp-mount-install/6-sensor_adhesive.jpg" class="rounded m-2" width="400"/>
+
+8. Gently install the sensor extension clips, inserting the thin side under the slat.
+    - Extension wire/sensor strip connector should be approximately centered in the clip.
+    - The connectors should click into a cavity, leaving the clips flush with the slat.
+    - It’s okay if the slot in the slat does not perfectly align with the slot in the clip.
+
+    <img src="/assets/images/bp-mount-install/7-extension_clip.jpg" class="rounded m-2" width="400"/>
+
+9. Insert the included zip tie through the slot, tighten it, and trim excess.
+
+    <img src="/assets/images/bp-mount-install/8-zip_tie.jpg" class="rounded m-2" width="400"/>
+
+10. Connect USB-C power. The unit is now ready to install on top of a box spring, upholstered base, solid platform, or foundation.
+    - For beds with wooden slats or platforms, optionally use the provided wood screws to secure the ends of the flexible slat in place.
 
 ## Automatic Sensor Calibration
 
