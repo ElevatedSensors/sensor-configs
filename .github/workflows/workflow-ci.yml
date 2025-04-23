@@ -26,7 +26,7 @@ jobs:
           echo "Replacing @main with @${branch} in bed-presence-mk1.yaml"
           sed -i "s/ref: main/ref: ${branch}/g" ./bed-presence-mk1.yaml
       - name: Build ESPHome firmware to verify configuration
-        uses: esphome/build-action@v4.0.4
+        uses: esphome/build-action@v6
         id: esphome-build
         with:
           yaml-file: ${{ matrix.file }}

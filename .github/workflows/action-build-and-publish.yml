@@ -55,7 +55,7 @@ jobs:
         file: ${{ fromJson(needs.prepare.outputs.files) }}
     steps:
       - uses: actions/checkout@v4.2.2
-      - uses: esphome/build-action@v4.0.4
+      - uses: esphome/build-action@v6
         id: esphome-build
         with:
           yaml-file: ${{ matrix.file }}
