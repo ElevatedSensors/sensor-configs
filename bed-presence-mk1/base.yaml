@@ -1,17 +1,21 @@
+substitutions:
+  sensor_gpio_left: GPIO10
+  sensor_gpio_right: GPIO20
+
 packages:
   left_bed_sensor: !include
     file: sensor.yaml
     vars:
       sensor_name: Left
       sensor_id: left
-      sensor_gpio: GPIO10
+      sensor_gpio: ${sensor_gpio_left}
 
   right_bed_sensor: !include
     file: sensor.yaml
     vars:
       sensor_name: Right
       sensor_id: right
-      sensor_gpio: GPIO20
+      sensor_gpio: ${sensor_gpio_right}
 
 sensor:
   - platform: wifi_signal   # Reports the WiFi signal strength in dB
