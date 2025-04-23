@@ -18,7 +18,7 @@ substitutions:
 
   # Fast Sensor Delay
   # This controls how long the "Fast" sensor must register "unoccupied" or "occupied" before reporting. Averaging or
-  # delay is encourage to prevent frequent false negatives as you shift in bed.
+  # delay is encouraged to prevent frequent false negatives as you shift in bed.
   #     - 2s    Same response as standard sensor
   #     - 500ms Good starting point for getting speed without too many false negatives
   #     - 0ms   No delay (DEFAULT)
@@ -30,6 +30,12 @@ substitutions:
   # delay is enocuraged to ensure stability.
   standard_delayed_on: '0s'
   standard_delayed_off: '1s'
+
+  # Slow Sensor Delay
+  # This controls how long the "Slow" sensor must register "unoccupied" or "occupied" before reporting. Averaging or
+  # delay is encouraged to ensure stability.
+  slow_delayed_on: '2s'
+  slow_delayed_off: '5s'
 
   # Reporting Delta
   # The sensor must change by this amount before an update is sent (or the reporting_interval_max has been hit)
@@ -56,10 +62,26 @@ binary_sensor:
     id: bed_occupied_${sensor_id}_fast
     device_class: occupancy
     icon: mdi:bed
-    disabled_by_default: true
+    disabled_by_default: true   # Not making this fully internal for backwards compatibility
     filters:
       - delayed_on: ${fast_delayed_on}
-      - delayed_off: ${fast_delayed_off}  # prevent shifting in bed from registering "off"
+      - delayed_off: ${fast_delayed_off}
+    lambda: return id(bed_sensor_${sensor_id}).state > id(val_trigger_${sensor_id}).state;
+
+  - platform: template
+    id: bed_occupied_${sensor_id}_normal
+    device_class: occupancy
+    filters:
+      - delayed_on: ${standard_delayed_on}
+      - delayed_off: ${standard_delayed_off}
+    lambda: return id(bed_sensor_${sensor_id}).state > id(val_trigger_${sensor_id}).state;
+
+  - platform: template
+    id: bed_occupied_${sensor_id}_slow
+    device_class: occupancy
+    filters:
+      - delayed_on: ${slow_delayed_on}
+      - delayed_off: ${slow_delayed_off}
     lambda: return id(bed_sensor_${sensor_id}).state > id(val_trigger_${sensor_id}).state;
 
   - platform: template
@@ -67,10 +89,14 @@ binary_sensor:
     id: bed_occupied_${sensor_id}
     device_class: occupancy
     icon: mdi:bed
-    filters:
-      - delayed_on: ${standard_delayed_on}
-      - delayed_off: ${standard_delayed_off}
-    lambda: return id(bed_sensor_${sensor_id}).state > id(val_trigger_${sensor_id}).state;
+    lambda: |-  # Sensor response is user tunable via "Response Speed"
+      if (id(response_speed).state == "Fast") {
+        return id(bed_occupied_${sensor_id}_fast).state;
+      } else if (id(response_speed).state == "Slow") {
+        return id(bed_sensor_${sensor_id}_slow).state;
+      } else {
+        return id(bed_sensor_${sensor_id}_normal).state;
+      }
 
 sensor:
   - platform: pulse_counter
@@ -187,6 +213,17 @@ button:
             id: val_occupied_${sensor_id}
             # round to 2 decimal places
             value: !lambda return round(id(bed_sensor_${sensor_id}).state * 100)/100.0;
+
+select:
+  - platform: template
+    name: "Response Speed"
+    id: response_speed
+    icon: mdi:speedometer
+    options:
+      - "Fast"
+      - "Normal"
+      - "Slow"
+    initial_option: "Normal"
 
 script:
   - id: update_trigger_${sensor_id}

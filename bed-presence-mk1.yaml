@@ -55,6 +55,8 @@ packages:
 #   fast_delayed_off: '0ms'
 #   standard_delayed_on: '0s'
 #   standard_delayed_off: '1s'
+#   slow_delayed_on: '2s'
+#   slow_delayed_off: '5s'
 #   reporting_delta: '1.0'
 #   reporting_interval_max: '180s'
 #   calibrate_100: '408000'
