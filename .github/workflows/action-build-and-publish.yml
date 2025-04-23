@@ -55,7 +55,7 @@ jobs:
         file: ${{ fromJson(needs.prepare.outputs.files) }}
     steps:
       - uses: actions/checkout@v4.2.2
-      - uses: esphome/build-action@v4.0.1
+      - uses: esphome/build-action@v4.0.4
         id: esphome-build
         with:
           yaml-file: ${{ matrix.file }}
@@ -98,7 +98,7 @@ jobs:
         run: find output/
 
       - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4.6.3
+        uses: JamesIves/github-pages-deploy-action@v4.6.9
         with:
           branch: gh-pages
           folder: output
