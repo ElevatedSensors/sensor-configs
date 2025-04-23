@@ -101,6 +101,7 @@ sensor:
     name: Calibrated ${sensor_name} Pressure
     id: bed_sensor_${sensor_id}_calibrated
     icon: mdi:scale-balance
+    disabled_by_default: true
     filters:
       - lambda: |-                                # scale between val_unoccupied and val_occupied
           float cal_0 = id(val_unoccupied_${sensor_id}).state;
