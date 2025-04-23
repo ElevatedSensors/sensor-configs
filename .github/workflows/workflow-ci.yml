@@ -19,18 +19,18 @@ jobs:
           - bed-presence-mk1.factory.yaml
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.2
       - name: Change remote_package branch to current dev branch
         run: |
           branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
           echo "Replacing @main with @${branch} in bed-presence-mk1.yaml"
           sed -i "s/ref: main/ref: ${branch}/g" ./bed-presence-mk1.yaml
       - name: Build ESPHome firmware to verify configuration
-        uses: esphome/build-action@v4.0.1
+        uses: esphome/build-action@v4.0.4
         id: esphome-build
         with:
           yaml-file: ${{ matrix.file }}
-      - uses: actions/upload-artifact@v4.3.6
+      - uses: actions/upload-artifact@v4.4.3
         with:
           name: ${{ matrix.file }}
           path: ${{ steps.esphome-build.outputs.name }}
