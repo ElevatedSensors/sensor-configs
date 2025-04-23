@@ -219,6 +219,8 @@ select:
     name: "Response Speed"
     id: response_speed
     icon: mdi:speedometer
+    optimistic: true
+    restore_value: true
     options:
       - "Fast"
       - "Normal"
