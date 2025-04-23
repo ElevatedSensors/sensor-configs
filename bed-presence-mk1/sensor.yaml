@@ -214,19 +214,6 @@ button:
             # round to 2 decimal places
             value: !lambda return round(id(bed_sensor_${sensor_id}).state * 100)/100.0;
 
-select:
-  - platform: template
-    name: "Response Speed"
-    id: response_speed
-    icon: mdi:speedometer
-    optimistic: true
-    restore_value: true
-    options:
-      - "Fast"
-      - "Normal"
-      - "Slow"
-    initial_option: "Normal"
-
 script:
   - id: update_trigger_${sensor_id}
     mode: queued

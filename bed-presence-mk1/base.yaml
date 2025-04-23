@@ -87,3 +87,16 @@ switch:
     restore_mode: RESTORE_DEFAULT_OFF
     entity_category: config
     icon: mdi:arrow-expand
+
+select:
+  - platform: template
+    name: "Response Speed"
+    id: response_speed
+    icon: mdi:speedometer
+    optimistic: true
+    restore_value: true
+    options:
+      - "Fast"
+      - "Normal"
+      - "Slow"
+    initial_option: "Normal"
