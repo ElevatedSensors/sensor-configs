@@ -17,6 +17,9 @@ packages:
       sensor_id: right
       sensor_gpio: ${sensor_gpio_right}
 
+  bluetooth_proxy: !include
+    file: ../common/bluetooth_proxy.yaml
+
 sensor:
   - platform: wifi_signal   # Reports the WiFi signal strength in dB
     name: WiFi Signal dB
