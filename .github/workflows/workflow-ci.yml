@@ -30,7 +30,7 @@ jobs:
         id: esphome-build
         with:
           yaml-file: ${{ matrix.file }}
-      - uses: actions/upload-artifact@v4.4.3
+      - uses: actions/upload-artifact@v4.6.2
         with:
           name: ${{ matrix.file }}
           path: ${{ steps.esphome-build.outputs.name }}
