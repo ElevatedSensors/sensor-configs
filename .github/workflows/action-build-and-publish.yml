@@ -54,7 +54,7 @@ jobs:
       matrix:
         file: ${{ fromJson(needs.prepare.outputs.files) }}
     steps:
-      - uses: actions/checkout@v4.2.2
+      - uses: actions/checkout@v4
       - uses: esphome/build-action@v6
         id: esphome-build
         with:
@@ -83,7 +83,7 @@ jobs:
     needs: [build]
     if: ${{ always() }}
     steps:
-      - uses: actions/checkout@v4.2.2
+      - uses: actions/checkout@v4
 
       # Download fw build artifacts
       - uses: actions/download-artifact@v4
