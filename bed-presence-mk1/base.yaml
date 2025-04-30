@@ -100,3 +100,4 @@ select:
       - "Normal"
       - "Slow"
     initial_option: "Normal"
+    entity_category: config
