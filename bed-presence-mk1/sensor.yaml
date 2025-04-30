@@ -141,7 +141,7 @@ sensor:
       - lambda: |-
           static float last_val = 0;
           float delta = x - last_val;
-          last_vale = x;
+          last_val = x;
           return delta;
       - or:
           - delta: ${reporting_delta}             # only send if sensor changes by `reporting_delta` (eliminate sensor noise)
