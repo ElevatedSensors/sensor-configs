@@ -61,16 +61,19 @@ binary_sensor:
     name: Bed Occupied ${sensor_name} (Fast)
     id: bed_occupied_${sensor_id}_fast
     device_class: occupancy
-    icon: mdi:bed
-    disabled_by_default: true   # Not making this fully internal for backwards compatibility
+    icon: mdi:speedometer
+    disabled_by_default: true
     filters:
       - delayed_on: ${fast_delayed_on}
       - delayed_off: ${fast_delayed_off}
     lambda: return id(bed_sensor_${sensor_id}).state > id(val_trigger_${sensor_id}).state;
 
   - platform: template
+    name: Bed Occupied ${sensor_name} (Normal)
     id: bed_occupied_${sensor_id}_normal
     device_class: occupancy
+    icon: mdi:speedometer-medium
+    disabled_by_default: true
     filters:
       - delayed_on: ${standard_delayed_on}
       - delayed_off: ${standard_delayed_off}
@@ -78,7 +81,10 @@ binary_sensor:
 
   - platform: template
     id: bed_occupied_${sensor_id}_slow
+    name: Bed Occupied ${sensor_name} (Slow)
     device_class: occupancy
+    icon: mdi:speedometer-slow
+    disabled_by_default: true
     filters:
       - delayed_on: ${slow_delayed_on}
       - delayed_off: ${slow_delayed_off}
