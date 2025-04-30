@@ -138,11 +138,11 @@ sensor:
     id: bed_sensor_${sensor_id}_delta
     icon: mdi:gauge
     filters:
-      lambda: |-
-        static float last_val = 0;
-        float delta = x - last_val;
-        last_vale = x;
-        return delta;
+      - lambda: |-
+          static float last_val = 0;
+          float delta = x - last_val;
+          last_vale = x;
+          return delta;
       - or:
           - delta: ${reporting_delta}             # only send if sensor changes by `reporting_delta` (eliminate sensor noise)
           - throttle: ${reporting_interval_max}   # but still update every `reporting_interval_max`
