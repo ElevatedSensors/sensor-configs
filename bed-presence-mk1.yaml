@@ -41,6 +41,7 @@ packages:
   remote_package:
     url: https://github.com/ElevatedSensors/sensor-configs
     ref: main
+    refresh: 1s
     files:
       - 'bed-presence-mk1/base.yaml'
       - 'common/bluetooth-proxy.yaml'
