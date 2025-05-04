@@ -107,9 +107,11 @@ binary_sensor:
 sensor:
   - platform: pulse_counter
     pin: ${sensor_gpio}
-    id: bed_sensor_${sensor_id}_raw
+    name: ${sensor_name} Pressure
+    id: bed_sensor_${sensor_id}
     update_interval: 0.5s
     unit_of_measurement: '%'
+    icon: mdi:gauge
     filters:
       - lambda: |-                                # scale pulses/minute to 0%->100%
           float cal_0 = id(full_range).state ? 0 : ${calibrate_0};
@@ -120,29 +122,9 @@ sensor:
           return val/range;
       - clamp:
           min_value: 0
-  - platform: copy
-    source_id: bed_sensor_${sensor_id}_raw
-    name: ${sensor_name} Pressure
-    id: bed_sensor_${sensor_id}
-    icon: mdi:gauge
-    filters:
       - sliding_window_moving_average:
           window_size: ${averaging_window_samples}
           send_every: 1
-      - or:
-          - delta: ${reporting_delta}             # only send if sensor changes by `reporting_delta` (eliminate sensor noise)
-          - throttle: ${reporting_interval_max}   # but still update every `reporting_interval_max`
-  - platform: copy
-    source_id: bed_sensor_${sensor_id}_raw
-    name: ${sensor_name} Pressure Delta
-    id: bed_sensor_${sensor_id}_delta
-    icon: mdi:gauge
-    filters:
-      - lambda: |-
-          static float last_val = 0;
-          float delta = x - last_val;
-          last_val = x;
-          return delta;
       - or:
           - delta: ${reporting_delta}             # only send if sensor changes by `reporting_delta` (eliminate sensor noise)
           - throttle: ${reporting_interval_max}   # but still update every `reporting_interval_max`
