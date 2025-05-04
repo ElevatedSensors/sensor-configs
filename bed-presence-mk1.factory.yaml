@@ -4,7 +4,7 @@ packages:
 esphome:
   project:
     name: ElevatedSensors.BedPresenceMk1
-    version: 2025.4.0
+    version: 2025.5.0
 
 # Allow ESPHome Adoption
 dashboard_import:
