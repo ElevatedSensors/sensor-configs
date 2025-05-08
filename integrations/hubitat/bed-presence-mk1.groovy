@@ -57,7 +57,7 @@ metadata {
     }
 }
 
-public void initialize() {
+void initialize() {
     // API library command to open socket to device, it will automatically reconnect if needed
     openSocket()
     
@@ -66,46 +66,46 @@ public void initialize() {
     }
 }
 
-public void installed() {
+void installed() {
     log.info "${device} driver installed"
 }
 
-public void logsOff() {
+void logsOff() {
     espHomeSubscribeLogs(LOG_LEVEL_INFO, false) // disable device logging
     device.updateSetting('logEnable', false)
     device.updateSetting('logDriverEnable', false)
     log.info "${device} debug logging disabled"
 }
 
-public void refresh() {
+void refresh() {
     log.info "${device} refresh"
     state.clear()
     state.requireRefresh = true
     espHomeDeviceInfoRequest()
 }
 
-public void updated() {
+void updated() {
     log.info "${device} driver configuration updated"
     initialize()
     
     //runIn(5, configure)
 }
 
-public void uninstalled() {
+void uninstalled() {
     closeSocket('driver uninstalled') // make sure the socket is closed when uninstalling
     log.info "${device} driver uninstalled"
 }
 
-public void fullRangeOn() {
+void fullRangeOn() {
     espHomeSwitchCommand(key: state['full_range'] as Long, state: true)
 }
 
-public void fullRangeOff() {
+void fullRangeOff() {
     espHomeSwitchCommand(key: state['full_range'] as Long, state: false)
 }
 
 // the parse method is invoked by the API library when messages are received
-public void parse(Map message) {
+void parse(final Map message) {
     if (logDriverEnable) { log.debug "ESPHome received: ${message}" }
 
     switch (message.type) {
