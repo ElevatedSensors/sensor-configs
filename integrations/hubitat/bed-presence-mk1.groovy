@@ -44,6 +44,7 @@ metadata {
         //calibrateLeftUnoccupied
         //calibrateRightOccupied
         //calibrateRightUnoccupied
+        //restart
     }
 
     preferences {
@@ -117,11 +118,11 @@ void uninstalled() {
 }
 
 void fullRangeOn() {
-    espHomeSwitchCommand(key: state['full_range'] as Long, state: true)
+    espHomeSwitchCommand(key: state['full_range'], state: true)
 }
 
 void fullRangeOff() {
-    espHomeSwitchCommand(key: state['full_range'] as Long, state: false)
+    espHomeSwitchCommand(key: state['full_range'], state: false)
 }
 
 // the parse method is invoked by the API library when messages are received
@@ -148,8 +149,17 @@ private void parseState(final Map message) {
     if (message.state != null) {
         final Long key = message.key as Long
         switch (key) {
+            case state['bed_occupied_either']:
+                updateCurrentState('bed_occupied_either', message.state ? 'on' : 'off')
+                break
+            case state['bed_occupied_both']:
+                updateCurrentState('bed_occupied_both', message.state ? 'on' : 'off')
+                break
             case state['bed_occupied_left']:
-                log.debug "Got bed_occupied_left"
+                updateCurrentState('bed_occupied_left', message.state ? 'on' : 'off')
+                break
+            case state['bed_occupied_right']:
+                updateCurrentState('bed_occupied_right', message.state ? 'on' : 'off')
                 break
             case state['full_range']:
                 updateCurrentState('full_range', message.state ? 'on' : 'off')
