@@ -18,12 +18,32 @@ metadata {
 
         // attribute populated by ESPHome API Library automatically
         attribute 'networkStatus', 'enum', [ 'connecting', 'online', 'offline' ]
+        attribute 'bed_occupied_both', 'enum', [ 'present', 'not present' ]
+        attribute 'bed_occupied_either', 'enum', [ 'present', 'not present' ]
         attribute 'bed_occupied_left', 'enum', [ 'present', 'not present' ]
         attribute 'bed_occupied_right', 'enum', [ 'present', 'not present' ]
+        //left_pressure
+        //right_pressure
         attribute 'full_range', 'enum', [ 'on', 'off' ]
+        //response_speed
+        
+        //Controllable Numbers
+        //left_trigger_pressure
+        //right_trigger_pressure
+        //left_occupied_pressure
+        //left_unoccupied_pressure
+        //right_occupied_pressure
+        //right_unoccupied_pressure
+        //uptime
+        //wifi_signal_db
+        //wifi_signal_percent
         
         command 'fullRangeOn'
         command 'fullRangeOff'
+        //calibrateLeftOccupied
+        //calibrateLeftUnoccupied
+        //calibrateRightOccupied
+        //calibrateRightUnoccupied
     }
 
     preferences {
