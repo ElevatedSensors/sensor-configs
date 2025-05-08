@@ -29,20 +29,13 @@ metadata {
         //attribute 'full_range', 'enum', [ 'on', 'off' ]
         //response_speed
         
-       //IGNORE
-        //left_occupied_pressure
-        //left_unoccupied_pressure
-        //right_occupied_pressure
-        //right_unoccupied_pressure
-        //uptime
-        
         //command 'fullRangeOn'
         //command 'fullRangeOff'
-        //calibrateLeftOccupied
-        //calibrateLeftUnoccupied
-        //calibrateRightOccupied
-        //calibrateRightUnoccupied
-        //restart
+        command 'calibrateLeftOccupied'
+        command 'calibrateLeftUnoccupied'
+        command 'calibrateRightOccupied'
+        command 'calibrateRightUnoccupied'
+        command 'restart'
     }
     
     //preferences
@@ -126,6 +119,26 @@ void uninstalled() {
 //void fullRangeOff() {
 //    espHomeSwitchCommand(key: state['full_range'], state: false)
 //}
+
+void calibrateLeftOccupied() {
+    espHomeButtonCommand(key: state['calibrate_left_occupied'])
+}
+
+void calibrateLeftUnoccupied() {
+    espHomeButtonCommand(key: state['calibrate_left_unoccupied'])
+}
+
+void calibrateRightOccupied() {
+    espHomeButtonCommand(key: state['calibrate_right_occupied'])
+}
+
+void calibrateRightUnoccupied() {
+    espHomeButtonCommand(key: state['calibrate_right_unoccupied'])
+}
+
+void restart() {
+    espHomeButtonCommand(key: state['restart'])
+}
 
 // the parse method is invoked by the API library when messages are received
 void parse(final Map message) {
