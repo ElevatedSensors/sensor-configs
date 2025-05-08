@@ -195,14 +195,18 @@ private void parseState(final Map message) {
             case state['uptime']:
                 updateCurrentState('uptime', message.state as Integer, 's')
                 break
+            case state['wifi_signal_db']:
+                updateCurrentState('rssi', message.state as Integer, 'dBm')
+                break
             case state['wifi_signal_percent']:
-                updateCurrentState('wifi_signal_percent', message.state as Double, '%')
+                updateCurrentState('wifi_signal_percent', message.state as Integer, '%')
+                break
             default:
-                log.debug "Hit default"
+                if (logDriverEnable) { log.debug "Key does not have associate case. Message: ${message}" }
                 break
         }
     } else {
-        if (logDriverEnable) { log.debug "State message has no state, skipping. Message: ${message}" }
+        if (logDriverEnable) { log.debug "State is null, skipping. Message: ${message}" }
     }
 }
 
