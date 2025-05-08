@@ -16,14 +16,13 @@ metadata {
         capability 'Initialize'
         capability 'PresenceSensor'
 
-        // attribute populated by ESPHome API Library automatically
-        attribute 'networkStatus', 'enum', [ 'connecting', 'online', 'offline' ]
+        attribute 'networkStatus', 'enum', [ 'connecting', 'online', 'offline' ] //auto populated by ESPHome API Library
         attribute 'bed_occupied_both', 'enum', [ 'present', 'not present' ]
         attribute 'bed_occupied_either', 'enum', [ 'present', 'not present' ]
         attribute 'bed_occupied_left', 'enum', [ 'present', 'not present' ]
         attribute 'bed_occupied_right', 'enum', [ 'present', 'not present' ]
-        //left_pressure
-        //right_pressure
+        attribute 'left_pressure', 'decimal'
+        attribute 'right_pressure', 'decimal'
         attribute 'full_range', 'enum', [ 'on', 'off' ]
         //response_speed
         
@@ -164,6 +163,12 @@ private void parseState(final Map message) {
             case state['full_range']:
                 updateCurrentState('full_range', message.state ? 'on' : 'off')
                 break
+            case state['left_pressure']:
+                updateCurrentState('left_pressure', message.state as Double, '%')
+                break
+            case state['right_pressure']:
+                updateCurrentState('right_pressure', message.state as Double, '%')
+                break
             case state['uptime']:
                 log.debug "Got uptime"
                 break
@@ -176,10 +181,11 @@ private void parseState(final Map message) {
     }
 }
 
-private void updateCurrentState(final String attribute, final Object value, final String unit = null, final String type = null) {
+private void updateCurrentState(final String attribute, final Object value, final String unit = null) {
     final String descriptionText = "${attribute} was set to ${value}${unit ?: ''}"
     if (device.currentValue(attribute) != value) {
-        sendEvent(name: attribute, value: value, unit: unit, type: type, descriptionText: descriptionText)
+        //sendEvent(name: attribute, value: value, unit: unit, type: type, descriptionText: descriptionText)
+        sendEvent(name: attribute, value: value, unit: unit, descriptionText: descriptionText, isStateChange: true)
         if (settings.logTextEnable) { log.info descriptionText }
     }
 }
