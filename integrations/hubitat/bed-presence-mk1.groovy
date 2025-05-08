@@ -14,37 +14,41 @@ metadata {
         capability 'Refresh'
         capability 'SignalStrength'
         capability 'Initialize'
-        capability 'PresenceSensor'
+        //capability 'PresenceSensor'
 
-        attribute 'networkStatus', 'enum', [ 'connecting', 'online', 'offline' ] //auto populated by ESPHome API Library
-        attribute 'bed_occupied_both', 'enum', [ 'present', 'not present' ]
-        attribute 'bed_occupied_either', 'enum', [ 'present', 'not present' ]
-        attribute 'bed_occupied_left', 'enum', [ 'present', 'not present' ]
-        attribute 'bed_occupied_right', 'enum', [ 'present', 'not present' ]
+        attribute 'networkStatus', 'enum', [ 'connecting', 'online', 'offline' ]   // auto populated by ESPHome API Library
+        attribute 'bed_occupied_both', 'enum', [ 'present', 'not present' ]        // consider child devices for'PresenceSensor's with 'presence' attribute 
+        attribute 'bed_occupied_either', 'enum', [ 'present', 'not present' ]      // *
+        attribute 'bed_occupied_left', 'enum', [ 'present', 'not present' ]        // *
+        attribute 'bed_occupied_right', 'enum', [ 'present', 'not present' ]       // *
         attribute 'left_pressure', 'decimal'
         attribute 'right_pressure', 'decimal'
-        attribute 'full_range', 'enum', [ 'on', 'off' ]
+        attribute 'wifi_signal_percent', 'decimal'
+        attribute 'uptime', 'number'
+        
+        //attribute 'full_range', 'enum', [ 'on', 'off' ]
         //response_speed
         
-        //Controllable Numbers
-        //left_trigger_pressure
-        //right_trigger_pressure
+       //IGNORE
         //left_occupied_pressure
         //left_unoccupied_pressure
         //right_occupied_pressure
         //right_unoccupied_pressure
         //uptime
-        //wifi_signal_db
-        //wifi_signal_percent
         
-        command 'fullRangeOn'
-        command 'fullRangeOff'
+        //command 'fullRangeOn'
+        //command 'fullRangeOff'
         //calibrateLeftOccupied
         //calibrateLeftUnoccupied
         //calibrateRightOccupied
         //calibrateRightUnoccupied
         //restart
     }
+    
+    //preferences
+    //full_range
+    //left_trigger_pressure
+    //right_trigger_pressure
 
     preferences {
         input name: 'ipAddress',          // required setting for API library
@@ -107,8 +111,6 @@ void refresh() {
 void updated() {
     log.info "${device} driver configuration updated"
     initialize()
-    
-    //runIn(5, configure)
 }
 
 void uninstalled() {
@@ -116,13 +118,14 @@ void uninstalled() {
     log.info "${device} driver uninstalled"
 }
 
-void fullRangeOn() {
-    espHomeSwitchCommand(key: state['full_range'], state: true)
-}
-
-void fullRangeOff() {
-    espHomeSwitchCommand(key: state['full_range'], state: false)
-}
+// commands
+//void fullRangeOn() {
+//    espHomeSwitchCommand(key: state['full_range'], state: true)
+//}
+//
+//void fullRangeOff() {
+//    espHomeSwitchCommand(key: state['full_range'], state: false)
+//}
 
 // the parse method is invoked by the API library when messages are received
 void parse(final Map message) {
@@ -144,6 +147,7 @@ void parse(final Map message) {
     }
 }
 
+// internal helper functions
 private void parseState(final Map message) {
     if (message.state != null) {
         final Long key = message.key as Long
@@ -160,18 +164,26 @@ private void parseState(final Map message) {
             case state['bed_occupied_right']:
                 updateCurrentState('bed_occupied_right', message.state ? 'on' : 'off')
                 break
-            case state['full_range']:
-                updateCurrentState('full_range', message.state ? 'on' : 'off')
-                break
+            //case state['full_range']:
+            //    updateCurrentState('full_range', message.state ? 'on' : 'off')
+            //    break
             case state['left_pressure']:
                 updateCurrentState('left_pressure', message.state as Double, '%')
                 break
             case state['right_pressure']:
                 updateCurrentState('right_pressure', message.state as Double, '%')
                 break
-            case state['uptime']:
-                log.debug "Got uptime"
+            case state['left_trigger_pressure']:
+                updateCurrentState('left_trigger_pressure', message.state as Double, '%')
                 break
+            case state['right_trigger_pressure']:
+                updateCurrentState('right_trigger_pressure', message.state as Double, '%')
+                break
+            case state['uptime']:
+                updateCurrentState('uptime', message.state as Integer, 's')
+                break
+            case state['wifi_signal_percent']:
+                updateCurrentState('wifi_signal_percent', message.state as Double, '%')
             default:
                 log.debug "Hit default"
                 break
