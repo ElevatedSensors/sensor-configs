@@ -125,11 +125,14 @@ void parse(final Map message) {
 }
 
 private void parseState(final Map message) {
-    if (message.hasState) {
+    if (message.state != null) {
         final Long key = message.key as Long
         switch (key) {
             case state['bed_occupied_left']:
                 log.debug "Got bed_occupied_left"
+                break
+            case state['full_range']:
+                updateCurrentState('full_range', message.state ? 'on' : 'off')
                 break
             case state['uptime']:
                 log.debug "Got uptime"
@@ -139,7 +142,7 @@ private void parseState(final Map message) {
                 break
         }
     } else {
-        if (logDriverEnable) { log.debug "State message has no state, skipping" }
+        if (logDriverEnable) { log.debug "State message has no state, skipping. Message: ${message}" }
     }
 }
 
