@@ -16,15 +16,15 @@ metadata {
         capability 'Initialize'
         //capability 'PresenceSensor'
 
-        attribute 'networkStatus', 'enum', [ 'connecting', 'online', 'offline' ]   // auto populated by ESPHome API Library
-        attribute 'bed_occupied_both', 'enum', [ 'present', 'not present' ]        // consider child devices for'PresenceSensor's with 'presence' attribute 
-        attribute 'bed_occupied_either', 'enum', [ 'present', 'not present' ]      // *
-        attribute 'bed_occupied_left', 'enum', [ 'present', 'not present' ]        // *
-        attribute 'bed_occupied_right', 'enum', [ 'present', 'not present' ]       // *
-        attribute 'left_pressure', 'decimal'
-        attribute 'right_pressure', 'decimal'
-        attribute 'wifi_signal_percent', 'decimal'
-        attribute 'uptime', 'number'
+        attribute 'networkStatus', 'enum', [ 'connecting', 'online', 'offline' ] // auto populated by ESPHome API Library
+        attribute 'bedOccupiedBoth', 'enum', [ 'present', 'not present' ]        // consider child devices for'PresenceSensor's with 'presence' attribute 
+        attribute 'bedOccupiedEither', 'enum', [ 'present', 'not present' ]      // *
+        attribute 'bedOccupiedLeft', 'enum', [ 'present', 'not present' ]        // *
+        attribute 'bedOccupiedRight', 'enum', [ 'present', 'not present' ]       // *
+        attribute 'leftPressure', 'decimal'
+        attribute 'rightPressure', 'decimal'
+        attribute 'wifiSignalPercent', 'decimal'
+        attribute 'uptimeSeconds', 'number'
         
         //attribute 'full_range', 'enum', [ 'on', 'off' ]
         //response_speed
@@ -166,40 +166,34 @@ private void parseState(final Map message) {
         final Long key = message.key as Long
         switch (key) {
             case state['bed_occupied_either']:
-                updateCurrentState('bed_occupied_either', message.state ? 'on' : 'off')
+                updateCurrentState('bedOccupiedEither', message.state ? 'on' : 'off')
                 break
             case state['bed_occupied_both']:
-                updateCurrentState('bed_occupied_both', message.state ? 'on' : 'off')
+                updateCurrentState('bedOccupiedBoth', message.state ? 'on' : 'off')
                 break
             case state['bed_occupied_left']:
-                updateCurrentState('bed_occupied_left', message.state ? 'on' : 'off')
+                updateCurrentState('bedOccupiedLeft', message.state ? 'on' : 'off')
                 break
             case state['bed_occupied_right']:
-                updateCurrentState('bed_occupied_right', message.state ? 'on' : 'off')
+                updateCurrentState('bedOccupiedRight', message.state ? 'on' : 'off')
                 break
             //case state['full_range']:
             //    updateCurrentState('full_range', message.state ? 'on' : 'off')
             //    break
             case state['left_pressure']:
-                updateCurrentState('left_pressure', message.state as Double, '%')
+                updateCurrentState('leftPressure', message.state as Double, '%')
                 break
             case state['right_pressure']:
-                updateCurrentState('right_pressure', message.state as Double, '%')
-                break
-            case state['left_trigger_pressure']:
-                updateCurrentState('left_trigger_pressure', message.state as Double, '%')
-                break
-            case state['right_trigger_pressure']:
-                updateCurrentState('right_trigger_pressure', message.state as Double, '%')
+                updateCurrentState('rightPressure', message.state as Double, '%')
                 break
             case state['uptime']:
-                updateCurrentState('uptime', message.state as Integer, 's')
+                updateCurrentState('uptimeSeconds', message.state as Integer, 's')
                 break
             case state['wifi_signal_db']:
                 updateCurrentState('rssi', message.state as Integer, 'dBm')
                 break
             case state['wifi_signal_percent']:
-                updateCurrentState('wifi_signal_percent', message.state as Integer, '%')
+                updateCurrentState('wifiSignalPercent', message.state as Integer, '%')
                 break
             default:
                 if (logDriverEnable) { log.debug "Key does not have associate case. Message: ${message}" }
