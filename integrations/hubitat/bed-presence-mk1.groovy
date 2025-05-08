@@ -115,8 +115,6 @@ void parse(final Map message) {
 
         case 'entity':
             state[message.objectId] = message.key as Long
-            
-            //parseEntityMessage(message)
             break
 
         case 'state':
@@ -126,9 +124,23 @@ void parse(final Map message) {
     }
 }
 
-private void parseState(final Map Message) {
-    log.debug "called parseState"
-    log.debug "${state['bed_occupied_left']}"
+private void parseState(final Map message) {
+    if (message.hasState) {
+        final Long key = message.key as Long
+        switch (key) {
+            case state['bed_occupied_left']:
+                log.debug "Got bed_occupied_left"
+                break
+            case state['uptime']:
+                log.debug "Got uptime"
+                break
+            default:
+                log.debug "Hit default"
+                break
+        }
+    } else {
+        if (logDriverEnable) { log.debug "State message has no state, skipping" }
+    }
 }
 
 private void updateCurrentState(final String attribute, final Object value, final String unit = null, final String type = null) {
