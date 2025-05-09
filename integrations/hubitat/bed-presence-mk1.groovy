@@ -14,7 +14,6 @@ metadata {
         capability 'Refresh'
         capability 'SignalStrength'
         capability 'Initialize'
-        capability 'Configuration'
         //capability 'PresenceSensor'
 
         attribute 'networkStatus', 'enum', [ 'connecting', 'online', 'offline' ] // auto populated by ESPHome API Library
@@ -135,33 +134,10 @@ void updated() {
     }
 }
 
-void configure() {
-    log.debug "////////////////////////////"
-    log.debug "Sending left_trigger_pressure = ${settings['leftTriggerPressure']}"
-    espHomeNumberCommand(key: state['left_trigger_pressure'], state: settings['leftTriggerPressure'] as Double)
-    log.debug "Done"
-    //not found function?
-    
-    // send preference updates to HA
-    //leftTriggerPressure
-    //rightTriggerPressure
-    //fullRange
-    //sensorResponseSpeed
-}
-
 void uninstalled() {
     closeSocket('driver uninstalled') // make sure the socket is closed when uninstalling
     log.info "${device} driver uninstalled"
 }
-
-// commands
-//void fullRangeOn() {
-//    espHomeSwitchCommand(key: state['full_range'], state: true)
-//}
-//
-//void fullRangeOff() {
-//    espHomeSwitchCommand(key: state['full_range'], state: false)
-//}
 
 void calibrateLeftOccupied() {
     espHomeButtonCommand(key: state['calibrate_left_occupied'])
@@ -238,10 +214,10 @@ private void parseState(final Map message) {
                 break
             // preferences
             case state['left_trigger_pressure']:
-                updatePreference('leftTriggerPressure', message.state)
+                updatePreference('leftTriggerPressure', round2(message.state))
                 break
             case state['right_trigger_pressure']:
-                updatePreference('rightTriggerPressure', message.state)
+                updatePreference('rightTriggerPressure', round2(message.state))
                 break
             case state['full_range']:
                 updatePreference('fullRange', message.state)
@@ -259,7 +235,7 @@ private void parseState(final Map message) {
 }
 
 private void updateCurrentState(final String attribute, final Object value, final String unit = null) {
-    final String descriptionText = "$Current state {attribute} was set to ${value}${unit ?: ''}"
+    final String descriptionText = "Current state ${attribute} was set to ${value}${unit ?: ''}"
     if (device.currentValue(attribute) != value) {
         //sendEvent(name: attribute, value: value, unit: unit, type: type, descriptionText: descriptionText)
         sendEvent(name: attribute, value: value, unit: unit, descriptionText: descriptionText, isStateChange: true)
