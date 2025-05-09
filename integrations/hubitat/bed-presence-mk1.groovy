@@ -1,5 +1,5 @@
 /**
- * Adapted from https://github.com/bradsjm/hubitat-public/blob/main/ESPHome/ESPHome-ContactSensor.groovy (MIT License, 2022)
+ * Adapted from examples at https://github.com/bradsjm/hubitat-public/blob/main/ESPHome (MIT License, 2022)
  */
 
 metadata {
