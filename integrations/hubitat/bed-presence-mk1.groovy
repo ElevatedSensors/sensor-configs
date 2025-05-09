@@ -67,27 +67,27 @@ metadata {
                 type: 'decimal',
                 title: 'Left Trigger Pressure',
                 description: 'test description',
-                required: false,
+                required: true,
                 defaultValue: 50.0,
                 range: '0..120'
         
         input name: 'rightTriggerPressure',
                 type: 'decimal',
                 title: 'Right Trigger Pressure',
-                required: false,
+                required: true,
                 defaultValue: 50.0
         
         input name: 'fullRange',
                 type: 'bool',
                 title: 'Enable Full Range',
-                required: false,
+                required: true,
                 defaultValue: false
         
         input name: 'responseSpeed',
                 type: 'enum',
                 title: 'Sensor Response Speed',
                 options: ['Fast', 'Normal', 'Slow'],
-                required: false,
+                required: true,
                 defaultValue: 'Normal'
     }
 }
@@ -131,6 +131,7 @@ void updated() {
         espHomeNumberCommand(key: state['left_trigger_pressure'], state: settings['leftTriggerPressure'] as Double)
         espHomeNumberCommand(key: state['right_trigger_pressure'], state: settings['rightTriggerPressure'] as Double)
         espHomeSwitchCommand(key: state['full_range'], state: settings['fullRange'])
+        espHomeSelectCommand(key: state['response_speed'], state: settings['responseSpeed'] as String)
     }
 }
 
