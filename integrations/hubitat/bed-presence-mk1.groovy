@@ -17,15 +17,15 @@ metadata {
         //capability 'PresenceSensor'
 
         attribute 'networkStatus', 'enum', [ 'connecting', 'online', 'offline' ] // auto populated by ESPHome API Library
-        attribute 'bedOccupiedBoth', 'enum', [ 'present', 'not present' ]        // consider child devices for'PresenceSensor's with 'presence' attribute 
-        attribute 'bedOccupiedEither', 'enum', [ 'present', 'not present' ]      // *
-        attribute 'bedOccupiedLeft', 'enum', [ 'present', 'not present' ]        // *
-        attribute 'bedOccupiedRight', 'enum', [ 'present', 'not present' ]       // *
+        attribute 'bedOccupiedBoth', 'enum', [ 'present', 'not present' ]
+        attribute 'bedOccupiedEither', 'enum', [ 'present', 'not present' ]
+        attribute 'bedOccupiedLeft', 'enum', [ 'present', 'not present' ]
+        attribute 'bedOccupiedRight', 'enum', [ 'present', 'not present' ]
         attribute 'leftPressure', 'decimal'
         attribute 'rightPressure', 'decimal'
         attribute 'wifiSignalPercent', 'decimal'
         attribute 'uptimeSeconds', 'number'
-        
+
         command 'calibrateLeftOccupied'
         command 'calibrateLeftUnoccupied'
         command 'calibrateRightOccupied'
@@ -34,55 +34,55 @@ metadata {
     }
 
     preferences {
-        input name: 'ipAddress',          // required setting for API library
+        input name: 'ipAddress',          	// required setting for API library
                 type: 'text',
                 title: 'Device IP Address',
                 required: true
 
-        input name: 'password',           // optional setting for API library
+        input name: 'password',           	// optional setting for API library
                 type: 'text',
                 title: 'Device Password <i>(if required)</i>',
                 required: false
 
-        input name: 'logTextEnable',      // if enabled, the driver will log sendEvent details
+        input name: 'logTextEnable',      	// if enabled, the driver will log sendEvent details
                 type: 'bool',
                 title: 'Enable descriptionText logging',
                 required: false,
                 defaultValue: true
-        
-        input name: 'logDriverEnable',    // if enabled the driver will log debug details
+
+        input name: 'logDriverEnable',    	// if enabled the driver will log debug details
                 type: 'bool',
                 title: 'Enable driver DEBUG logging',
                 required: false,
                 defaultValue: false
-        
-        input name: 'logEnable',          // if enabled the library will log ESPHome debug details
+
+        input name: 'logEnable',          	// if enabled the library will log ESPHome debug details
                 type: 'bool',
                 title: 'Enable ESPHome DEBUG logging',
                 required: false,
                 defaultValue: false
-        
-        input name: 'leftTriggerPressure',
+
+        input name: 'leftTriggerPressure',	// the pressure at which bed_occupied_left will register 'present'
                 type: 'decimal',
                 title: 'Left Trigger Pressure',
-                description: 'test description',
                 required: true,
                 defaultValue: 50.0,
                 range: '0..120'
-        
-        input name: 'rightTriggerPressure',
+
+        input name: 'rightTriggerPressure',	// the pressure at which bed_occupied_right will register 'present'
                 type: 'decimal',
                 title: 'Right Trigger Pressure',
                 required: true,
-                defaultValue: 50.0
-        
-        input name: 'fullRange',
+                defaultValue: 50.0,
+                range: '0..120'
+
+        input name: 'fullRange',         	// use the full range of the sensor
                 type: 'bool',
                 title: 'Enable Full Range',
                 required: true,
                 defaultValue: false
-        
-        input name: 'responseSpeed',
+
+        input name: 'responseSpeed',        // control how fast values update (trade off between speed and false negatives)
                 type: 'enum',
                 title: 'Sensor Response Speed',
                 options: ['Fast', 'Normal', 'Slow'],
@@ -95,7 +95,7 @@ void initialize() {
     // API library command to open socket to device, it will automatically reconnect if needed
     openSocket()
     state.currentIp = settings.ipAddress
-    
+
     if (logEnable || logDriverEnable) {
         runIn(1800, 'logsOff')
     }
@@ -173,7 +173,6 @@ void parse(final Map message) {
             break
 
         case 'state':
-            //parseStateMessage(message)
             parseState(message)
             break
     }
