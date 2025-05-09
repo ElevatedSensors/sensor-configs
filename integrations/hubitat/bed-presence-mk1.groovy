@@ -27,22 +27,12 @@ metadata {
         attribute 'wifiSignalPercent', 'decimal'
         attribute 'uptimeSeconds', 'number'
         
-        //attribute 'full_range', 'enum', [ 'on', 'off' ]
-        //response_speed
-        
-        //command 'fullRangeOn'
-        //command 'fullRangeOff'
         command 'calibrateLeftOccupied'
         command 'calibrateLeftUnoccupied'
         command 'calibrateRightOccupied'
         command 'calibrateRightUnoccupied'
         command 'restart'
     }
-    
-    //preferences
-    //full_range
-    //left_trigger_pressure
-    //right_trigger_pressure
 
     preferences {
         input name: 'ipAddress',          // required setting for API library
@@ -72,6 +62,7 @@ metadata {
                 title: 'Enable ESPHome DEBUG logging',
                 required: false,
                 defaultValue: false
+        
         input name: 'leftTriggerPressure',
                 type: 'decimal',
                 title: 'Left Trigger Pressure',
@@ -79,16 +70,19 @@ metadata {
                 required: false,
                 defaultValue: 50.0,
                 range: '0..120'
+        
         input name: 'rightTriggerPressure',
                 type: 'decimal',
                 title: 'Right Trigger Pressure',
                 required: false,
                 defaultValue: 50.0
+        
         input name: 'fullRange',
                 type: 'bool',
                 title: 'Enable Full Range',
                 required: false,
                 defaultValue: false
+        
         input name: 'responseSpeed',
                 type: 'enum',
                 title: 'Sensor Response Speed',
@@ -101,6 +95,7 @@ metadata {
 void initialize() {
     // API library command to open socket to device, it will automatically reconnect if needed
     openSocket()
+    state.currentIp = settings.ipAddress
     
     if (logEnable || logDriverEnable) {
         runIn(1800, 'logsOff')
@@ -127,13 +122,24 @@ void refresh() {
 
 void updated() {
     log.info "${device} driver configuration updated"
-    initialize()
-    
-    runIn(5, configurePreferences)
+    if (settings.ipAddress != state.currentIp) {
+        log.info "New ipAddress detected for ${device}, initializing connection"
+        state.currentIp = settings.ipAddress
+        initialize()
+    } else {
+        log.info "Configuring preferences on ${device}"
+        espHomeNumberCommand(key: state['left_trigger_pressure'], state: settings['leftTriggerPressure'] as Double)
+        espHomeNumberCommand(key: state['right_trigger_pressure'], state: settings['rightTriggerPressure'] as Double)
+        espHomeSwitchCommand(key: state['full_range'], state: settings['fullRange'])
+    }
 }
 
 void configure() {
-    espHomeNumberCommand(state['left_trigger_pressure'], settings['leftTriggerPressure'] as Double)
+    log.debug "////////////////////////////"
+    log.debug "Sending left_trigger_pressure = ${settings['leftTriggerPressure']}"
+    espHomeNumberCommand(key: state['left_trigger_pressure'], state: settings['leftTriggerPressure'] as Double)
+    log.debug "Done"
+    //not found function?
     
     // send preference updates to HA
     //leftTriggerPressure
@@ -201,6 +207,7 @@ private void parseState(final Map message) {
     if (message.state != null) {
         final Long key = message.key as Long
         switch (key) {
+            // current states
             case state['bed_occupied_either']:
                 updateCurrentState('bedOccupiedEither', message.state ? 'on' : 'off')
                 break
@@ -213,9 +220,6 @@ private void parseState(final Map message) {
             case state['bed_occupied_right']:
                 updateCurrentState('bedOccupiedRight', message.state ? 'on' : 'off')
                 break
-            //case state['full_range']:
-            //    updateCurrentState('full_range', message.state ? 'on' : 'off')
-            //    break
             case state['left_pressure']:
                 updateCurrentState('leftPressure', message.state as Double, '%')
                 break
@@ -231,24 +235,17 @@ private void parseState(final Map message) {
             case state['wifi_signal_percent']:
                 updateCurrentState('wifiSignalPercent', message.state as Integer, '%')
                 break
+            // preferences
             case state['left_trigger_pressure']:
-                //update preference value
-                //device.updateSetting('leftTriggerPressure', message.state)
                 updatePreference('leftTriggerPressure', message.state)
                 break
             case state['right_trigger_pressure']:
-                //update preference value
-                //device.updateSetting('rightTriggerPressure', message.state)
                 updatePreference('rightTriggerPressure', message.state)
                 break
             case state['full_range']:
-                //update preference value
-                //device.updateSetting('fullRange', message.state)
                 updatePreference('fullRange', message.state)
                 break
             case state['response_speed']:
-                //update preference value
-                //device.updateSetting('responseSpeed', message.state)
                 updatePreference('responseSpeed', [value: message.state, type: 'enum'])
                 break
             default:
