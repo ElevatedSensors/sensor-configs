@@ -14,6 +14,7 @@ metadata {
         capability 'Refresh'
         capability 'SignalStrength'
         capability 'Initialize'
+        capability 'Configuration'
         //capability 'PresenceSensor'
 
         attribute 'networkStatus', 'enum', [ 'connecting', 'online', 'offline' ] // auto populated by ESPHome API Library
@@ -55,22 +56,45 @@ metadata {
                 required: false
 
         input name: 'logTextEnable',      // if enabled, the driver will log sendEvent details
-              type: 'bool',
-              title: 'Enable descriptionText logging',
-              required: false,
-              defaultValue: true
+                type: 'bool',
+                title: 'Enable descriptionText logging',
+                required: false,
+                defaultValue: true
         
         input name: 'logDriverEnable',    // if enabled the driver will log debug details
-              type: 'bool',
-              title: 'Enable driver DEBUG logging',
-              required: false,
-              defaultValue: false
+                type: 'bool',
+                title: 'Enable driver DEBUG logging',
+                required: false,
+                defaultValue: false
         
         input name: 'logEnable',          // if enabled the library will log ESPHome debug details
                 type: 'bool',
                 title: 'Enable ESPHome DEBUG logging',
                 required: false,
                 defaultValue: false
+        input name: 'leftTriggerPressure',
+                type: 'decimal',
+                title: 'Left Trigger Pressure',
+                description: 'test description',
+                required: false,
+                defaultValue: 50.0,
+                range: '0..120'
+        input name: 'rightTriggerPressure',
+                type: 'decimal',
+                title: 'Right Trigger Pressure',
+                required: false,
+                defaultValue: 50.0
+        input name: 'fullRange',
+                type: 'bool',
+                title: 'Enable Full Range',
+                required: false,
+                defaultValue: false
+        input name: 'responseSpeed',
+                type: 'enum',
+                title: 'Sensor Response Speed',
+                options: ['Fast', 'Normal', 'Slow'],
+                required: false,
+                defaultValue: 'Normal'
     }
 }
 
@@ -104,6 +128,18 @@ void refresh() {
 void updated() {
     log.info "${device} driver configuration updated"
     initialize()
+    
+    runIn(5, configurePreferences)
+}
+
+void configure() {
+    espHomeNumberCommand(state['left_trigger_pressure'], settings['leftTriggerPressure'] as Double)
+    
+    // send preference updates to HA
+    //leftTriggerPressure
+    //rightTriggerPressure
+    //fullRange
+    //sensorResponseSpeed
 }
 
 void uninstalled() {
@@ -195,6 +231,26 @@ private void parseState(final Map message) {
             case state['wifi_signal_percent']:
                 updateCurrentState('wifiSignalPercent', message.state as Integer, '%')
                 break
+            case state['left_trigger_pressure']:
+                //update preference value
+                //device.updateSetting('leftTriggerPressure', message.state)
+                updatePreference('leftTriggerPressure', message.state)
+                break
+            case state['right_trigger_pressure']:
+                //update preference value
+                //device.updateSetting('rightTriggerPressure', message.state)
+                updatePreference('rightTriggerPressure', message.state)
+                break
+            case state['full_range']:
+                //update preference value
+                //device.updateSetting('fullRange', message.state)
+                updatePreference('fullRange', message.state)
+                break
+            case state['response_speed']:
+                //update preference value
+                //device.updateSetting('responseSpeed', message.state)
+                updatePreference('responseSpeed', [value: message.state, type: 'enum'])
+                break
             default:
                 if (logDriverEnable) { log.debug "Key does not have associate case. Message: ${message}" }
                 break
@@ -211,6 +267,12 @@ private void updateCurrentState(final String attribute, final Object value, fina
         sendEvent(name: attribute, value: value, unit: unit, descriptionText: descriptionText, isStateChange: true)
         if (settings.logTextEnable) { log.info descriptionText }
     }
+}
+
+private void updatePreference(final String attribute, final Object value) {
+    final String descriptionText = "Preference ${attribute} was set to ${value}"
+    device.updateSetting(attribute, value)
+    if (settings.logTextEnable) { log.info descriptionText }
 }
 
 // Include the ESPHome API library helper
