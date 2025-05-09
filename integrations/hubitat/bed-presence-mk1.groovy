@@ -14,7 +14,6 @@ metadata {
         capability 'Refresh'
         capability 'SignalStrength'
         capability 'Initialize'
-        //capability 'PresenceSensor'
 
         attribute 'networkStatus', 'enum', [ 'connecting', 'online', 'offline' ] // auto populated by ESPHome API Library
         attribute 'bedOccupiedBoth', 'enum', [ 'present', 'not present' ]
@@ -191,19 +190,19 @@ private void parseState(final Map message) {
         switch (key) {
             // current states
             case state['bed_occupied_either']:
-                //updateCurrentState('bedOccupiedEither', message.state ? 'on' : 'off')
+                updateCurrentState('bedOccupiedEither', message.state ? 'on' : 'off')
                 updateChildPresenceSensor('either', message.state)
                 break
             case state['bed_occupied_both']:
-                //updateCurrentState('bedOccupiedBoth', message.state ? 'on' : 'off')
+                updateCurrentState('bedOccupiedBoth', message.state ? 'on' : 'off')
                 updateChildPresenceSensor('both', message.state)
                 break
             case state['bed_occupied_left']:
-                //updateCurrentState('bedOccupiedLeft', message.state ? 'on' : 'off')
+                updateCurrentState('bedOccupiedLeft', message.state ? 'on' : 'off')
                 updateChildPresenceSensor('left', message.state)
                 break
             case state['bed_occupied_right']:
-                //updateCurrentState('bedOccupiedRight', message.state ? 'on' : 'off')
+                updateCurrentState('bedOccupiedRight', message.state ? 'on' : 'off')
                 updateChildPresenceSensor('right', message.state)
                 break
             case state['left_pressure']:
