@@ -1,5 +1,5 @@
 /**
- * Adapted from examples at https://github.com/bradsjm/hubitat-public/blob/main/ESPHome (MIT License, 2022)
+ * Adapted from examples at https://github.com/bradsjm/hubitat-public/blob/main/ESPHome (MIT License)
  */
 
 metadata {
@@ -236,7 +236,6 @@ private void parseState(final Map message) {
 private void updateCurrentState(final String attribute, final Object value, final String unit = null) {
     final String descriptionText = "Current state ${attribute} was set to ${value}${unit ?: ''}"
     if (device.currentValue(attribute) != value) {
-        //sendEvent(name: attribute, value: value, unit: unit, type: type, descriptionText: descriptionText)
         sendEvent(name: attribute, value: value, unit: unit, descriptionText: descriptionText, isStateChange: true)
         if (settings.logTextEnable) { log.info descriptionText }
     }
