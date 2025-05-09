@@ -222,10 +222,10 @@ private void parseState(final Map message) {
                 updateCurrentState('bedOccupiedRight', message.state ? 'on' : 'off')
                 break
             case state['left_pressure']:
-                updateCurrentState('leftPressure', message.state as Double, '%')
+                updateCurrentState('leftPressure', round2(message.state as Double), '%')
                 break
             case state['right_pressure']:
-                updateCurrentState('rightPressure', message.state as Double, '%')
+                updateCurrentState('rightPressure', round2(message.state as Double), '%')
                 break
             case state['uptime']:
                 updateCurrentState('uptimeSeconds', message.state as Integer, 's')
@@ -259,7 +259,7 @@ private void parseState(final Map message) {
 }
 
 private void updateCurrentState(final String attribute, final Object value, final String unit = null) {
-    final String descriptionText = "${attribute} was set to ${value}${unit ?: ''}"
+    final String descriptionText = "$Current state {attribute} was set to ${value}${unit ?: ''}"
     if (device.currentValue(attribute) != value) {
         //sendEvent(name: attribute, value: value, unit: unit, type: type, descriptionText: descriptionText)
         sendEvent(name: attribute, value: value, unit: unit, descriptionText: descriptionText, isStateChange: true)
@@ -271,6 +271,10 @@ private void updatePreference(final String attribute, final Object value) {
     final String descriptionText = "Preference ${attribute} was set to ${value}"
     device.updateSetting(attribute, value)
     if (settings.logTextEnable) { log.info descriptionText }
+}
+
+private double round2(final double value) {
+    return Math.round(value * 100) / 100.0
 }
 
 // Include the ESPHome API library helper
