@@ -4,8 +4,8 @@
 
 metadata {
     definition(
-        name: 'Bed Presence Mk1',
-        namespace: 'esphome',
+        name: 'Elevated Sensors - Bed Presence Mk1',
+        namespace: 'elevated_sensors',
         author: 'Elevated Sensors',
         singleThreaded: true,
         importUrl: 'https://raw.githubusercontent.com/ElevatedSensors/sensor-configs/main/integrations/hubitat/bed-presence-mk1.groovy') {
@@ -99,6 +99,11 @@ void initialize() {
     if (logEnable || logDriverEnable) {
         runIn(1800, 'logsOff')
     }
+    
+    createChildPresenceSensor('either')
+    createChildPresenceSensor('both')
+    createChildPresenceSensor('left')
+    createChildPresenceSensor('right')
 }
 
 void installed() {
@@ -139,6 +144,7 @@ void uninstalled() {
     log.info "${device} driver uninstalled"
 }
 
+// commands
 void calibrateLeftOccupied() {
     espHomeButtonCommand(key: state['calibrate_left_occupied'])
 }
@@ -185,16 +191,20 @@ private void parseState(final Map message) {
         switch (key) {
             // current states
             case state['bed_occupied_either']:
-                updateCurrentState('bedOccupiedEither', message.state ? 'on' : 'off')
+                //updateCurrentState('bedOccupiedEither', message.state ? 'on' : 'off')
+                updateChildPresenceSensor('either', message.state)
                 break
             case state['bed_occupied_both']:
-                updateCurrentState('bedOccupiedBoth', message.state ? 'on' : 'off')
+                //updateCurrentState('bedOccupiedBoth', message.state ? 'on' : 'off')
+                updateChildPresenceSensor('both', message.state)
                 break
             case state['bed_occupied_left']:
-                updateCurrentState('bedOccupiedLeft', message.state ? 'on' : 'off')
+                //updateCurrentState('bedOccupiedLeft', message.state ? 'on' : 'off')
+                updateChildPresenceSensor('left', message.state)
                 break
             case state['bed_occupied_right']:
-                updateCurrentState('bedOccupiedRight', message.state ? 'on' : 'off')
+                //updateCurrentState('bedOccupiedRight', message.state ? 'on' : 'off')
+                updateChildPresenceSensor('right', message.state)
                 break
             case state['left_pressure']:
                 updateCurrentState('leftPressure', round2(message.state as Double), '%')
@@ -230,6 +240,31 @@ private void parseState(final Map message) {
         }
     } else {
         if (logDriverEnable) { log.debug "State is null, skipping. Message: ${message}" }
+    }
+}
+
+private void createChildPresenceSensor(final String side) {
+    final String dni = "${device.deviceNetworkId}-bed_occupied_${side}"
+    
+    // delete child if it already exists
+    if (getChildDevice(dni)) {
+        deleteChildDevice(dni)
+        log.info "Deleted child device: ${dni}"
+    }
+    
+    // create new child device
+    addChildDevice('elevated_sensors', 'Elevated Sensors - Presence Sensor Child', dni,
+        [name: "Bed Occupied ${side.capitalize()}", isComponent: true])
+    log.info "Created child device: ${dni}"
+}
+
+private void updateChildPresenceSensor(final String side, final Object value) {
+    final String dni = "${device.deviceNetworkId}-bed_occupied_${side}"
+    def child = getChildDevice(dni)
+    if (child) {
+        child.setState(value)
+    } else {
+        if (settings.logDriverEnable) { log.debug "Missing child:  ${dni}" }
     }
 }
 
