@@ -1,11 +1,11 @@
 metadata {
     definition(
-        name: 'Elevated Sensors - Presence Sensor Child',
+        name: 'Elevated Sensors Presence Sensor Child',
         namespace: 'elevated_sensors',
         author: 'Elevated Sensors',
         singleThreaded: true,
-        importUrl: 'https://raw.githubusercontent.com/ElevatedSensors/sensor-configs/main/integrations/hubitat/child-presence-sensor.groovy') {
-        
+        importUrl: 'https://raw.githubusercontent.com/ElevatedSensors/sensor-configs/main/integrations/hubitat/drivers/child-presence-sensor.groovy') {
+
         capability 'PresenceSensor'
     }
 }

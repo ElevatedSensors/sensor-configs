@@ -4,11 +4,11 @@
 
 metadata {
     definition(
-        name: 'Elevated Sensors - Bed Presence Mk1',
+        name: 'Elevated Sensors Bed Presence Mk1',
         namespace: 'elevated_sensors',
         author: 'Elevated Sensors',
         singleThreaded: true,
-        importUrl: 'https://raw.githubusercontent.com/ElevatedSensors/sensor-configs/main/integrations/hubitat/bed-presence-mk1.groovy') {
+        importUrl: 'https://raw.githubusercontent.com/ElevatedSensors/sensor-configs/main/integrations/hubitat/drivers/bed-presence-mk1.groovy') {
 
         capability 'Sensor'
         capability 'Refresh'
@@ -98,7 +98,7 @@ void initialize() {
     if (logEnable || logDriverEnable) {
         runIn(1800, 'logsOff')
     }
-    
+
     createChildPresenceSensor('either')
     createChildPresenceSensor('both')
     createChildPresenceSensor('left')
@@ -244,15 +244,15 @@ private void parseState(final Map message) {
 
 private void createChildPresenceSensor(final String side) {
     final String dni = "${device.deviceNetworkId}-bed_occupied_${side}"
-    
+
     // delete child if it already exists
     if (getChildDevice(dni)) {
         deleteChildDevice(dni)
         log.info "Deleted child device: ${dni}"
     }
-    
+
     // create new child device
-    addChildDevice('elevated_sensors', 'Elevated Sensors - Presence Sensor Child', dni,
+    addChildDevice('elevated_sensors', 'Elevated Sensors Presence Sensor Child', dni,
         [name: "Bed Occupied ${side.capitalize()}", isComponent: true])
     log.info "Created child device: ${dni}"
 }
