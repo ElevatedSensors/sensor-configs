@@ -137,10 +137,10 @@ void updated() {
 void uninstalled() {
     closeSocket('driver uninstalled') // make sure the socket is closed when uninstalling
     
-    deleteChildPresenceSensor('either')
-    deleteChildPresenceSensor('both')
-    deleteChildPresenceSensor('left')
-    deleteChildPresenceSensor('right')
+    // delete child devices
+    for (device in getChildDevices()) {
+        deleteChildDevice(device.deviceNetworkId)
+    }
    
     log.info "${device} driver uninstalled"
 }
