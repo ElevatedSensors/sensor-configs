@@ -99,11 +99,6 @@ void initialize() {
     if (logEnable || logDriverEnable) {
         runIn(1800, 'logsOff')
     }
-    
-    //createChildPresenceSensor('either')
-    //createChildPresenceSensor('both')
-    //createChildPresenceSensor('left')
-    //createChildPresenceSensor('right')
 }
 
 void installed() {
@@ -147,7 +142,6 @@ void uninstalled() {
     deleteChildPresenceSensor('left')
     deleteChildPresenceSensor('right')
    
-    
     log.info "${device} driver uninstalled"
 }
 
@@ -176,13 +170,6 @@ void componentRefresh(child) {
     log.info "refresh request from ${child.displayName}"
 }
 
-//void componentPresence(child, value) {
-//    final String descriptionText = "${child.displayName} was set to ${value}"
-//    log.debug "componentPresence: ${descriptionText}"
-//    //child.parse([[name:"presence", value: value, descriptionText: descriptionText]])
-//    child.sendEvent(name: 'presence', value: value, descriptionText: descriptionText, isStateChange: true)
-//}
-
 // the parse method is invoked by the API library when messages are received
 void parse(final Map message) {
     if (logDriverEnable) { log.debug "ESPHome received: ${message}" }
@@ -191,9 +178,11 @@ void parse(final Map message) {
         case 'device':
             // Device information
             break
-
         case 'entity':
+            // store object key
             state[message.objectId] = message.key as Long
+        
+            // create child devices
             switch (message.objectId) {
                 case 'bed_occupied_either':
                     createChildPresenceSensor('either')
@@ -209,7 +198,6 @@ void parse(final Map message) {
                     break
             }
             break
-
         case 'state':
             parseState(message)
             break
@@ -223,22 +211,22 @@ private void parseState(final Map message) {
         switch (key) {
             // current states
             case state['bed_occupied_either']:
-                def present = message.state ? 'present' : 'not present'
+                final String present = message.state ? 'present' : 'not present'
                 updateCurrentState('bedOccupiedEither', present)
                 updateChildPresenceSensor('either', present)
                 break
             case state['bed_occupied_both']:
-                def present = message.state ? 'present' : 'not present'
+                final String present = message.state ? 'present' : 'not present'
                 updateCurrentState('bedOccupiedBoth', present)
                 updateChildPresenceSensor('both', present)
                 break
             case state['bed_occupied_left']:
-                def present = message.state ? 'present' : 'not present'
+                final String present = message.state ? 'present' : 'not present'
                 updateCurrentState('bedOccupiedLeft', present)
                 updateChildPresenceSensor('left', present)
                 break
             case state['bed_occupied_right']:
-                def present = message.state ? 'present' : 'not present'
+                final String present = message.state ? 'present' : 'not present'
                 updateCurrentState('bedOccupiedRight', present)
                 updateChildPresenceSensor('right', present)
                 break
@@ -282,19 +270,11 @@ private void parseState(final Map message) {
 private void createChildPresenceSensor(final String side) {
     final String dni = "${device.deviceNetworkId}-bed_occupied_${side}"
     
-    // DEV - delete child if it already exists
-    //if (getChildDevice(dni)) {
-    //    deleteChildDevice(dni)
-    //    log.warn "Deleted child device: ${dni}"
-    //}
-    
     if (!getChildDevice(dni)) {
-        // create new child device
         def child = addChildDevice('hubitat', 'Generic Component Presence Sensor', dni,
                        [name: "${device.displayName} Bed Occupied ${side.capitalize()}", isComponent: true])
-        // set default value
-        //child.parse([[name:"presence", value: 'not present']])
-        child.sendEvent(name: 'presence', value: 'not present')
+        
+        child.sendEvent(name: 'presence', value: 'not present') // set default value
         log.info "Created child device: ${dni}"
     }
 }
@@ -312,10 +292,7 @@ private void updateChildPresenceSensor(final String side, final Object value) {
     final String dni = "${device.deviceNetworkId}-bed_occupied_${side}"
     def child = getChildDevice(dni)
     if (child) {
-        //componentPresence(child, value)
         final String descriptionText = "${child.displayName} was set to ${value}"
-        //log.debug "componentPresence: ${descriptionText}"
-        //child.parse([[name:"presence", value: value, descriptionText: descriptionText]])
         child.sendEvent(name: 'presence', value: value, descriptionText: descriptionText, isStateChange: true)
     } else {
         if (settings.logDriverEnable) { log.debug "Missing child:  ${dni}" }
