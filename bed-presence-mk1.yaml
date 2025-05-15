@@ -44,7 +44,7 @@ packages:
     refresh: 1s
     files:
       - 'bed-presence-mk1/base.yaml'
-      - 'common/bluetooth-proxy.yaml'
+      - 'esphome-common/bluetooth-proxy.yaml'
 
 # See https://github.com/ElevatedSensors/sensor-configs/blob/main/bed-presence-mk1/sensor.yaml for a detailed
 # description of available substitutions.
