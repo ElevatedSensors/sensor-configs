@@ -54,8 +54,8 @@ jobs:
       matrix:
         file: ${{ fromJson(needs.prepare.outputs.files) }}
     steps:
-      - uses: actions/checkout@v4.2.2
-      - uses: esphome/build-action@v4.0.4
+      - uses: actions/checkout@v4
+      - uses: esphome/build-action@v7
         id: esphome-build
         with:
           yaml-file: ${{ matrix.file }}
@@ -72,7 +72,7 @@ jobs:
           jq '.builds[].ota.path |= "${{ steps.esphome-build.outputs.name }}/" + .' output/tmp.json > output/tmp2.json
           jq '.builds[].parts[].path |= "${{ steps.esphome-build.outputs.name }}/" + .' output/tmp2.json > output/${{ inputs.manifest-filename }}
           rm output/tmp*json
-      - uses: actions/upload-artifact@v4.4.3
+      - uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.name }}
           path: output
@@ -83,10 +83,10 @@ jobs:
     needs: [build]
     if: ${{ always() }}
     steps:
-      - uses: actions/checkout@v4.2.2
+      - uses: actions/checkout@v4
 
       # Download fw build artifacts
-      - uses: actions/download-artifact@v4.1.8
+      - uses: actions/download-artifact@v4
         with:
           path: output
           name: ${{ inputs.name }}
@@ -98,7 +98,7 @@ jobs:
         run: find output/
 
       - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4.6.9
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
           folder: output
