@@ -2,11 +2,11 @@ name: CI
 
 on:
   pull_request:
-  push:
-    branches-ignore:
-      - 'main'
-      - 'dependabot/**'
-      - 'gh-pages'
+  # push:
+  #   branches-ignore:
+  #     - 'main'
+  #     - 'dependabot/**'
+  #     - 'gh-pages'
   workflow_dispatch:
 
 jobs:
