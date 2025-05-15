@@ -1,17 +1,21 @@
+substitutions:
+  sensor_gpio_left: GPIO10
+  sensor_gpio_right: GPIO20
+
 packages:
   left_bed_sensor: !include
     file: sensor.yaml
     vars:
       sensor_name: Left
       sensor_id: left
-      sensor_gpio: GPIO10
+      sensor_gpio: ${sensor_gpio_left}
 
   right_bed_sensor: !include
     file: sensor.yaml
     vars:
       sensor_name: Right
       sensor_id: right
-      sensor_gpio: GPIO20
+      sensor_gpio: ${sensor_gpio_right}
 
 sensor:
   - platform: wifi_signal   # Reports the WiFi signal strength in dB
@@ -83,3 +87,17 @@ switch:
     restore_mode: RESTORE_DEFAULT_OFF
     entity_category: config
     icon: mdi:arrow-expand
+
+select:
+  - platform: template
+    name: "Response Speed"
+    id: response_speed
+    icon: mdi:speedometer
+    optimistic: true
+    restore_value: true
+    options:
+      - "Fast"
+      - "Normal"
+      - "Slow"
+    initial_option: "Normal"
+    entity_category: config
