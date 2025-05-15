@@ -1,6 +1,7 @@
 name: Hubitat Bundles
 
 on:
+  pull_request:
   push:
     branches:
       - main
