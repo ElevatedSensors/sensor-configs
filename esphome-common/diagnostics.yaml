@@ -1,0 +1,44 @@
+button:
+  - platform: factory_reset
+    id: factory_reset_button
+    name: Factory Reset
+
+  - platform: restart
+    name: Restart
+    id: restart_button
+    entity_category: diagnostic
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: ${boot_gpio}
+      mode: INPUT_PULLUP
+      inverted: true
+    id: boot_button
+    internal: true
+    filters:
+      - delayed_on: 10s
+    on_press:
+      then:
+        - button.press: factory_reset_button
+
+sensor:
+  - platform: wifi_signal   # Reports the WiFi signal strength in dB
+    name: WiFi Signal dB
+    id: wifi_signal_db
+    update_interval: 60s
+
+  - platform: copy          # Reports the WiFi signal strength in %
+    source_id: wifi_signal_db
+    name: WiFi Signal Percent
+    id: wifi_signal_percent
+    filters:
+      - lambda: return min(max(2 * (x + 100.0), 0.0), 100.0);
+    unit_of_measurement: '%'
+    entity_category: diagnostic
+    device_class: ""
+
+  - platform: uptime
+    type: seconds
+    id: uptime
+    name: Uptime
