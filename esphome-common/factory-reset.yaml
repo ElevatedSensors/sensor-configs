@@ -1,0 +1,18 @@
+button:
+  - platform: factory_reset
+    name: "Factory Reset"
+    id: factory_reset_button
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO9
+      mode: INPUT_PULLUP
+      inverted: true
+    id: boot_button
+    internal: true
+    filters:
+      - delayed_on: 10s
+    on_press:
+      then:
+        - button.press: factory_reset_button

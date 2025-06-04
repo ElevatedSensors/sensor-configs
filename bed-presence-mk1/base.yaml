@@ -3,6 +3,8 @@ substitutions:
   sensor_gpio_right: GPIO20
 
 packages:
+  factory_reset: !include ../esphome-common/factory-reset.yaml
+
   left_bed_sensor: !include
     file: sensor.yaml
     vars:
@@ -16,6 +18,7 @@ packages:
       sensor_name: Right
       sensor_id: right
       sensor_gpio: ${sensor_gpio_right}
+
 
 sensor:
   - platform: wifi_signal   # Reports the WiFi signal strength in dB
