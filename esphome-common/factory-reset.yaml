@@ -6,7 +6,7 @@ button:
 binary_sensor:
   - platform: gpio
     pin:
-      number: GPIO9
+      number: ${boot_gpio}
       mode: INPUT_PULLUP
       inverted: true
     id: boot_button

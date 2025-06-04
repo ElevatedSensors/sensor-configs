@@ -3,7 +3,10 @@ substitutions:
   sensor_gpio_right: GPIO20
 
 packages:
-  factory_reset: !include ../esphome-common/factory-reset.yaml
+  factory_reset: !include
+    file: ../esphome-common/factory-reset.yaml
+    vars:
+      boot_gpio: GPIO9
 
   left_bed_sensor: !include
     file: sensor.yaml
