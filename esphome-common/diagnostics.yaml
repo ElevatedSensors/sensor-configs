@@ -1,3 +1,9 @@
+substitutions:
+  boot_gpio: GPIO9
+  uptime_id: uptime_sensor
+  restart_id: restart_button
+  status_id: status_sensor
+
 button:
   - platform: factory_reset
     id: factory_reset_button
@@ -5,7 +11,7 @@ button:
 
   - platform: restart
     name: Restart
-    id: restart_button
+    id: ${restart_id}
     entity_category: diagnostic
 
 binary_sensor:
@@ -21,6 +27,11 @@ binary_sensor:
     on_press:
       then:
         - button.press: factory_reset_button
+
+  - platform: status
+    id: ${status_id}
+    name: Status
+
 
 sensor:
   - platform: wifi_signal   # Reports the WiFi signal strength in dB
@@ -40,5 +51,5 @@ sensor:
 
   - platform: uptime
     type: seconds
-    id: uptime
+    id: ${uptime_id}
     name: Uptime
