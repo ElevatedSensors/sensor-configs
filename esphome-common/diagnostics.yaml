@@ -22,7 +22,7 @@ binary_sensor:
       - delayed_on: 10s
     on_press:
       then:
-        - button.press: factory_reset_button
+        - button.press: ${factory_reset_id}
 
   - platform: status
     id: ${status_id}
