@@ -15,8 +15,7 @@ binary_sensor:
       mode: INPUT_PULLUP
       inverted: true
     id: ${boot_id}
-    # internal: true
-    internal: false
+    internal: true
     name: Boot Button
     filters:
       - delayed_on: 10s
@@ -32,6 +31,7 @@ button:
   - platform: factory_reset
     id: ${factory_reset_id}
     name: Factory Reset
+    entity_category: diagnostic
 
   - platform: restart
     name: Restart
