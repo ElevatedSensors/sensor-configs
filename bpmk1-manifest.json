@@ -9,6 +9,7 @@
       "ota": {
         "path": "bed-presence-esp32c3/bed-presence-esp32c3.ota.bin",
         "md5": "6d17f0e943bb5be275b2243f2743cb57",
+        "summary": "Add Bluetooth Proxy, Adjustable Sensor Response Speed, Physical Factory Reset",
         "release_url": "https://docs.elevatedsensors.com/bed-presence-mk1/release"
       },
       "parts": [
