@@ -1,0 +1,59 @@
+substitutions:
+  boot_gpio: GPIO9
+  boot_id: boot_button
+  status_id: status_sensor
+  factory_reset_id: factory_reset_button
+  restart_id: restart_button
+  wifi_db_id: wifi_signal_db
+  wifi_percent_id: wifi_signal_percent
+  uptime_id: uptime_sensor
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: ${boot_gpio}
+      mode: INPUT_PULLUP
+      inverted: true
+    id: ${boot_id}
+    internal: true
+    name: Boot Button
+    filters:
+      - delayed_on: 10s
+    on_press:
+      then:
+        - button.press: ${factory_reset_id}
+
+  - platform: status
+    id: ${status_id}
+    name: Status
+
+button:
+  - platform: factory_reset
+    id: ${factory_reset_id}
+    internal: true
+
+  - platform: restart
+    name: Restart
+    id: ${restart_id}
+    entity_category: diagnostic
+
+sensor:
+  - platform: wifi_signal   # Reports the WiFi signal strength in dB
+    name: WiFi Signal dB
+    id: ${wifi_db_id}
+    update_interval: 60s
+
+  - platform: copy          # Reports the WiFi signal strength in %
+    source_id: ${wifi_db_id}
+    name: WiFi Signal Percent
+    id: ${wifi_percent_id}
+    filters:
+      - lambda: return min(max(2 * (x + 100.0), 0.0), 100.0);
+    unit_of_measurement: '%'
+    entity_category: diagnostic
+    device_class: ""
+
+  - platform: uptime
+    type: seconds
+    id: ${uptime_id}
+    name: Uptime
