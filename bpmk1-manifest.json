@@ -1,6 +1,6 @@
 {
   "name": "Bed Presence Mk1",
-  "version": "2025.2.0",
+  "version": "2025.6.0",
   "home_assistant_domain": "esphome",
   "new_install_improv_wait_time": 15,
   "builds": [
@@ -8,8 +8,7 @@
       "chipFamily": "ESP32-C3",
       "ota": {
         "path": "bed-presence-esp32c3/bed-presence-esp32c3.ota.bin",
-        "md5": "3d7d5571b5ac9b47093bd63185d8bc5d",
-        "summary": "Increase calibration pressure max_values to 120%.",
+        "md5": "6d17f0e943bb5be275b2243f2743cb57",
         "release_url": "https://docs.elevatedsensors.com/bed-presence-mk1/release"
       },
       "parts": [
