@@ -10,7 +10,7 @@ breadcrumb_list:
 ---
 
 ## 2025.6.0
-**Bluetoth Proxy** - Added Bluetooth Proxy functionality to relay BLE signals to Home Assistant, helping extend Bluetooth
+**Bluetooth Proxy** - Added Bluetooth Proxy functionality to relay BLE signals to Home Assistant, helping extend Bluetooth
 coverage in your home.
 
 **Sensor Response Speed** - Add adjustable response speed setting to adjust sensor responsiveness (Fast, Normal, Slow) to
