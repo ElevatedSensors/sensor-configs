@@ -9,6 +9,15 @@ breadcrumb_list:
       url: /bed-presence-mk1
 ---
 
+## 2025.6.0
+**Bluetoth Proxy** - Added Bluetooth Proxy functionality to relay BLE signals to Home Assistant, helping extend Bluetooth
+coverage in your home.
+
+**Sensor Response Speed** - Add adjustable response speed setting to adjust sensor responsiveness (Fast, Normal, Slow) to
+reduce false negatives.
+
+**Factory Reset** - Add option to factory reset device by holding BOOT button for 10 seconds.
+
 ## 2025.2.0
 **Fix Calibration Cap** - Accomodate the increased sensitivity of revC boards, ensuring accurate pressure calibration up to
 120% instead of being limited to 110%.

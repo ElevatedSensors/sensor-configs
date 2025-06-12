@@ -1,38 +1,29 @@
+substitutions:
+  sensor_gpio_left: GPIO10
+  sensor_gpio_right: GPIO20
+
 packages:
+  diagnostics: !include
+    file: ../esphome-common/diagnostics.yaml
+    vars:
+      boot_gpio: GPIO9
+      uptime_id: bed_presence_uptime
+      restart_id: btn_restart
+      status_id: bed_presence_status
+
   left_bed_sensor: !include
     file: sensor.yaml
     vars:
       sensor_name: Left
       sensor_id: left
-      sensor_gpio: GPIO10
+      sensor_gpio: ${sensor_gpio_left}
 
   right_bed_sensor: !include
     file: sensor.yaml
     vars:
       sensor_name: Right
       sensor_id: right
-      sensor_gpio: GPIO20
-
-sensor:
-  - platform: wifi_signal   # Reports the WiFi signal strength in dB
-    name: WiFi Signal dB
-    id: wifi_signal_db
-    update_interval: 60s
-
-  - platform: copy          # Reports the WiFi signal strength in %
-    source_id: wifi_signal_db
-    name: WiFi Signal Percent
-    id: wifi_signal_percent
-    filters:
-      - lambda: return min(max(2 * (x + 100.0), 0.0), 100.0);
-    unit_of_measurement: '%'
-    entity_category: diagnostic
-    device_class: ""
-
-  - platform: uptime
-    type: seconds
-    id: bed_presence_uptime
-    name: Uptime
+      sensor_gpio: ${sensor_gpio_right}
 
 binary_sensor:
   - platform: template
@@ -65,16 +56,6 @@ binary_sensor:
     icon: mdi:bunk-bed
     lambda: return id(bed_occupied_left).state || id(bed_occupied_right).state;
 
-  - platform: status
-    id: bed_presence_status
-    name: Status
-
-button:
-  - platform: restart
-    name: Restart
-    id: btn_restart
-    entity_category: diagnostic
-
 switch:
   - platform: template
     name: Full Range
@@ -83,3 +64,17 @@ switch:
     restore_mode: RESTORE_DEFAULT_OFF
     entity_category: config
     icon: mdi:arrow-expand
+
+select:
+  - platform: template
+    name: "Response Speed"
+    id: response_speed
+    icon: mdi:speedometer
+    optimistic: true
+    restore_value: true
+    options:
+      - "Fast"
+      - "Normal"
+      - "Slow"
+    initial_option: "Normal"
+    entity_category: config
