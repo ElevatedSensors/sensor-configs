@@ -102,6 +102,7 @@ void initialize() {
 }
 
 void installed() {
+    syncDriverVersion()
     log.info "${device} driver installed"
 }
 
@@ -121,6 +122,7 @@ void refresh() {
 
 void updated() {
     log.info "${device} driver configuration updated"
+
     if (settings.ipAddress != state.currentIp) {
         log.info "New ipAddress detected for ${device}, initializing connection"
         state.currentIp = settings.ipAddress
@@ -136,12 +138,12 @@ void updated() {
 
 void uninstalled() {
     closeSocket('driver uninstalled') // make sure the socket is closed when uninstalling
-    
+
     // delete child devices
     for (device in getChildDevices()) {
         deleteChildDevice(device.deviceNetworkId)
     }
-   
+
     log.info "${device} driver uninstalled"
 }
 
@@ -181,7 +183,7 @@ void parse(final Map message) {
         case 'entity':
             // store object key
             state[message.objectId] = message.key as Long
-        
+
             // create child devices
             switch (message.objectId) {
                 case 'bed_occupied_either':
@@ -238,6 +240,7 @@ private void parseState(final Map message) {
                 break
             case state['uptime']:
                 updateCurrentState('uptimeSeconds', message.state as Integer, 's')
+                syncDriverVersion()
                 break
             case state['wifi_signal_db']:
                 updateCurrentState('rssi', message.state as Integer, 'dBm')
@@ -269,11 +272,11 @@ private void parseState(final Map message) {
 
 private void createChildPresenceSensor(final String side) {
     final String dni = "${device.deviceNetworkId}-bed_occupied_${side}"
-    
+
     if (!getChildDevice(dni)) {
         def child = addChildDevice('hubitat', 'Generic Component Presence Sensor', dni,
                        [name: "${device.displayName} Bed Occupied ${side.capitalize()}", isComponent: true])
-        
+
         child.sendEvent(name: 'presence', value: 'not present') // set default value
         log.info "Created child device: ${dni}"
     }
@@ -281,7 +284,7 @@ private void createChildPresenceSensor(final String side) {
 
 private void deleteChildPresenceSensor(final String side) {
     final String dni = "${device.deviceNetworkId}-bed_occupied_${side}"
-    
+
     if (getChildDevice(dni)) {
         deleteChildDevice(dni)
         log.info "Deleted child device: ${dni}"
@@ -315,6 +318,15 @@ private void updatePreference(final String attribute, final Object value) {
 
 private double round2(final double value) {
     return Math.round(value * 100) / 100.0
+}
+
+private void syncDriverVersion() {
+    final String DRIVER_VERSION = "2025.6.0"
+
+    final String stored = device.getDataValue("Driver Version")
+    if (stored != DRIVER_VERSION) {
+        device.updateDataValue('Driver Version', DRIVER_VERSION)
+    }
 }
 
 // Include the ESPHome API library helper
