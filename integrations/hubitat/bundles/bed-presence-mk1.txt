@@ -1,0 +1,4 @@
+elevated_sensors
+Bed Presence Mk1
+library esphome.espHomeApiHelper.groovy
+driver elevated_sensors.BedPresenceMk1.groovy
