@@ -9,6 +9,9 @@ breadcrumb_list:
       url: /bed-presence-mk1
 ---
 
+## 2025.6.1
+**Bluetooth Proxy Fix** - Only stop BLE scanning when last API client disconnects.
+
 ## 2025.6.0
 **Bluetooth Proxy** - Added Bluetooth Proxy functionality to relay BLE signals to Home Assistant, helping extend Bluetooth
 coverage in your home.
