@@ -9,6 +9,7 @@
       "ota": {
         "path": "bed-presence-esp32c3/bed-presence-esp32c3.ota.bin",
         "md5": "40f3cc657358d78c7317bd0ef8f89ad9",
+        "summary": "Minor BT Proxy Fix - Only stop BLE scanning when last API client disconnects.",
         "release_url": "https://docs.elevatedsensors.com/bed-presence-mk1/release"
       },
       "parts": [
