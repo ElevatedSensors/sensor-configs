@@ -24,6 +24,8 @@ select:
   - platform: template
     name: Bluetooth Scanner Mode
     id: scanner_mode
+    entity_category: config
+    icon: mdi:bluetooth
     options:
       - "Passive"
       - "Active"
