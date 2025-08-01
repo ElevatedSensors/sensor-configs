@@ -1,6 +1,6 @@
 {
   "name": "Bed Presence Mk1",
-  "version": "2025.6.1",
+  "version": "2025.6.2",
   "home_assistant_domain": "esphome",
   "new_install_improv_wait_time": 15,
   "builds": [
@@ -8,8 +8,7 @@
       "chipFamily": "ESP32-C3",
       "ota": {
         "path": "bed-presence-esp32c3/bed-presence-esp32c3.ota.bin",
-        "md5": "40f3cc657358d78c7317bd0ef8f89ad9",
-        "summary": "Minor BT Proxy Fix - Only stop BLE scanning when last API client disconnects.",
+        "md5": "509e28a530c22ab33b691646545f8e32",
         "release_url": "https://docs.elevatedsensors.com/bed-presence-mk1/release"
       },
       "parts": [
