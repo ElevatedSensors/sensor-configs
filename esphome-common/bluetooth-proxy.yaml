@@ -11,10 +11,31 @@ api:
         - esp32_ble_tracker.stop_scan:
 
 bluetooth_proxy:
+  id: bt_proxy
   active: true
 
 esp32_ble_tracker:
   id: ble_tracker
   scan_parameters:
-    active: true
+    active: false
     continuous: false
+
+select:
+  - platform: template
+    name: Bluetooth Scanner Mode
+    id: scanner_mode
+    entity_category: config
+    icon: mdi:bluetooth
+    options:
+      - "Passive"
+      - "Active"
+    lambda: |-
+      if (id(ble_tracker).get_scan_active()) {
+        return {"Active"};
+      } else {
+        return {"Passive"};
+      }
+    set_action:
+      - lambda: |-
+          id(bt_proxy).bluetooth_scanner_set_mode(x == "Active");
+      - component.update: scanner_mode
