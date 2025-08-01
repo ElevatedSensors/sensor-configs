@@ -9,6 +9,9 @@ breadcrumb_list:
       url: /bed-presence-mk1
 ---
 
+## 2025.6.2
+**Bluetooth Proxy Fix** - Add toggle for Bluetooth scanning mode.
+
 ## 2025.6.1
 **Bluetooth Proxy Fix** - Only stop BLE scanning when last API client disconnects.
 
