@@ -9,6 +9,7 @@
       "ota": {
         "path": "bed-presence-esp32c3/bed-presence-esp32c3.ota.bin",
         "md5": "509e28a530c22ab33b691646545f8e32",
+        "summary": "BT Proxy Fix - Add toggle for Bluetooth scanning mode",
         "release_url": "https://docs.elevatedsensors.com/bed-presence-mk1/release"
       },
       "parts": [
