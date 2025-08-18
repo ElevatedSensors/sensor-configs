@@ -19,7 +19,7 @@ jobs:
           - bed-presence-mk1.factory.yaml
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Change remote_package branch to current dev branch
         run: |
           branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
