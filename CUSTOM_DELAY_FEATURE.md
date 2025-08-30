@@ -9,8 +9,8 @@ This new feature adds the ability to configure custom delays for occupation dete
 
 ### Configuration Options
 Each sensor side (Left and Right) now has two new configuration entities:
-- **Occupied Delay** (0-30 seconds): Controls how long the sensor must detect pressure before reporting "occupied"
-- **Clear Delay** (0-30 seconds): Controls how long the sensor must detect no pressure before reporting "clear"
+- **Occupied Delay** (0-300 seconds / 0-5 minutes): Controls how long the sensor must detect pressure before reporting "occupied"
+- **Clear Delay** (0-300 seconds / 0-5 minutes): Controls how long the sensor must detect no pressure before reporting "clear"
 
 ### Response Speed Modes
 The sensor supports four response speed modes:
@@ -34,7 +34,7 @@ The sensor supports four response speed modes:
      - "Left Clear Delay"
      - "Right Occupied Delay"
      - "Right Clear Delay"
-   - Set your desired values (in seconds, 0-30 range)
+   - Set your desired values (in seconds, 0-300 range / 0-5 minutes)
 
 3. **Test Your Configuration**:
    - Get in/out of bed to test the response times
@@ -43,16 +43,23 @@ The sensor supports four response speed modes:
 ## Use Cases
 
 ### Preventing False Positives
-- Set a longer **Occupied Delay** (e.g., 2-3 seconds) to avoid triggering when briefly sitting on the bed
+- Set a longer **Occupied Delay** (e.g., 10-30 seconds) to avoid triggering when briefly sitting on the bed
+- For extreme cases, use up to 60-120 seconds to ensure only sustained presence triggers
 
 ### Preventing False Negatives
-- Set a longer **Clear Delay** (e.g., 5-10 seconds) to maintain occupied status when shifting positions during sleep
+- Set a longer **Clear Delay** (e.g., 30-60 seconds) to maintain occupied status when shifting positions during sleep
+- For restless sleepers, consider 120-180 seconds (2-3 minutes) to prevent false clearing
 
 ### Quick Response for Automations
 - Set short delays (e.g., 0.5s occupied, 1s clear) for responsive lighting automations
 
+### Long-term Presence Detection
+- Use extended delays (e.g., 240-300 seconds) for scenarios requiring confirmed long-term presence
+- Useful for deep sleep detection or extended absence confirmation
+
 ### Partner Movement Isolation
 - Use different delay settings for left/right sides based on movement patterns
+- One partner can have 60s clear delay while the other has 180s based on sleep habits
 
 ## Technical Implementation
 
@@ -79,9 +86,10 @@ This feature is compatible with:
 
 If the custom delays aren't working:
 1. Ensure "Response Speed" is set to "Custom"
-2. Check that delay values are within the 0-30 second range
+2. Check that delay values are within the 0-300 second range
 3. Restart the ESP device after making changes
 4. Verify the sensor is properly calibrated
+5. For delays over 60 seconds, ensure your automations account for the longer response time
 
 ## Notes
 - Delays are applied after the pressure threshold detection
