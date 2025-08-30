@@ -76,5 +76,6 @@ select:
       - "Fast"
       - "Normal"
       - "Slow"
+      - "Custom"
     initial_option: "Normal"
     entity_category: config
