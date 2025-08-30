@@ -43,18 +43,84 @@ binary_sensor:
     lambda: return id(bed_occupied_left_fast).state || id(bed_occupied_right_fast).state;
 
   - platform: template
+    name: Bed Occupied Both (Normal)
+    id: bed_occupied_both_normal
+    device_class: occupancy
+    icon: mdi:bunk-bed
+    disabled_by_default: true
+    lambda: return id(bed_occupied_left_normal).state && id(bed_occupied_right_normal).state;
+
+  - platform: template
+    name: Bed Occupied Either (Normal)
+    id: bed_occupied_either_normal
+    device_class: occupancy
+    icon: mdi:bunk-bed
+    disabled_by_default: true
+    lambda: return id(bed_occupied_left_normal).state || id(bed_occupied_right_normal).state;
+
+  - platform: template
+    name: Bed Occupied Both (Slow)
+    id: bed_occupied_both_slow
+    device_class: occupancy
+    icon: mdi:bunk-bed
+    disabled_by_default: true
+    lambda: return id(bed_occupied_left_slow).state && id(bed_occupied_right_slow).state;
+
+  - platform: template
+    name: Bed Occupied Either (Slow)
+    id: bed_occupied_either_slow
+    device_class: occupancy
+    icon: mdi:bunk-bed
+    disabled_by_default: true
+    lambda: return id(bed_occupied_left_slow).state || id(bed_occupied_right_slow).state;
+
+  - platform: template
+    name: Bed Occupied Both (Custom)
+    id: bed_occupied_both_custom
+    device_class: occupancy
+    icon: mdi:bunk-bed
+    disabled_by_default: true
+    lambda: return id(bed_occupied_left_custom).state && id(bed_occupied_right_custom).state;
+
+  - platform: template
+    name: Bed Occupied Either (Custom)
+    id: bed_occupied_either_custom
+    device_class: occupancy
+    icon: mdi:bunk-bed
+    disabled_by_default: true
+    lambda: return id(bed_occupied_left_custom).state || id(bed_occupied_right_custom).state;
+
+  - platform: template
     name: Bed Occupied Both
     id: bed_occupied_both
     device_class: occupancy
     icon: mdi:bunk-bed
-    lambda: return id(bed_occupied_left).state && id(bed_occupied_right).state;
+    lambda: |-  # Sensor response is user tunable via "Response Speed"
+      if (id(response_speed).state == "Fast") {
+        return id(bed_occupied_both_fast).state;
+      } else if (id(response_speed).state == "Slow") {
+        return id(bed_occupied_both_slow).state;
+      } else if (id(response_speed).state == "Custom") {
+        return id(bed_occupied_both_custom).state;
+      } else {
+        return id(bed_occupied_both_normal).state;
+      }
 
   - platform: template
     name: Bed Occupied Either
     id: bed_occupied_either
     device_class: occupancy
     icon: mdi:bunk-bed
-    lambda: return id(bed_occupied_left).state || id(bed_occupied_right).state;
+    lambda: |-  # Sensor response is user tunable via "Response Speed"
+      if (id(response_speed).state == "Fast") {
+        return id(bed_occupied_either_fast).state;
+      } else if (id(response_speed).state == "Slow") {
+        return id(bed_occupied_either_slow).state;
+      } else if (id(response_speed).state == "Custom") {
+        return id(bed_occupied_either_custom).state;
+      } else {
+        return id(bed_occupied_either_normal).state;
+      }
 
 switch:
   - platform: template
@@ -76,5 +142,6 @@ select:
       - "Fast"
       - "Normal"
       - "Slow"
+      - "Custom"
     initial_option: "Normal"
     entity_category: config

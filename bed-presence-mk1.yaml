@@ -49,6 +49,13 @@ packages:
 # See https://github.com/ElevatedSensors/sensor-configs/blob/main/bed-presence-mk1/sensor.yaml for a detailed
 # description of available substitutions.
 #
+# NEW FEATURE: Custom Delay Configuration
+# You can now use custom delays for occupation detection:
+# 1. Set "Response Speed" to "Custom" in Home Assistant
+# 2. Configure delays for each sensor side (Left/Right):
+#    - "Occupied Delay": Time (in seconds) before reporting bed as occupied (0-300s / 0-5 minutes)
+#    - "Clear Delay": Time (in seconds) before reporting bed as clear/unoccupied (0-300s / 0-5 minutes)
+#
 # substitutions:
 #   trigger_percentile: '0.75'
 #   averaging_window_samples: '5'
