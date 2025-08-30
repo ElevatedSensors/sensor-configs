@@ -12,6 +12,12 @@ Each sensor side (Left and Right) now has two new configuration entities:
 - **Occupied Delay** (0-300 seconds / 0-5 minutes): Controls how long the sensor must detect pressure before reporting "occupied"
 - **Clear Delay** (0-300 seconds / 0-5 minutes): Controls how long the sensor must detect no pressure before reporting "clear"
 
+### Combined Sensors Support
+The "Both" and "Either" combined sensors automatically inherit the custom delays:
+- **Bed Occupied Both**: Uses custom delays when both sides need to be occupied
+- **Bed Occupied Either**: Uses custom delays when either side needs to be occupied
+- These combined sensors respect the Response Speed setting including "Custom" mode
+
 ### Response Speed Modes
 The sensor supports four response speed modes:
 1. **Fast**: Minimal delays (default: 0ms on/off)
@@ -94,5 +100,6 @@ If the custom delays aren't working:
 ## Notes
 - Delays are applied after the pressure threshold detection
 - Each side (Left/Right) can have independent delay settings
-- The "Either" and "Both" combined sensors inherit the delays from their component sensors
+- The "Either" and "Both" combined sensors automatically use the custom delays when Response Speed is set to "Custom"
+- Combined sensors now support all four modes: Fast, Normal, Slow, and Custom
 - Custom delays are preserved across device restarts
