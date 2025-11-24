@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Bundle
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Build bpmk1 bundle
         run:  |
