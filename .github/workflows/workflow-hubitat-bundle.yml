@@ -25,7 +25,7 @@ jobs:
           wget -O bed-presence-mk1-bundle/esphome.espHomeApiHelper.groovy https://raw.githubusercontent.com/ElevatedSensors/hubitat-espHomeApiHelper/refs/heads/main/ESPHome/ESPHome-API-Library.groovy
 
       - name: Zip bpmk1
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: bed-presence-mk1-hubitat-bundle
           path: bed-presence-mk1-bundle/
