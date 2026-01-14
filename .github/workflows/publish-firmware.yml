@@ -16,7 +16,7 @@ jobs:
       files: |
         bed-presence-mk1.factory.yaml
       esphome-version: latest
-      combined-name: project-template
+      combined-name: bed-presence-mk1
       #### Modify above here to match your project ####
 
       release-summary: ${{ github.event.release.body }}
