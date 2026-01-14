@@ -96,9 +96,9 @@ binary_sensor:
     device_class: occupancy
     icon: mdi:bed
     lambda: |-  # Sensor response is user tunable via "Response Speed"
-      if (id(response_speed).state == "Fast") {
+      if (id(response_speed).current_option() == "Fast") {
         return id(bed_occupied_${sensor_id}_fast).state;
-      } else if (id(response_speed).state == "Slow") {
+      } else if (id(response_speed).current_option() == "Slow") {
         return id(bed_occupied_${sensor_id}_slow).state;
       } else {
         return id(bed_occupied_${sensor_id}_normal).state;
