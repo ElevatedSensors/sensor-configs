@@ -6,7 +6,8 @@ on:
     #   - '*.yaml'
     #   - '.github/workflows/ci.yml'
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 0 * * *'   # run every day at 00:00
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
