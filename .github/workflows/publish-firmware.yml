@@ -5,7 +5,7 @@ on:
     types: [published]
 
 env:
-  PRODUCT_NAME: bed-presence-mk1
+  PRODUCT_NAME: bed-presence-mk1   # Change this per product repo
 
 permissions:
   contents: write
@@ -15,13 +15,10 @@ jobs:
     name: Build Firmware
     uses: esphome/workflows/.github/workflows/build.yml@2025.10.0
     with:
-      #### Modify below here to match your project ####
       files: |
-        $PRODUCT_NAME.factory.yaml
+        bed-presence-mk1.factory.yaml
       esphome-version: latest
-      combined-name: $PRODUCT_NAME
-      #### Modify above here to match your project ####
-
+      combined-name: bed-presence-mk1
       release-summary: ${{ github.event.release.body }}
       release-url: ${{ github.event.release.html_url }}
       release-version: ${{ github.event.release.tag_name }}
@@ -38,25 +35,33 @@ jobs:
     name: Push Latest Firmware to Docs Repo
     runs-on: ubuntu-latest
     needs:
-      - build-firmware   # We need the build artifacts
+      - build-firmware
     steps:
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
-          name: firmware   # This is the standard artifact name from esphome/workflows build.yml
+          name: firmware
           path: firmware-build/
 
       - name: Clone docs repo
         run: |
           git clone https://x-access-token:${{ secrets.DOCS_REPO_TOKEN }}@github.com/ElevatedSensors/docs.git docs-repo
 
-      - name: Copy files to docs repo (latest)
+      - name: Copy files to docs repo
         run: |
-          mkdir -p docs-repo/firmware/$PRODUCT_NAME/latest
-          cp -f firmware-build/$PRODUCT_NAME/* docs-repo/firmware/$PRODUCT_NAME/latest/
-          # Also copy to a versioned folder for history in docs
-          mkdir -p docs-repo/firmware/$PRODUCT_NAME/${{ github.event.release.tag_name }}
-          cp -r firmware-build/$PRODUCT_NAME/* docs-repo/firmware/$PRODUCT_NAME/${{ github.event.release.tag_name }}/
+          # Create folders
+          mkdir -p docs-repo/firmware/${{ env.PRODUCT_NAME }}/latest
+          mkdir -p docs-repo/firmware/${{ env.PRODUCT_NAME }}/${{ github.event.release.tag_name }}
+
+          # Copy manifest (usually named PRODUCT_NAME.manifest.json)
+          cp -f firmware-build/${{ env.PRODUCT_NAME }}/*.manifest.json docs-repo/firmware/${{ env.PRODUCT_NAME }}/latest/${{ env.PRODUCT_NAME }}.manifest.json
+
+          # Copy and rename binaries for ESP Web Tools compatibility
+          cp -f firmware-build/${{ env.PRODUCT_NAME }}/*.factory.bin docs-repo/firmware/${{ env.PRODUCT_NAME }}/latest/${{ env.PRODUCT_NAME }}.factory.bin
+          cp -f firmware-build/${{ env.PRODUCT_NAME }}/*.ota.bin docs-repo/firmware/${{ env.PRODUCT_NAME }}/latest/${{ env.PRODUCT_NAME }}.ota.bin
+
+          # Copy everything to versioned folder (for history)
+          cp -r firmware-build/${{ env.PRODUCT_NAME }}/* docs-repo/firmware/${{ env.PRODUCT_NAME }}/${{ github.event.release.tag_name }}/
 
       - name: Commit and push to docs repo
         run: |
@@ -64,5 +69,5 @@ jobs:
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
           git add .
-          git commit -m "Update latest firmware for $PRODUCT_NAME from release ${{ github.event.release.tag_name }}" || echo "No changes to commit"
+          git commit -m "Update latest firmware for ${{ env.PRODUCT_NAME }} from release ${{ github.event.release.tag_name }}" || echo "No changes to commit"
           git push origin main
