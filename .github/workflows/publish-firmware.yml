@@ -17,9 +17,9 @@ jobs:
     with:
       #### Modify below here to match your project ####
       files: |
-        $PRODUCT_NAME.factory.yaml
+        bed-presence-mk1.factory.yaml
       esphome-version: latest
-      combined-name: $PRODUCT_NAME
+      combined-name: bed-presence-mk1
       #### Modify above here to match your project ####
 
       release-summary: ${{ github.event.release.body }}
@@ -52,11 +52,11 @@ jobs:
 
       - name: Copy files to docs repo (latest)
         run: |
-          mkdir -p docs-repo/firmware/$PRODUCT_NAME/latest
-          cp -f firmware-build/$PRODUCT_NAME/* docs-repo/firmware/$PRODUCT_NAME/latest/
+          mkdir -p docs-repo/firmware/${{ env.PRODUCT_NAME }}/latest
+          cp -f firmware-build/${{ env.PRODUCT_NAME }}/* docs-repo/firmware/${{ env.PRODUCT_NAME }}/latest/
           # Also copy to a versioned folder for history in docs
-          mkdir -p docs-repo/firmware/$PRODUCT_NAME/${{ github.event.release.tag_name }}
-          cp -r firmware-build/$PRODUCT_NAME/* docs-repo/firmware/$PRODUCT_NAME/${{ github.event.release.tag_name }}/
+          mkdir -p docs-repo/firmware/${{ env.PRODUCT_NAME }}/${{ github.event.release.tag_name }}
+          cp -r firmware-build/${{ env.PRODUCT_NAME }}/* docs-repo/firmware/${{ env.PRODUCT_NAME }}/${{ github.event.release.tag_name }}/
 
       - name: Commit and push to docs repo
         run: |
@@ -64,5 +64,5 @@ jobs:
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
           git add .
-          git commit -m "Update latest firmware for $PRODUCT_NAME from release ${{ github.event.release.tag_name }}" || echo "No changes to commit"
+          git commit -m "Update latest firmware for ${{ env.PRODUCT_NAME }} from release ${{ github.event.release.tag_name }}" || echo "No changes to commit"
           git push origin main
