@@ -48,6 +48,7 @@ jobs:
 
       - name: Clone docs repo
         run: |
+          ls
           git clone https://x-access-token:${{ secrets.DOCS_REPO_TOKEN }}@github.com/ElevatedSensors/docs.git docs-repo
 
       - name: Copy files to docs repo (latest)
@@ -56,7 +57,7 @@ jobs:
           cp -f firmware-build/${{ env.PRODUCT_NAME }}/* docs-repo/firmware/${{ env.PRODUCT_NAME }}/latest/
           # Also copy to a versioned folder for history in docs
           mkdir -p docs-repo/firmware/${{ env.PRODUCT_NAME }}/${{ github.event.release.tag_name }}
-          cp -r firmware-build/${{ env.PRODUCT_NAME }}/* docs-repo/firmware/${{ env.PRODUCT_NAME }}/${{ github.event.release.tag_name }}/
+          cp firmware-build/${{ env.PRODUCT_NAME }}/* docs-repo/firmware/${{ env.PRODUCT_NAME }}/${{ github.event.release.tag_name }}/
 
       - name: Commit and push to docs repo
         run: |
