@@ -43,7 +43,7 @@ jobs:
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
-          name: firmware   # This is the standard artifact name from esphome/workflows build.yml
+          name: bed-presence-mk1   # This is the standard artifact name from esphome/workflows build.yml
           path: firmware-build/
 
       - name: Clone docs repo
